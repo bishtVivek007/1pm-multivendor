@@ -59,20 +59,21 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyD0Z911mOoWCVkeGdjhIKwWFPRgvd6ZyAw",
-        authDomain: "stackmart-500c7.firebaseapp.com",
-        projectId: "stackmart-500c7",
-        storageBucket: "stackmart-500c7.appspot.com",
-        messagingSenderId: "491987943015",
-        appId: "1:491987943015:web:d8bc7ab8dbc9991c8f1ec2"
+        apiKey: "AIzaSyDwsr1PHGRNLAN-rO6EqMSTOs_6k7aJY1M",
+        authDomain: "pm-507ed.firebaseapp.com",
+        projectId: "pm-507ed",
+        storageBucket: "pm-507ed.firebasestorage.app",
+        messagingSenderId: "417474721005",
+        appId: "1:417474721005:web:314599404f47a1758308e4",
+        measurementId: "G-WGE37ED1LJ"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA",
-        appId: "1:491987943015:android:a6fb4303cc4bf3d18f1ec2",
-        messagingSenderId: "491987943015",
-        projectId: "stackmart-500c7",
+        apiKey: "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM",
+        appId: "1:417474721005:android:151e4821cba33a898308e4",
+        messagingSenderId: "417474721005",
+        projectId: "pm-507ed",
       ),
     );
   } else {
