@@ -59,13 +59,13 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyDwsr1PHGRNLAN-rO6EqMSTOs_6k7aJY1M",
-        authDomain: "pm-507ed.firebaseapp.com",
-        projectId: "pm-507ed",
-        storageBucket: "pm-507ed.firebasestorage.app",
-        messagingSenderId: "417474721005",
-        appId: "1:417474721005:web:314599404f47a1758308e4",
-        measurementId: "G-WGE37ED1LJ"
+        apiKey: "AIzaSyDTUiWpck17q6yt3L_nfrlI-iP0gQIp3h4",
+        authDomain: "lucklore-packaged.firebaseapp.com",
+        projectId: "lucklore-packaged",
+        storageBucket: "lucklore-packaged.firebasestorage.app",
+        messagingSenderId: "941538571278",
+        appId: "1:941538571278:web:94e7e4d47579d03b52b85f",
+        measurementId: "G-8CBCMM6QZ9"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(

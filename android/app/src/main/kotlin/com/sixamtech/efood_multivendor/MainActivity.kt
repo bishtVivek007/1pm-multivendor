@@ -1,4 +1,4 @@
-package com.application.onepm
+package com.ftechiz.lucklorepackageddw
 
 import io.flutter.embedding.android.FlutterActivity
 
