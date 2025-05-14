@@ -1,4 +1,4 @@
-package com.ftechiz.lucklorepackageddw
+package com.ftechiz.lucklore
 
 import io.flutter.embedding.android.FlutterActivity
 

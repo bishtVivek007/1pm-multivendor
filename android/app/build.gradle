@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.ftechiz.lucklorepackageddw"
+    namespace "com.ftechiz.lucklore"
     compileSdk 35
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.ftechiz.lucklorepackageddw"
+        applicationId "com.ftechiz.lucklore"
         minSdkVersion 23
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
