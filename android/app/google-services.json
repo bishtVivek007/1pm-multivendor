@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "417474721005",
-    "project_id": "pm-507ed",
-    "storage_bucket": "pm-507ed.firebasestorage.app"
+    "project_number": "286606937619",
+    "project_id": "foodan-4ee52",
+    "storage_bucket": "foodan-4ee52.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:151e4821cba33a898308e4",
+        "mobilesdk_app_id": "1:286606937619:android:68e79232b64d05ceb979e6",
         "android_client_info": {
-          "package_name": "com.application.onepm"
+          "package_name": "com.application.foodaan"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
+          "current_key": "AIzaSyDDDSRLX8ESE6n8kOPrAga3nU5NoH_AGt4"
         }
       ],
       "services": {

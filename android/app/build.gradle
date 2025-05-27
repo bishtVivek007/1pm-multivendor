@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.application.onepm"
+    namespace "com.application.foodaan"
     compileSdk 35
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.application.onepm"
+        applicationId "com.application.foodaan"
         minSdkVersion 23
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
@@ -59,7 +59,7 @@ android {
         release {
             keyAlias 'groceries'
             keyPassword 'Mali@123Gluu'
-            storeFile file('/Users/ftechiz/Desktop/1pm_web-app/android/app/groceries.jks')
+            storeFile file('/Users/ftechiz/Desktop/1pm-foodan-quickshopy-lucklore/android/app/groceries.jks')
             storePassword 'Mali@123Gluu'
         }
     }
