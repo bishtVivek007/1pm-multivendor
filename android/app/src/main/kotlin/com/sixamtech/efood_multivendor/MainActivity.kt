@@ -1,4 +1,4 @@
-package com.application.onepm
+package com.aplication.quickshopy
 
 import io.flutter.embedding.android.FlutterActivity
 
