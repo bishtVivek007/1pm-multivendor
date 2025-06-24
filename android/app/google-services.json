@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "417474721005",
-    "project_id": "pm-507ed",
-    "storage_bucket": "pm-507ed.firebasestorage.app"
+    "project_number": "495489572152",
+    "project_id": "mandiatdoor-2f296",
+    "storage_bucket": "mandiatdoor-2f296.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:151e4821cba33a898308e4",
+        "mobilesdk_app_id": "1:495489572152:android:f15d1471ddef4e610835cd",
         "android_client_info": {
-          "package_name": "com.application.onepm"
+          "package_name": "com.application.mandiatdoor"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
+          "current_key": "AIzaSyDRxv5c5krvL_NLhHZVGBIWGA1SocN8dBI"
         }
       ],
       "services": {

@@ -1,4 +1,4 @@
-package com.application.onepm
+package com.application.mandiatdoor
 
 import io.flutter.embedding.android.FlutterActivity
 
