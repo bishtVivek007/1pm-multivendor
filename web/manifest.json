@@ -1,6 +1,6 @@
 {
-    "name": "QUICKSHOPY",
-    "short_name": "QUICKSHOPY",
+    "name": "Quickshopy",
+    "short_name": "Quickshopy",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#2A9849",

@@ -1,7 +1,7 @@
 name: sixam_mart
 description: A Multi-vendor1 Food. Grocery, eCommerce, Pharmacy & Parcel service.
 publish_to: 'none' #
-version: 1.0.0+1
+version: 1.0.0+0
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -54,7 +54,7 @@ dependencies:
   animated_flip_counter: ^0.3.4
   youtube_player_iframe: ^5.1.5
   card_swiper: ^3.0.1
-  audioplayers: ^6.1.0
+  audioplayers: ^6.5.0
   video_player: ^2.9.1
   flutter_svg: ^2.0.10+1
   flutter_widget_from_html_core: ^0.15.2

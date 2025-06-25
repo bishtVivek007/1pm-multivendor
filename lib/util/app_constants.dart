@@ -4,7 +4,7 @@ import 'package:sixam_mart/features/language/domain/models/language_model.dart';
 import 'package:sixam_mart/util/images.dart';
 
 class AppConstants {
-  static const String appName = 'QUICKSHOPY';
+  static const String appName = 'Quickshopy';
   static const double appVersion = 3.0; ///Flutter Version: 3.27.4
 
   static const String fontFamily = 'Roboto';
