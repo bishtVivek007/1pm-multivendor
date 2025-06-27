@@ -59,7 +59,7 @@ android {
         release {
             keyAlias 'groceries'
             keyPassword 'Mali@123Gluu'
-            storeFile file('/Users/ftechiz/Desktop/1pm_web-app/android/app/groceries.jks')
+            storeFile file('C:\\Users\\hp-pc\\Desktop\\vb\\1pm-multivendor\\android\\app\\groceries.jks')
             storePassword 'Mali@123Gluu'
         }
     }
