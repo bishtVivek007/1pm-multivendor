@@ -5,7 +5,7 @@ import 'package:sixam_mart/util/images.dart';
 
 class AppConstants {
   static const String appName = 'Tatkaal Seva';
-  static const double appVersion = 3.0; ///Flutter Version: 3.27.4
+  static const double appVersion = 3.1;
 
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
@@ -252,10 +252,10 @@ class AppConstants {
   /// Delivery Tips
   static List<String> tips = ['0' ,'15', '10', '20', '40', 'custom'];
   static List<String> deliveryInstructionList = [
-    'deliver_to_front_door'.tr,
-    'deliver_the_reception_desk'.tr,
-    'avoid_calling_phone'.tr,
-    'come_with_no_sound'.tr,
+    'deliver_to_front_door',
+    'deliver_the_reception_desk',
+    'avoid_calling_phone',
+    'come_with_no_sound',
   ];
 
   static List<ChooseUsModel> whyChooseUsList = [
@@ -284,9 +284,9 @@ class AppConstants {
 
   static List<LanguageModel> languages = [
     LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
-    // LanguageModel(imageUrl: Images.arabic, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),
-    // LanguageModel(imageUrl: Images.spanish, languageName: 'Spanish', countryCode: 'ES', languageCode: 'es'),
-    // LanguageModel(imageUrl: Images.bengali, languageName: 'Bengali', countryCode: 'BN', languageCode: 'bn'),
+    LanguageModel(imageUrl: Images.arabic, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),
+    LanguageModel(imageUrl: Images.spanish, languageName: 'Spanish', countryCode: 'ES', languageCode: 'es'),
+    LanguageModel(imageUrl: Images.bengali, languageName: 'Bengali', countryCode: 'BN', languageCode: 'bn'),
   ];
 
   static List<String> joinDropdown = [

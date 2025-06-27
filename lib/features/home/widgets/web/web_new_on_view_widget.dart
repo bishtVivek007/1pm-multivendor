@@ -97,7 +97,7 @@ class _WebNewOnViewWidgetState extends State<WebNewOnViewWidget> {
               top: 70, left: 0,
               child: ArrowIconButton(
                 isRight: false,
-                onTap: () => scrollController.animateTo(scrollController.offset - Dimensions.webMaxWidth,
+                onTap: () => scrollController.animateTo(scrollController.offset - (Dimensions.webMaxWidth / 3),
                     duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
               ),
             ),
@@ -106,7 +106,7 @@ class _WebNewOnViewWidgetState extends State<WebNewOnViewWidget> {
             Positioned(
               top: 70, right: 0,
               child: ArrowIconButton(
-                onTap: () => scrollController.animateTo(scrollController.offset + Dimensions.webMaxWidth,
+                onTap: () => scrollController.animateTo(scrollController.offset + (Dimensions.webMaxWidth / 3),
                     duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
               ),
             ),

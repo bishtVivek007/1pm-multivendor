@@ -176,14 +176,6 @@ class RouteHelper {
   static String getOnBoardingRoute() => onBoarding;
   static String getSignInRoute(String page) => '$signIn?page=$page';
   static String getSignUpRoute() => signUp;
-  /*static String getVerificationRoute(String? number, String? token, String page, String pass, {String? session}) {
-    String? authSession;
-    if(session != null) {
-      authSession = base64Url.encode(utf8.encode(session));
-    }
-    return '$verification?page=$page&number=$number&token=$token&pass=$pass&session=$authSession';
-  }*/
-
   static String getVerificationRoute(String? number, String? email, String? token, String page, String? pass, String loginType, {String? session, UpdateUserModel? updateUserModel}) {
     String? authSession;
     String? userModel;
@@ -201,17 +193,8 @@ class RouteHelper {
   static String getPickMapRoute(String? page, bool canRoute) => '$pickMap?page=$page&route=${canRoute.toString()}';
   static String getInterestRoute() => interest;
   static String getMainRoute(String page) => '$main?page=$page';
-  /*static String getForgotPassRoute(bool fromSocialLogin, SocialLogInBody? socialLogInBody) {
-    String? data;
-    if(fromSocialLogin) {
-      data = base64Encode(utf8.encode(jsonEncode(socialLogInBody!.toJson())));
-    }
-    return '$forgotPassword?page=${fromSocialLogin ? 'social-login' : 'forgot-password'}&data=${fromSocialLogin ? data : 'null'}';
-  }*/
-
   static String getForgotPassRoute() => forgotPassword;
-
-  static String getResetPasswordRoute(String? phone, String token, String page) => '$resetPassword?phone=$phone&token=$token&page=$page';
+  static String getResetPasswordRoute({String? phone, String? email, required String token, required String page}) => '$resetPassword?phone=$phone&token=$token&page=$page&email=$email';
   static String getSearchRoute({String? queryText}) => '$search?query=${queryText ?? ''}';
   static String getStoreRoute({required int? id, required String page}) {
     return '$store?id=$id&page=$page';
@@ -328,35 +311,6 @@ class RouteHelper {
     return '$newUserSetupScreen?name=$name&login_type=$loginType&phone=$phone&email=$email';
   }
 
-  // static String getNewHomeRoute() => newHome;
-  // static String getTaxiModuleLocationRoute(String riderType, AddressModel? addressModel) {
-  //   String riderType0 = base64Url.encode(utf8.encode(jsonEncode(riderType)));
-  //   String address = 'null';
-  //   if(addressModel != null){
-  //     address = base64Url.encode(utf8.encode(jsonEncode(addressModel)));
-  //   }
-  //   return '$taxiModuleLocation?rider_type=$riderType0&address=$address';
-  // }
-  // static String getTaxiLocationResultRoute() => taxiLocationResult;
-  // static String getSelectVehicleRoute({required AddressModel? fromAddress, required AddressModel? toAddress}) {
-  //   String fromAddress0 = 'null';
-  //   String toAddress0 = 'null';
-  //   if(fromAddress != null) {
-  //     fromAddress0 = base64Url.encode(utf8.encode(jsonEncode(fromAddress.toJson())));
-  //   }
-  //   if(toAddress != null) {
-  //   toAddress0 = base64Url.encode(utf8.encode(jsonEncode(toAddress.toJson())));
-  //   }
-  //   return '$selectVehicle?from=$fromAddress0&to=$toAddress0';
-  // }
-  // static String getSearchVehicleRoute() => searchVehicle;
-  // static String getCartVehicleRoute() => cartVehicle;
-  // static String getTextCheckoutRoute() => texiCheckout;
-  // static String getTaxiOrderPageRoute() => taxiOrderPage;
-  // static String getVehicleDetailsPageRoute() => vehicleDetails;
-  // static String getVehicleProviderDetailsRoute() => vehicleProviderDetails;
-  // static String getReviewDetailsScreenRoute() => reviewDetailsScreen;
-
   static List<GetPage> routes = [
     GetPage(name: initial, page: () => getRoute(DashboardScreen(pageIndex: 0, fromSplash: Get.parameters['from-splash'] == 'true'))),
     GetPage(name: splash, page: () {
@@ -375,19 +329,6 @@ class RouteHelper {
       fromNotification: Get.parameters['page'] == notification, fromResetPassword: Get.parameters['page'] == resetPassword,
     )),
     GetPage(name: signUp, page: () => const SignUpScreen()),
-    /*GetPage(name: verification, page: () {
-      List<int> decode = base64Decode(Get.parameters['pass']!.replaceAll(' ', '+'));
-      String data = utf8.decode(decode);
-      String? session;
-      if(Get.parameters['session'] != null && Get.parameters['session'] != 'null') {
-        session = utf8.decode(base64Url.decode(Get.parameters['session'] ?? ''));
-      }
-      return VerificationScreen(
-        number: Get.parameters['number'], fromSignUp: Get.parameters['page'] == signUp, token: Get.parameters['token'],
-        password: data, firebaseSession: session,
-      );
-    }),*/
-
     GetPage(name: verification, page: () {
       String? pass;
       if(Get.parameters['pass'] != 'null') {
@@ -429,19 +370,11 @@ class RouteHelper {
           : Get.parameters['page'] == 'cart' ? 2 : Get.parameters['page'] == 'order' ? 3 : Get.parameters['page'] == 'menu' ? 4 : 0,
     ))),
 
-    /*GetPage(name: forgotPassword, page: () {
-      SocialLogInBody? data;
-      if(Get.parameters['page'] == 'social-login') {
-        List<int> decode = base64Decode(Get.parameters['data']!.replaceAll(' ', '+'));
-        data = SocialLogInBody.fromJson(jsonDecode(utf8.decode(decode)));
-      }
-      return ForgetPassScreen(fromSocialLogin: Get.parameters['page'] == 'social-login', socialLogInBody: data);
-    }),*/
-
     GetPage(name: forgotPassword, page: () => const ForgetPassScreen()),
 
     GetPage(name: resetPassword, page: () => NewPassScreen(
       resetToken: Get.parameters['token'], number: Get.parameters['phone'], fromPasswordChange: Get.parameters['page'] == 'password-change',
+      email: Get.parameters['email'],
     )),
     GetPage(name: search, page: () => getRoute(SearchScreen(queryText: Get.parameters['query']))),
     GetPage(name: store, page: () {

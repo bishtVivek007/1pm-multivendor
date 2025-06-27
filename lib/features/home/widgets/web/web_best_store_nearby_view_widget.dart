@@ -296,7 +296,7 @@ class _WebBestStoreNearbyViewWidgetState extends State<WebBestStoreNearbyViewWid
                   top: 70, left: isPharmacy ? 0 : Get.find<LocalizationController>().isLtr ? 45 : 0,
                   child: ArrowIconButton(
                     isRight: false,
-                    onTap: () => scrollController.animateTo(scrollController.offset - Dimensions.webMaxWidth,
+                    onTap: () => scrollController.animateTo(scrollController.offset - (Dimensions.webMaxWidth / 3),
                         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
                   ),
                 ),
@@ -305,7 +305,7 @@ class _WebBestStoreNearbyViewWidgetState extends State<WebBestStoreNearbyViewWid
                 Positioned(
                   top: 70, right: Get.find<LocalizationController>().isLtr ? 0 : 45,
                   child: ArrowIconButton(
-                    onTap: () => scrollController.animateTo(scrollController.offset + Dimensions.webMaxWidth,
+                    onTap: () => scrollController.animateTo(scrollController.offset + (Dimensions.webMaxWidth / 3),
                         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
                   ),
                 ),
@@ -326,126 +326,129 @@ class WebBestStoreNearbyShimmerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isPharmacy = Get.find<SplashController>().module != null && Get.find<SplashController>().module!.moduleType.toString() == 'pharmacy';
 
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.only(left: isPharmacy ? 0 : Dimensions.paddingSizeDefault),
-      itemCount: 8,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
-          child: Container(
-            height: 160, width: 275,
-            padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-            margin: const EdgeInsets.all(Dimensions.paddingSizeExtraLarge),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
-            ),
-            child: Shimmer(
-              duration: const Duration(seconds: 2),
-              enabled: true,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return SizedBox(
+      height: 190,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.only(left: isPharmacy ? 0 : Dimensions.paddingSizeDefault),
+        itemCount: 8, shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
+            child: Container(
+              height: 160, width: 275,
+              padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+              margin: const EdgeInsets.all(Dimensions.paddingSizeExtraLarge),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
+              ),
+              child: Shimmer(
+                duration: const Duration(seconds: 2),
+                enabled: true,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                Expanded(
-                  flex: 6,
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Expanded(
+                    flex: 6,
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                    Container(
-                      height: 70, width: 70,
+                      Container(
+                        height: 70, width: 70,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                        ),
+                        child: Stack(children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                            child: Container(
+                              height: double.infinity, width: double.infinity,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ]),
+                      ),
+                      const SizedBox(width: Dimensions.paddingSizeDefault),
+
+                      Expanded(
+                        flex: 9,
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+
+                          isPharmacy ? Container(height: 10, width: 100, color: Colors.grey[300]) : Row(children: [
+
+                            Container(height: 10, width: 50, color: Colors.grey[300]),
+                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                            Container(height: 10, width: 20, color: Colors.grey[300]),
+
+                          ]),
+
+                          isPharmacy ? Row(children: [
+
+                            Icon(Icons.storefront, size: 15, color: Theme.of(context).disabledColor),
+                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                            Expanded(
+                              child: Container(height: 10, width: 100, color: Colors.grey[300]),
+                            ),
+                          ]) : Row(children: [
+
+                            Icon(Icons.star, size: 15, color: Theme.of(context).disabledColor),
+                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                            Container(height: 10, width: 20, color: Colors.grey[300]),
+                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                            Container(height: 10, width: 20, color: Colors.grey[300]),
+
+                          ]),
+
+                          isPharmacy ? Container(height: 10, width: 20, color: Colors.grey[300]) : Container(
+                            padding: const EdgeInsets.symmetric(vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
+                            ),
+                            child: Row(children: [
+                                Container(height: 10, width: 20, color: Colors.grey[300]),
+                                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                                Container(height: 10, width: 20, color: Colors.grey[300]),
+                            ]),
+                          ),
+
+                        ]),
+                      ),
+                    ]),
+                  ),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                  Expanded(
+                    flex: 2,
+                    child: isPharmacy ? Container(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                        borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
                       ),
-                      child: Stack(children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                          child: Container(
-                            height: double.infinity, width: double.infinity,
-                            color: Colors.grey[300],
-                          ),
-                        ),
+                      child: Row(children: [
+                        Container(height: 10, width: 20, color: Colors.grey[300]),
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                        Container(height: 10, width: 20, color: Colors.grey[300]),
                       ]),
-                    ),
-                    const SizedBox(width: Dimensions.paddingSizeDefault),
-
-                    Expanded(
-                      flex: 9,
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-
-                        isPharmacy ? Container(height: 10, width: 100, color: Colors.grey[300]) : Row(children: [
-
-                          Container(height: 10, width: 50, color: Colors.grey[300]),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                          Container(height: 10, width: 20, color: Colors.grey[300]),
-
-                        ]),
-
-                        isPharmacy ? Row(children: [
-
-                          Icon(Icons.storefront, size: 15, color: Theme.of(context).disabledColor),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                          Expanded(
-                            child: Container(height: 10, width: 100, color: Colors.grey[300]),
-                          ),
-                        ]) : Row(children: [
-
-                          Icon(Icons.star, size: 15, color: Theme.of(context).disabledColor),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                          Container(height: 10, width: 20, color: Colors.grey[300]),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                          Container(height: 10, width: 20, color: Colors.grey[300]),
-
-                        ]),
-
-                        isPharmacy ? Container(height: 10, width: 20, color: Colors.grey[300]) : Container(
-                          padding: const EdgeInsets.symmetric(vertical: 3),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
-                          ),
-                          child: Row(children: [
-                              Container(height: 10, width: 20, color: Colors.grey[300]),
-                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                              Container(height: 10, width: 20, color: Colors.grey[300]),
-                          ]),
-                        ),
-
-                      ]),
-                    ),
-                  ]),
-                ),
-                const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                Expanded(
-                  flex: 2,
-                  child: isPharmacy ? Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
-                    ),
-                    child: Row(children: [
-                      Container(height: 10, width: 20, color: Colors.grey[300]),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                      Container(height: 10, width: 20, color: Colors.grey[300]),
-                    ]),
-                  ) : Container(height: 10, width: 100, color: Colors.grey[300]),
-                ),
-              ]),
+                    ) : Container(height: 10, width: 100, color: Colors.grey[300]),
+                  ),
+                ]),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

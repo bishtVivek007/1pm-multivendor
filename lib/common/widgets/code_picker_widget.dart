@@ -228,12 +228,10 @@ class _CodePickerWidgetState extends State<CodePickerWidget> {
             barrierColor: widget.barrierColor,
             hideSearch: widget.hideSearch!,
             closeIcon: widget.closeIcon,
-
             hideHeaderText: false,
             headerTextStyle: widget.dialogTextStyle ?? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             topBarPadding: const EdgeInsets.symmetric(vertical: 8.0),
             headerAlignment: MainAxisAlignment.center,
-
           ),
         ),
       ).then((e) {
