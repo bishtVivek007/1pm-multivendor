@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "17078083013",
-    "project_id": "quickshopy-a347b",
-    "storage_bucket": "quickshopy-a347b.firebasestorage.app"
+    "project_number": "996097508873",
+    "project_id": "talkaalseva",
+    "storage_bucket": "talkaalseva.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:17078083013:android:989557f7388d27e1cc3fac",
+        "mobilesdk_app_id": "1:996097508873:android:8f5f1047033a77e3171ad8",
         "android_client_info": {
-          "package_name": "com.aplication.quickshopy"
+          "package_name": "com.applications.tatkaalseva"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "17078083013-cpd9bmme53vnecofr603q2eag7c7vmrh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.aplication.quickshopy",
-            "certificate_hash": "585f1f2b7d2521fb4205c573ce156a0729370eac"
-          }
-        },
-        {
-          "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC3aobvW0FVNgHR54yyy_EsZWqbw7beiIg"
+          "current_key": "AIzaSyBdYlvl-TAnYfSJm8KL646DjTWtLdf8Jbw"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

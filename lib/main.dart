@@ -59,21 +59,21 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyBdhSMui3y6AxHqQ045ZVxW0M4XgIezGPc",
-        authDomain: "quickshopy-a347b.firebaseapp.com",
-        projectId: "quickshopy-a347b",
-        storageBucket: "quickshopy-a347b.firebasestorage.app",
-        messagingSenderId: "17078083013",
-        appId: "1:17078083013:web:ceb57f87292ad44acc3fac",
-        measurementId: "G-2V95N8PM6R"
+        apiKey: "AIzaSyCdgxeJwA57mS2EOG80gvmva7Af83QgQc0",
+        authDomain: "talkaalseva.firebaseapp.com",
+        projectId: "talkaalseva",
+        storageBucket: "talkaalseva.firebasestorage.app",
+        messagingSenderId: "996097508873",
+        appId: "1:996097508873:web:60cafca3c1e342de171ad8",
+        measurementId: "G-6R1327PD44"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyC3aobvW0FVNgHR54yyy_EsZWqbw7beiIg",
-        appId: "1:17078083013:android:989557f7388d27e1cc3fac",
-        messagingSenderId: "17078083013",
-        projectId: "quickshopy-a347b",
+        apiKey: "AIzaSyBdYlvl-TAnYfSJm8KL646DjTWtLdf8Jbw",
+        appId: "1:996097508873:android:8f5f1047033a77e3171ad8",
+        messagingSenderId: "996097508873",
+        projectId: "talkaalseva",
       ),
     );
   } else {
