@@ -19,7 +19,7 @@ class SplashRepository implements SplashRepositoryInterface {
 
   @override
   Future<Response> getConfigData({required DataSourceEnum source}) async {
-    Response responseData = const Response(statusCode: 00, body: null);
+    Response responseData = Response(statusCode: 00, body: ApiClient.noInternetMessage);
     String cacheId = AppConstants.configUri;
 
     switch(source) {

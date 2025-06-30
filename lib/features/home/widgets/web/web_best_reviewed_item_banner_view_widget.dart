@@ -18,7 +18,7 @@ class WebStoreWiseBannerViewWidget extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-          child: CustomImage(
+          child: const CustomImage(
             image: Images.placeholder,
             fit: BoxFit.cover, height: 135, width: double.infinity,
           ),

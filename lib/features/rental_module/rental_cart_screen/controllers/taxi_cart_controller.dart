@@ -8,7 +8,7 @@ class TaxiCartController extends GetxController implements GetxService {
 
   TaxiCartController({required this.taxiCartServiceInterface});
 
-  List<Carts> _cartList = [];
+  final List<Carts> _cartList = [];
   List<Carts> get cartList => _cartList;
 
   Future<bool> getCarCartList() async {

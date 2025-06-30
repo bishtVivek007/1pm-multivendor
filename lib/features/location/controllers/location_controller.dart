@@ -1,9 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:sixam_mart/common/widgets/no_internet_screen.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
 import 'package:sixam_mart/features/location/screens/pick_map_screen.dart';
 import 'package:sixam_mart/features/profile/controllers/profile_controller.dart';
@@ -79,8 +81,8 @@ class LocationController extends GetxController implements GetxService {
   List<PredictionModel> _predictionList = [];
   List<PredictionModel> get predictionList => _predictionList;
 
-  void hideSuggestedLocation(){
-    _showLocationSuggestion = !_showLocationSuggestion;
+  void showSuggestedLocation(bool status){
+    _showLocationSuggestion = status;
   }
 
   void setAddressTypeIndex(int index, {bool isUpdate = true}) {
@@ -181,6 +183,11 @@ class LocationController extends GetxController implements GetxService {
   }
 
   Future<void> syncZoneData() async {
+    bool hasInternet = await checkInternet();
+    if (!hasInternet) {
+      return;
+    }
+
     ZoneResponseModel response = await getZone(AddressHelper.getUserAddressFromSharedPref()!.latitude, AddressHelper.getUserAddressFromSharedPref()!.longitude, false, updateInAddress: true);
     if(response.zoneIds.isEmpty) {
       await AddressHelper.saveUserAddressInSharedPref(AddressModel());
@@ -235,7 +242,13 @@ class LocationController extends GetxController implements GetxService {
     _prepareZoneData(address!, fromSignUp, route, canRoute, isDesktop);
   }
 
-  void _prepareZoneData(AddressModel address, bool fromSignUp, String? route, bool canRoute, bool isDesktop) {
+  void _prepareZoneData(AddressModel address, bool fromSignUp, String? route, bool canRoute, bool isDesktop) async {
+
+    bool hasInternet = await checkInternet();
+    if (!hasInternet) {
+      return;
+    }
+
     getZone(address.latitude, address.longitude, false).then((response) async {
       if (response.isSuccess) {
         Get.find<CartController>().getCartDataOnline();
@@ -246,7 +259,6 @@ class LocationController extends GetxController implements GetxService {
         address.zoneData!.addAll(response.zoneData);
         address.areaIds = [];
         address.areaIds!.addAll(response.areaIds);
-        print('=======zone its : ${address.zoneIds} // previous: ${{AddressHelper.getUserAddressFromSharedPref()?.zoneIds}}');
         autoNavigate(address, fromSignUp, route, canRoute, isDesktop);
       } else {
         if (response.statusCode == 404) {
@@ -427,6 +439,11 @@ class LocationController extends GetxController implements GetxService {
 
   void _checkPermission(String page) async {
 
+    bool hasInternet = await checkInternet();
+    if (!hasInternet) {
+      return;
+    }
+
     LocationPermission permission = await Geolocator.checkPermission();
 
     if(permission == LocationPermission.denied) {
@@ -495,6 +512,19 @@ class LocationController extends GetxController implements GetxService {
       }
     }
 
+  }
+
+  Future<bool> checkInternet() async {
+    if(kIsWeb) {
+      return true;
+    }
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    bool isConnected = connectivityResult.contains(ConnectivityResult.wifi) || connectivityResult.contains(ConnectivityResult.mobile);
+    if(!isConnected) {
+      Get.offAll(()=> const NoInternetScreen());
+      return false;
+    }
+    return true;
   }
 
 }
