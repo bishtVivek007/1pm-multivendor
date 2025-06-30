@@ -109,11 +109,32 @@ class StoreController extends GetxController implements GetxService {
   List<Store>? _recommendedStoreList;
   List<Store>? get recommendedStoreList => _recommendedStoreList;
 
-  double getRestaurantDistance(LatLng storeLatLng){
-    double distance = 0;
-    distance = Geolocator.distanceBetween(storeLatLng.latitude, storeLatLng.longitude,
-        double.parse(AddressHelper.getUserAddressFromSharedPref()!.latitude!), double.parse(AddressHelper.getUserAddressFromSharedPref()!.longitude!)) / 1000;
-    return distance;
+  double getRestaurantDistance(LatLng storeLatLng) {
+    final userAddress = AddressHelper.getUserAddressFromSharedPref();
+
+    try {
+      final latStr = userAddress?.latitude;
+      final lngStr = userAddress?.longitude;
+
+      if (latStr == null || lngStr == null || latStr.isEmpty || lngStr.isEmpty) {
+        throw Exception("Latitude or Longitude is null or empty");
+      }
+
+      final userLat = double.parse(latStr);
+      final userLng = double.parse(lngStr);
+
+      final distance = Geolocator.distanceBetween(
+        storeLatLng.latitude,
+        storeLatLng.longitude,
+        userLat,
+        userLng,
+      ) / 1000;
+
+      return distance;
+    } catch (e) {
+      print("Error parsing user coordinates: $e");
+      return 0.0;
+    }
   }
 
   String filteringUrl(String slug){

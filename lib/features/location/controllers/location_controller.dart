@@ -232,33 +232,58 @@ class LocationController extends GetxController implements GetxService {
   }
 
   void saveAddressAndNavigate(AddressModel? address, bool fromSignUp, String? route, bool canRoute, bool isDesktop) {
-    _prepareZoneData(address!, fromSignUp, route, canRoute, isDesktop);
+    print('🔹 saveAddressAndNavigate: called');
+    if (address == null) {
+      print('❌ Error: Address is null!');
+      return;
+    }
+    _prepareZoneData(address, fromSignUp, route, canRoute, isDesktop);
   }
 
   void _prepareZoneData(AddressModel address, bool fromSignUp, String? route, bool canRoute, bool isDesktop) {
+    print('🔍 Fetching zone for: Lat=${address.latitude}, Lng=${address.longitude}');
+
     getZone(address.latitude, address.longitude, false).then((response) async {
+      print('🛰 Zone API response received: Success=${response.isSuccess}, Code=${response.statusCode}');
+
       if (response.isSuccess) {
         Get.find<CartController>().getCartDataOnline();
+
+        if (response.zoneIds.isEmpty) {
+          print('⚠️ Warning: zoneIds list is empty.');
+        }
+
         address.zoneId = response.zoneIds[0];
-        address.zoneIds = [];
-        address.zoneIds!.addAll(response.zoneIds);
-        address.zoneData = [];
-        address.zoneData!.addAll(response.zoneData);
-        address.areaIds = [];
-        address.areaIds!.addAll(response.areaIds);
-        print('=======zone its : ${address.zoneIds} // previous: ${{AddressHelper.getUserAddressFromSharedPref()?.zoneIds}}');
+        address.zoneIds = [...response.zoneIds];
+        address.zoneData = [...response.zoneData];
+        address.areaIds = [...response.areaIds];
+
+        print('✅ Zone IDs set: ${address.zoneIds}');
+        print('🆚 Previous Zone IDs: ${AddressHelper.getUserAddressFromSharedPref()?.zoneIds}');
+
         autoNavigate(address, fromSignUp, route, canRoute, isDesktop);
+
       } else {
+        print('❌ Zone fetch failed: ${response.message} (Code: ${response.statusCode})');
+
         if (response.statusCode == 404) {
+          print('➡️ Navigating to PickMapRoute (404)');
           Get.toNamed(RouteHelper.getPickMapRoute(route, false));
         } else {
+          print('🔙 Popping with error');
           Get.back();
           showCustomSnackBar(response.message);
-          if(route == 'splash') {
+
+          if (route == 'splash') {
+            print('➡️ Navigating to PickMapRoute (from splash fallback)');
             Get.toNamed(RouteHelper.getPickMapRoute(route, false));
           }
         }
       }
+    }).catchError((error) {
+      print('🔥 Exception in getZone: $error');
+      Get.back();
+      showCustomSnackBar('Failed to determine your delivery zone.');
     });
   }
 

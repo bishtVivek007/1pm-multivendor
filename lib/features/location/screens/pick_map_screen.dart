@@ -235,56 +235,108 @@ class _PickMapScreenState extends State<PickMapScreen> {
   }
 
   void _onPickAddressButtonPressed(LocationController locationController) {
-    if(locationController.pickPosition.latitude != 0 && locationController.pickAddress!.isNotEmpty) {
-      if(widget.onPicked != null) {
+    final pickLatLng = locationController.pickPosition;
+    final pickAddress = locationController.pickAddress;
+
+    print('📍 Picked Latitude: ${pickLatLng.latitude}');
+    print('📍 Picked Longitude: ${pickLatLng.longitude}');
+    print('🏠 Picked Address: $pickAddress');
+    print('👤 User Logged In: ${AuthHelper.isLoggedIn()}');
+    print('👤 Guest Logged In: ${AuthHelper.isGuestLoggedIn()}');
+
+    if (pickLatLng.latitude != 0 && pickAddress != null && pickAddress.isNotEmpty) {
+      if (widget.onPicked != null) {
+        final userAddress = AddressHelper.getUserAddressFromSharedPref();
+
+        print('📦 User Address from SharedPref: $userAddress');
+
         AddressModel address = AddressModel(
-          latitude: locationController.pickPosition.latitude.toString(),
-          longitude: locationController.pickPosition.longitude.toString(),
-          addressType: 'others', address: locationController.pickAddress,
-          contactPersonName: AddressHelper.getUserAddressFromSharedPref()!.contactPersonName,
-          contactPersonNumber: AddressHelper.getUserAddressFromSharedPref()!.contactPersonNumber,
+          latitude: pickLatLng.latitude.toString(),
+          longitude: pickLatLng.longitude.toString(),
+          addressType: 'others',
+          address: pickAddress,
+          contactPersonName: userAddress?.contactPersonName ?? '',
+          contactPersonNumber: userAddress?.contactPersonNumber ?? '',
         );
+
+        print('✅ Triggering onPicked with address: $address');
         widget.onPicked!(address);
         Get.back();
-      }else if(widget.fromAddAddress) {
-        if(widget.googleMapController != null) {
-          widget.googleMapController!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(
-            locationController.pickPosition.latitude, locationController.pickPosition.longitude,
-          ), zoom: 16)));
+
+      } else if (widget.fromAddAddress) {
+        print('🗺️ From Add Address Flow');
+        if (widget.googleMapController != null) {
+          print('📍 Moving camera to picked location...');
+          widget.googleMapController!.moveCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: LatLng(pickLatLng.latitude, pickLatLng.longitude),
+                zoom: 16,
+              ),
+            ),
+          );
           locationController.setAddAddressData();
         }
         Get.back();
-      }else {
+
+      } else {
+        print('🛣️ Regular Flow - Saving Address and Navigating...');
         AddressModel address = AddressModel(
-          latitude: locationController.pickPosition.latitude.toString(),
-          longitude: locationController.pickPosition.longitude.toString(),
-          addressType: 'others', address: locationController.pickAddress,
+          latitude: pickLatLng.latitude.toString(),
+          longitude: pickLatLng.longitude.toString(),
+          addressType: 'others',
+          address: pickAddress,
         );
 
-        if(widget.fromLandingPage) {
-          if(!AuthHelper.isGuestLoggedIn() && !AuthHelper.isLoggedIn()) {
+        if (widget.fromLandingPage) {
+          print('🏁 From Landing Page Flow');
+          if (!AuthHelper.isGuestLoggedIn() && !AuthHelper.isLoggedIn()) {
+            print('🔐 Performing Guest Login...');
             Get.find<AuthController>().guestLogin().then((response) {
-              if(response.isSuccess) {
+              print('🟢 Guest Login Success: ${response.isSuccess}');
+              if (response.isSuccess) {
                 Get.find<ProfileController>().setForceFullyUserEmpty();
                 Get.back();
                 locationController.saveAddressAndNavigate(
-                  address, widget.fromSignUp, widget.route, widget.canRoute, ResponsiveHelper.isDesktop(Get.context),
+                  address,
+                  widget.fromSignUp,
+                  widget.route,
+                  widget.canRoute,
+                  ResponsiveHelper.isDesktop(Get.context),
                 );
+              } else {
+                print('🔴 Guest Login Failed');
               }
             });
           } else {
+            print('🟢 User Already Logged In or Guest Logged In');
             Get.back();
             locationController.saveAddressAndNavigate(
-              address, widget.fromSignUp, widget.route, widget.canRoute, ResponsiveHelper.isDesktop(context),
+              address,
+              widget.fromSignUp,
+              widget.route,
+              widget.canRoute,
+              ResponsiveHelper.isDesktop(context),
             );
           }
-        }else {
+        } else {
+          print('🚀 Direct Address Save Flow');
           locationController.saveAddressAndNavigate(
-            address, widget.fromSignUp, widget.route, widget.canRoute, ResponsiveHelper.isDesktop(context),
+            address,
+            widget.fromSignUp,
+            widget.route,
+            widget.canRoute,
+            ResponsiveHelper.isDesktop(context),
           );
+          print('saved address');
+          final userAddress = AddressHelper.getUserAddressFromSharedPref();
+
+          print('📦 User Address from SharedPref: $userAddress');
+          return;
         }
       }
-    }else {
+    } else {
+      print('⚠️ Invalid pick position or address empty.');
       showCustomSnackBar('pick_an_address'.tr);
     }
   }

@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void showCustomSnackBar(String? message, {bool isError = true, bool getXSnackBar = false, int? showDuration}) {
+  if(message == "Loop Detected") {
+    print('loop loop 123123');
+    return;
+  } if (message == "Service Unavailable") {
+    print('service loop 123123');
+    return;
+  } if (message == "Internal Server Error") {
+    print('internal servver error loop 123123');
+    return;
+  }
   if(message != null && message.isNotEmpty) {
     if(getXSnackBar) {
       Get.showSnackbar(GetSnackBar(

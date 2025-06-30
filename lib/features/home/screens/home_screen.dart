@@ -298,16 +298,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: GetBuilder<LocationController>(builder: (locationController) {
                               return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                Text(
-                                  AuthHelper.isLoggedIn() ? AddressHelper.getUserAddressFromSharedPref()!.addressType!.tr : 'your_location'.tr,
-                                  style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color, fontSize: Dimensions.fontSizeDefault),
+                              Text(
+                                  AuthHelper.isLoggedIn() &&
+                                  AddressHelper.getUserAddressFromSharedPref() != null &&
+                                  AddressHelper.getUserAddressFromSharedPref()!.addressType != null
+                                  ? AddressHelper.getUserAddressFromSharedPref()!.addressType!.tr
+                                  : 'your_location'.tr,
+                              style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color, fontSize: Dimensions.fontSizeDefault),
                                   maxLines: 1, overflow: TextOverflow.ellipsis,
                                 ),
 
                                 Row(children: [
                                   Flexible(
                                     child: Text(
-                                      AddressHelper.getUserAddressFromSharedPref()!.address!,
+                                      AddressHelper.getUserAddressFromSharedPref()!.address ?? "",
                                       style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                       maxLines: 1, overflow: TextOverflow.ellipsis,
                                     ),
