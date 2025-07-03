@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:sixam_mart/features/category/screens/dashboard_category.dart';
 import 'package:sixam_mart/features/rental_module/common/widgets/taxi_cart_widget.dart';
 import 'package:sixam_mart/features/dashboard/widgets/store_registration_success_bottom_sheet.dart';
 import 'package:sixam_mart/features/home/controllers/home_controller.dart';
@@ -83,7 +84,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       const HomeScreen(),
-      const FavouriteScreen(),
+      const DashboardCategoryScreen(isDashboard: true),
       const SizedBox(),
       const OrderScreen(),
       const MenuScreen()
@@ -195,7 +196,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                               const HomeScreen(),
                               isParcel ? const AddressScreen(fromDashboard: true)
                                   : isTaxi ? const VehicleFavouriteScreen()
-                                  : const FavouriteScreen(),
+                                  : const DashboardCategoryScreen(isDashboard: true),
                               const SizedBox(),
                               OrderScreen(index: isTaxi ? 1 : 0),
                               const MenuScreen()

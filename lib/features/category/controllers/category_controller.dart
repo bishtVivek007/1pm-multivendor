@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:sixam_mart/common/enums/data_source_enum.dart';
 import 'package:sixam_mart/features/category/domain/models/category_model.dart';
 import 'package:sixam_mart/features/item/domain/models/item_model.dart';
 import 'package:sixam_mart/features/store/domain/models/store_model.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:sixam_mart/features/category/domain/services/category_service_interface.dart';
 
 class CategoryController extends GetxController implements GetxService {
@@ -11,6 +14,9 @@ class CategoryController extends GetxController implements GetxService {
 
   List<CategoryModel>? _categoryList;
   List<CategoryModel>? get categoryList => _categoryList;
+
+  List<CategoryModel>? _mainCategoryList;
+  List<CategoryModel>? get mainCategoryList => _mainCategoryList;
 
   List<CategoryModel>? _subCategoryList;
   List<CategoryModel>? get subCategoryList => _subCategoryList;
@@ -91,7 +97,7 @@ class CategoryController extends GetxController implements GetxService {
     update();
   }
 
-  void getSubCategoryList(String? categoryID) async {
+  Future<void> getSubCategoryList(String? categoryID) async {
     _subCategoryIndex = 0;
     _subCategoryList = null;
     _categoryItemList = null;
@@ -103,6 +109,74 @@ class CategoryController extends GetxController implements GetxService {
       getCategoryItemList(categoryID, 1, 'all', false);
     }
   }
+
+  Future<void> getMainCategoryList() async {
+    _mainCategoryList = [];
+    _categoryList = [];
+    _isLoading = true;
+    update(); // Notify UI that loading has started
+
+    try {
+      var response = await http.get(
+        Uri.parse('https://mandiatdoor.in/admin/api/v1/categories/head-categories'),
+        headers: {
+          'Content-Type': 'application/json',
+          'moduleId': '1',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+
+        for (var mainCategory in data) {
+          // Store main category
+          _mainCategoryList!.add(CategoryModel(
+            id: mainCategory['id'],
+            name: mainCategory['name'],
+          ));
+
+          // Fetch and store only relevant subcategories
+          List<CategoryModel> filteredCategories = (mainCategory['categories'] as List<dynamic>)
+              .map((subCategory) => CategoryModel(
+            id: subCategory['id'],
+            parentId: mainCategory['id'],
+            name: subCategory['name'],
+            imageFullUrl: subCategory['image_full_url'],
+          ))
+              .toList();
+
+          _categoryList!.addAll(filteredCategories);
+
+          print('✅ Main Category: ${mainCategory['name']}');
+          for (var category in filteredCategories) {
+            print('   → ID: ${category.id}, Name: ${category.name}, Image: ${category.imageFullUrl}');
+          }
+          print('--------------------');
+        }
+      } else {
+        print("❌ Failed to load categories: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("⚠️ Error fetching categories: $e");
+    }
+
+    _isLoading = false;
+    update(); // Notify UI that loading is complete
+  }
+
+
+  // void getSubCategoryList(String? categoryID) async {
+  //   _subCategoryIndex = 0;
+  //   _subCategoryList = null;
+  //   _categoryItemList = null;
+  //   List<CategoryModel>? subCategoryList = await categoryServiceInterface.getSubCategoryList(categoryID);
+  //   if (subCategoryList != null) {
+  //     _subCategoryList= [];
+  //     _subCategoryList!.add(CategoryModel(id: int.parse(categoryID!), name: 'all'.tr));
+  //     _subCategoryList!.addAll(subCategoryList);
+  //     getCategoryItemList(categoryID, 1, 'all', false);
+  //   }
+  // }
 
   void setSubCategoryIndex(int index, String? categoryID) {
     _subCategoryIndex = index;
