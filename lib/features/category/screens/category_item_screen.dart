@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/widgets/footer_view.dart';
 import 'package:sixam_mart/features/category/controllers/category_controller.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
@@ -16,6 +17,8 @@ import 'package:sixam_mart/common/widgets/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../helper/auth_helper.dart';
+
 class CategoryItemScreen extends StatefulWidget {
   final String? categoryID;
   final String categoryName;
@@ -31,10 +34,21 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
   TabController? _tabController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool? _isVendor;
+  bool _isLoggedIn = false;
+
+  Future<void> loadPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isVendor = prefs.getBool('isVendor') ?? false;
+      _isLoggedIn = AuthHelper.isLoggedIn();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
+    loadPrefs();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     Get.find<CategoryController>().getSubCategoryList(widget.categoryID);
 
@@ -85,14 +99,28 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
     return GetBuilder<CategoryController>(builder: (catController) {
       List<Item>? item;
       List<Store>? stores;
-      if(catController.isSearching ? catController.searchItemList != null : catController.categoryItemList != null) {
+      if (catController.isSearching
+          ? catController.searchItemList != null
+          : catController.categoryItemList != null) {
         item = [];
-        if (catController.isSearching) {
-          item.addAll(catController.searchItemList!);
-        } else {
-          item.addAll(catController.categoryItemList!);
+
+        List<Item> sourceList = catController.isSearching
+            ? (catController.searchItemList ?? [])
+            : (catController.categoryItemList ?? []);
+
+        for (var i in sourceList) {
+          if (_isLoggedIn && (_isVendor ?? false)) {
+            if (i.storeId == 9) {
+              item.add(i);
+            }
+          } else {
+            if (i.storeId != 9) {
+              item.add(i);
+            }
+          }
         }
       }
+
       if(catController.isSearching ? catController.searchStoreList != null : catController.categoryStoreList != null) {
         stores = [];
         if (catController.isSearching) {

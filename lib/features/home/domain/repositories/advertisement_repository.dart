@@ -22,6 +22,8 @@ class AdvertisementRepository implements AdvertisementRepositoryInterface {
       case DataSourceEnum.client:
         Response response = await apiClient.getData(AppConstants.advertisementListUri);
         if(response.statusCode == 200) {
+          // print("ads ads ads");
+          // print(response.body['store_id']);
           advertisementList = [];
           response.body.forEach((data) {
             advertisementList?.add(AdvertisementModel.fromJson(data));
@@ -40,6 +42,8 @@ class AdvertisementRepository implements AdvertisementRepositoryInterface {
     }
     Response response = await apiClient.getData(AppConstants.advertisementListUri);
     if(response.statusCode == 200) {
+      // print("ads ads ads");
+      // print(response.body);
       advertisementList = [];
       response.body.forEach((data) {
         advertisementList?.add(AdvertisementModel.fromJson(data));

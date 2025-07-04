@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/enums/data_source_enum.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
@@ -21,6 +22,8 @@ import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/common/widgets/item_bottom_sheet.dart';
 import 'package:sixam_mart/features/item/screens/item_details_screen.dart';
 import 'package:sixam_mart/features/item/domain/services/item_service_interface.dart';
+
+import '../../../helper/auth_helper.dart';
 
 class ItemController extends GetxController implements GetxService {
   final ItemServiceInterface itemServiceInterface;
@@ -146,6 +149,7 @@ class ItemController extends GetxController implements GetxService {
 
   Future<void> getPopularItemList(bool reload, String type, bool notify, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
     _popularType = type;
+    print('popular,popular,popular,popular');
     if(reload) {
       _popularItemList = null;
     }
@@ -166,10 +170,29 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  _preparePopularItems(List<Item>? items) {
+  _preparePopularItems(List<Item>? items) async {
     if (items != null) {
+      final prefs = await SharedPreferences.getInstance();
+      bool isVendor = prefs.getBool('isVendor') ?? false;
+      bool isLoggedIn = AuthHelper.isLoggedIn();
+
       _popularItemList = [];
-      _popularItemList!.addAll(items);
+
+      for (var item in items) {
+        print(item.toJson());
+        print('Store ID: ${item.storeId}');
+
+        if (isLoggedIn && isVendor) {
+          if (item.storeId == 9) {
+            _popularItemList!.add(item);
+          }
+        } else {
+          if (item.storeId != 9) {
+            _popularItemList!.add(item);
+          }
+        }
+      }
+
       _isLoading = false;
     }
     update();
@@ -208,33 +231,75 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getDiscountedItemList(bool reload, bool notify, String type, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
+  Future<void> getDiscountedItemList(bool reload, bool notify, String type, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false,}) async {
     _discountedType = type;
-    if(reload) {
+    if (reload) {
       _discountedItemList = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_discountedItemList == null || reload || fromRecall) {
 
+    if (_discountedItemList == null || reload || fromRecall) {
       List<Item>? items;
-      if(dataSource == DataSourceEnum.local) {
+
+      if (dataSource == DataSourceEnum.local) {
         items = await itemServiceInterface.getDiscountedItemList(type, dataSource);
+
         if (items != null) {
+          final prefs = await SharedPreferences.getInstance();
+          bool isVendor = prefs.getBool('isVendor') ?? false;
+
           _discountedItemList = [];
-          _discountedItemList!.addAll(items);
+
+          for (var item in items) {
+            if (isVendor) {
+              if (item.storeId == 9) {
+                _discountedItemList!.add(item);
+              }
+            } else {
+              if (item.storeId != 9) {
+                _discountedItemList!.add(item);
+              }
+            }
+          }
+
           _isLoading = false;
         }
+
         update();
-        getDiscountedItemList(false, notify, type, dataSource: DataSourceEnum.client, fromRecall: true);
+
+        await getDiscountedItemList(
+          false,
+          notify,
+          type,
+          dataSource: DataSourceEnum.client,
+          fromRecall: true,
+        );
       } else {
         items = await itemServiceInterface.getDiscountedItemList(type, dataSource);
+
         if (items != null) {
+          final prefs = await SharedPreferences.getInstance();
+          bool isVendor = prefs.getBool('isVendor') ?? false;
+
           _discountedItemList = [];
-          _discountedItemList!.addAll(items);
+
+          for (var item in items) {
+            if (isVendor) {
+              if (item.storeId == 9) {
+                _discountedItemList!.add(item);
+              }
+            } else {
+              if (item.storeId != 9) {
+                _discountedItemList!.add(item);
+              }
+            }
+          }
+
           _isLoading = false;
         }
+
         update();
       }
     }
@@ -281,13 +346,28 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  _prepareRecommendedItems(List<Item>? items) {
+  Future<void> _prepareRecommendedItems(List<Item>? items) async {
     if (items != null) {
+      final prefs = await SharedPreferences.getInstance();
+      bool isVendor = prefs.getBool('isVendor') ?? false;
+
       _recommendedItemList = [];
-      _recommendedItemList!.addAll(items);
+
+      for (var item in items) {
+        if (isVendor) {
+          if (item.storeId == 9) {
+            _recommendedItemList!.add(item);
+          }
+        } else {
+          if (item.storeId != 9) {
+            _recommendedItemList!.add(item);
+          }
+        }
+      }
+
       _isLoading = false;
+      update();
     }
-    update();
   }
 
   Future<void> getBasicMedicine(bool reload, bool notify, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
