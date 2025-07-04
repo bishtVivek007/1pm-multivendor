@@ -251,9 +251,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                                           onTap: () => _setPage(0),
                                         ),
                                         BottomNavItemWidget(
-                                          title: isParcel ? 'address'.tr : isTaxi ? 'wishlist'.tr : 'favourite'.tr,
-                                          selectedIcon: isParcel ? Images.addressSelect : Images.favouriteSelect,
-                                          unSelectedIcon: isParcel ? Images.addressUnselect : Images.favouriteUnselect,
+                                          title: isParcel ? 'address'.tr : isTaxi ? 'wishlist'.tr : 'Categories',
+                                          selectedIcon: isParcel ? Images.addressSelect : Images.moduleIcon,
+                                          unSelectedIcon: isParcel ? Images.addressUnselect : Images.moduleIcon,
                                           isSelected: _pageIndex == 1, onTap: () => _setPage(1),
                                         ),
                                         Container(width: size.width * 0.2),
