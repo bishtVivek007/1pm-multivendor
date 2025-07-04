@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/enums/data_source_enum.dart';
 import 'package:sixam_mart/features/category/controllers/category_controller.dart';
 import 'package:sixam_mart/features/coupon/controllers/coupon_controller.dart';
@@ -199,17 +200,27 @@ class StoreController extends GetxController implements GetxService {
     }
   }
 
-  _prepareStoreModel(StoreModel? storeModel, int offset) {
-    if (storeModel != null) {
-      if (offset == 1) {
-        _storeModel = storeModel;
-      }else {
-        _storeModel!.totalSize = storeModel.totalSize;
-        _storeModel!.offset = storeModel.offset;
-        _storeModel!.stores!.addAll(storeModel.stores!);
-      }
-      update();
+  _prepareStoreModel(StoreModel? storeModel, int offset) async {
+    final prefs = await SharedPreferences.getInstance();
+    bool isVendor = prefs.getBool('isVendor') ?? false;
+
+    if (offset == 1) {
+      _storeModel = StoreModel(
+        totalSize: storeModel?.totalSize,
+        offset: storeModel?.offset,
+        stores: [],
+      );
     }
+
+    for (var store in storeModel!.stores!) {
+      if (isVendor && store.id == 9) {
+        _storeModel!.stores!.add(store);
+        break; // only one store to add
+      } else if (!isVendor && store.id != 9) {
+        _storeModel!.stores!.add(store);
+      }
+    }
+    update();
   }
 
   void setFilterType(String type) {
@@ -227,6 +238,42 @@ class StoreController extends GetxController implements GetxService {
     _storeType = 'all';
   }
 
+  Future<void> _filterAndSetLatestStores(List<Store>? storeList) async {
+    final prefs = await SharedPreferences.getInstance();
+    bool isVendor = prefs.getBool('isVendor') ?? false;
+
+    _latestStoreList = [];
+
+    if (storeList != null) {
+      for (var store in storeList) {
+        if (isVendor && store.id == 9) {
+          _latestStoreList!.add(store);
+          break;
+        } else if (!isVendor && store.id != 9) {
+          _latestStoreList!.add(store);
+        }
+      }
+    }
+  }
+
+  Future<void> _filterAndSetPopularStores(List<Store>? storeList) async {
+    final prefs = await SharedPreferences.getInstance();
+    bool isVendor = prefs.getBool('isVendor') ?? false;
+
+    _popularStoreList = [];
+
+    if (storeList != null) {
+      for (var store in storeList) {
+        if (isVendor && store.id == 9) {
+          _popularStoreList!.add(store);
+          break;
+        } else if (!isVendor && store.id != 9) {
+          _popularStoreList!.add(store);
+        }
+      }
+    }
+  }
+
   Future<void> getPopularStoreList(bool reload, String type, bool notify, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
     _type = type;
     if(reload) {
@@ -237,23 +284,16 @@ class StoreController extends GetxController implements GetxService {
     }
     if(_popularStoreList == null || reload || fromRecall) {
       List<Store>? popularStoreList;
-      if(dataSource == DataSourceEnum.local) {
+      if (dataSource == DataSourceEnum.local) {
         popularStoreList = await storeServiceInterface.getPopularStoreList(type, source: DataSourceEnum.local);
-        if (popularStoreList != null) {
-          _popularStoreList = [];
-          _popularStoreList!.addAll(popularStoreList);
-        }
+        await _filterAndSetPopularStores(popularStoreList);
         update();
-        getPopularStoreList(false, type, notify, dataSource: DataSourceEnum.client, fromRecall: true);
+        await getPopularStoreList(false, type, notify, dataSource: DataSourceEnum.client, fromRecall: true);
       } else {
         popularStoreList = await storeServiceInterface.getPopularStoreList(type, source: DataSourceEnum.client);
-        if (popularStoreList != null) {
-          _popularStoreList = [];
-          _popularStoreList!.addAll(popularStoreList);
-        }
+        await _filterAndSetPopularStores(popularStoreList);
         update();
       }
-
     }
   }
 
@@ -265,22 +305,16 @@ class StoreController extends GetxController implements GetxService {
     if(notify) {
       update();
     }
-    if(_latestStoreList == null || reload || fromRecall) {
+    if (_latestStoreList == null || reload || fromRecall) {
       List<Store>? latestStoreList;
-      if(dataSource == DataSourceEnum.local) {
+      if (dataSource == DataSourceEnum.local) {
         latestStoreList = await storeServiceInterface.getLatestStoreList(type, source: DataSourceEnum.local);
-        if (latestStoreList != null) {
-          _latestStoreList = [];
-          _latestStoreList!.addAll(latestStoreList);
-        }
+        await _filterAndSetLatestStores(latestStoreList);
         update();
-        getLatestStoreList(false, type, notify, fromRecall: true, dataSource: DataSourceEnum.client);
+        await getLatestStoreList(false, type, notify, fromRecall: true, dataSource: DataSourceEnum.client);
       } else {
         latestStoreList = await storeServiceInterface.getLatestStoreList(type, source: DataSourceEnum.client);
-        if (latestStoreList != null) {
-          _latestStoreList = [];
-          _latestStoreList!.addAll(latestStoreList);
-        }
+        await _filterAndSetLatestStores(latestStoreList);
         update();
       }
     }
@@ -327,12 +361,28 @@ class StoreController extends GetxController implements GetxService {
 
   }
 
-  _prepareFeaturedStore(List<Store>? stores) {
+  _prepareFeaturedStore(List<Store>? stores) async {
     if (stores != null) {
       _featuredStoreList = [];
       List<Modules> moduleList = [];
       moduleList.addAll(storeServiceInterface.moduleList());
+      final prefs = await SharedPreferences.getInstance();
+      bool isVendor = prefs.getBool('isVendor') ?? false;
+
       for (Store store in stores) {
+        for (var module in moduleList) {
+          if(module.id == store.moduleId && module.pivot!.zoneId == store.zoneId){
+            if (isVendor && store.id == 9) {
+              _featuredStoreList!.add(store);
+              return; // Only add store 9
+            } else if (!isVendor && store.id != 9) {
+              _featuredStoreList!.add(store);
+            }
+          }
+        }
+      }
+
+      /*for (Store store in stores) {
         for (var module in moduleList) {
           if(module.id == store.moduleId){
             if(module.pivot!.zoneId == store.zoneId){
@@ -340,7 +390,7 @@ class StoreController extends GetxController implements GetxService {
             }
           }
         }
-      }
+      }*/
     }
     update();
   }
@@ -361,20 +411,25 @@ class StoreController extends GetxController implements GetxService {
 
   }
 
-  _prepareVisitAgainStore(List<Store>? stores) {
+  _prepareVisitAgainStore(List<Store>? stores) async {
     if (stores != null) {
       _visitAgainStoreList = [];
       List<Modules> moduleList = [];
       moduleList.addAll(storeServiceInterface.moduleList());
+      final prefs = await SharedPreferences.getInstance();
+      bool isVendor = prefs.getBool('isVendor') ?? false;
+      _visitAgainStoreList = [];
+
       for (var store in stores) {
-        for (var module in moduleList) {
-          if(module.id == store.moduleId){
-            if(module.pivot!.zoneId == store.zoneId){
-              _visitAgainStoreList!.add(store);
-            }
-          }
+        if (isVendor && store.id == 9) {
+          _visitAgainStoreList!.add(store);
+          break;
+        } else if (!isVendor && store.id != 9) {
+          _visitAgainStoreList!.add(store);
         }
       }
+      update();
+
     }
     update();
   }
@@ -452,13 +507,25 @@ class StoreController extends GetxController implements GetxService {
     }
   }
 
-  _prepareRecommendedStores(List<Store>? recommendedStoreList) {
+  _prepareRecommendedStores(List<Store>? recommendedStoreList) async {
     if (recommendedStoreList != null) {
+      final prefs = await SharedPreferences.getInstance();
+      bool isVendor = prefs.getBool('isVendor') ?? false;
+
       _recommendedStoreList = [];
-      _recommendedStoreList!.addAll(recommendedStoreList);
+
+      for (var store in recommendedStoreList) {
+        if (isVendor && store.id == 9) {
+          _recommendedStoreList!.add(store);
+          break; // Only one store to add
+        } else if (!isVendor && store.id != 9) {
+          _recommendedStoreList!.add(store);
+        }
+      }
     }
     update();
   }
+
 
   Future<void> getStoreItemList(int? storeID, int offset, String type, bool notify) async {
     if(offset == 1 || _storeItemModel == null) {

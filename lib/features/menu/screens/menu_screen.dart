@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/features/auth/widgets/auth_dialog_widget.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
@@ -269,6 +270,8 @@ class _MenuScreenState extends State<MenuScreen> {
                   onTap: () async {
                     if(AuthHelper.isLoggedIn()) {
                       Get.dialog(ConfirmationDialog(icon: Images.support, description: 'are_you_sure_to_logout'.tr, isLogOut: true, onYesPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('isVendor', false);
                         Get.find<ProfileController>().clearUserInfo();
                         Get.find<AuthController>().socialLogout();
                         Get.find<CartController>().clearCartList(canRemoveOnline: false);

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/models/response_model.dart';
 import 'package:sixam_mart/features/auth/domain/models/auth_response_model.dart';
 import 'package:sixam_mart/features/auth/domain/models/signup_body_model.dart';
@@ -66,6 +67,16 @@ class AuthService implements AuthServiceInterface{
   Future<ResponseModel> login({required String emailOrPhone, required String password, required String loginType, required String fieldType, bool alreadyInApp = false}) async {
     Response response = await authRepositoryInterface.login(emailOrPhone: emailOrPhone, password: password, loginType: loginType, fieldType: fieldType);
     if (response.statusCode == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      final isVendor = response.body['is_vendor'];
+      if (isVendor == 1) {
+        await prefs.setBool('isVendor', true);
+      } else {
+        await prefs.setBool('isVendor', false);
+      }
+      print('login,login,login');
+      print(response.body['is_vendor']);
+      print(response.body);
       AuthResponseModel authResponse = AuthResponseModel.fromJson(response.body);
       await _updateHeaderFunctionality(authResponse, alreadyInApp: alreadyInApp);
       return ResponseModel(true, authResponse.token??'', authResponseModel: authResponse);
