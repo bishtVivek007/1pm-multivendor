@@ -247,7 +247,10 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         BottomNavItemWidget(
                                           title: 'home'.tr, selectedIcon: Images.homeSelect,
                                           unSelectedIcon: Images.homeUnselect, isSelected: _pageIndex == 0,
-                                          onTap: () => _setPage(0),
+                                          onTap: () {
+                                            _setPage(0);
+                                            HomeScreen.loadData(true);
+                                          }
                                         ),
                                         BottomNavItemWidget(
                                           title: isParcel ? 'address'.tr : isTaxi ? 'wishlist'.tr : 'favourite'.tr,

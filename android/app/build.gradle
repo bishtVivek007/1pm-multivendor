@@ -3,7 +3,7 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
-    id "com.google.firebase.crashlytics"
+//    id "com.google.firebase.crashlytics"
 }
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -59,7 +59,7 @@ android {
         release {
             keyAlias 'groceries'
             keyPassword 'Mali@123Gluu'
-            storeFile file('/Users/ftechiz/Desktop/1pm_web-app/android/app/groceries.jks5')
+            storeFile file('/home/acerpc/Desktop/1pm-multivendor-app/android/app/groceries.jks')
             storePassword 'Mali@123Gluu'
         }
     }
