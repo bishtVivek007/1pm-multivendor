@@ -25,7 +25,7 @@
     </queries>
 
     <application
-        android:label="Tatkaal Seva"
+        android:label="A To Z Cart"
         android:name="${applicationName}"
         android:extractNativeLibs="true"
         android:requestLegacyExternalStorage="true"
@@ -62,7 +62,7 @@
 
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="Tatkaal Seva" />
+                android:value="A To Z Cart" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -4,16 +4,16 @@ import 'package:sixam_mart/features/language/domain/models/language_model.dart';
 import 'package:sixam_mart/util/images.dart';
 
 class AppConstants {
-  static const String appName = 'Tatkaal Seva';
+  static const String appName = 'A To Z Cart';
   static const double appVersion = 3.1;
 
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
   static const int balanceInputLen = 10;
-  static const String webHostedUrl = 'https://tatkaalseva.com';
+  static const String webHostedUrl = 'https://atozcart.in';
   static const bool useReactWebsite = false;
 
-  static const String baseUrl = 'https://tatkaalseva.com/admin';
+  static const String baseUrl = 'https://atozcart.in/admin';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
