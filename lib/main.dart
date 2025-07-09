@@ -51,21 +51,21 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyCdgxeJwA57mS2EOG80gvmva7Af83QgQc0",
-        authDomain: "talkaalseva.firebaseapp.com",
-        projectId: "talkaalseva",
-        storageBucket: "talkaalseva.firebasestorage.app",
-        messagingSenderId: "996097508873",
-        appId: "1:996097508873:web:60cafca3c1e342de171ad8",
-        measurementId: "G-6R1327PD44"
+        apiKey: "AIzaSyBPk9_-LMzdt_xtkp-K630BctEl3diTSZc",
+        authDomain: "a2zcart-cecd2.firebaseapp.com",
+        projectId: "a2zcart-cecd2",
+        storageBucket: "a2zcart-cecd2.firebasestorage.app",
+        messagingSenderId: "534442184736",
+        appId: "1:534442184736:web:35e0ed5d8d8178da8b6c45",
+        measurementId: "G-NNS69B1YVF"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyBdYlvl-TAnYfSJm8KL646DjTWtLdf8Jbw",
-        appId: "1:996097508873:android:8f5f1047033a77e3171ad8",
-        messagingSenderId: "996097508873",
-        projectId: "talkaalseva",
+        apiKey: "AIzaSyDqtz3QctA4BCj_sE_1UIrkI_C7oPxO6cI",
+        appId: "1:534442184736:android:5e017f33cbd317148b6c45",
+        messagingSenderId: "534442184736",
+        projectId: "a2zcart-cecd2",
       ),
     );
   } else {

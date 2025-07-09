@@ -1,4 +1,4 @@
-package com.applications.tatkaalseva
+package com.application.a2zcart
 
 import io.flutter.embedding.android.FlutterActivity
 

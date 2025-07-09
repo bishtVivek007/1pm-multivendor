@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "996097508873",
-    "project_id": "talkaalseva",
-    "storage_bucket": "talkaalseva.firebasestorage.app"
+    "project_number": "534442184736",
+    "project_id": "a2zcart-cecd2",
+    "storage_bucket": "a2zcart-cecd2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:996097508873:android:8f5f1047033a77e3171ad8",
+        "mobilesdk_app_id": "1:534442184736:android:5e017f33cbd317148b6c45",
         "android_client_info": {
-          "package_name": "com.applications.tatkaalseva"
+          "package_name": "com.application.a2zcart"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBdYlvl-TAnYfSJm8KL646DjTWtLdf8Jbw"
+          "current_key": "AIzaSyDqtz3QctA4BCj_sE_1UIrkI_C7oPxO6cI"
         }
       ],
       "services": {
