@@ -59,21 +59,21 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyDwsr1PHGRNLAN-rO6EqMSTOs_6k7aJY1M",
-        authDomain: "pm-507ed.firebaseapp.com",
-        projectId: "pm-507ed",
-        storageBucket: "pm-507ed.firebasestorage.app",
-        messagingSenderId: "417474721005",
-        appId: "1:417474721005:web:314599404f47a1758308e4",
-        measurementId: "G-WGE37ED1LJ"
+        apiKey: "AIzaSyBHd2uYqVIAv1YblA3YEP309EDoW1vsDOU",
+        authDomain: "lucklore-5b602.firebaseapp.com",
+        projectId: "lucklore-5b602",
+        storageBucket: "lucklore-5b602.firebasestorage.app",
+        messagingSenderId: "183155196837",
+        appId: "1:183155196837:web:a1cc39e338b5139d9fde4c",
+        measurementId: "G-K6M9GSXQWQ"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM",
-        appId: "1:417474721005:android:62aaf2694d7c08bf8308e4",
-        messagingSenderId: "417474721005",
-        projectId: "pm-507ed",
+        apiKey: "AIzaSyApCGUsEreg4Q8c0W7UZmEVdSFafQ0UjfU",
+        appId: "1:183155196837:android:7fa7828f9c93c6999fde4c",
+        messagingSenderId: "183155196837",
+        projectId: "lucklore-5b602",
       ),
     );
   } else {

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "417474721005",
-    "project_id": "pm-507ed",
-    "storage_bucket": "pm-507ed.firebasestorage.app"
+    "project_number": "183155196837",
+    "project_id": "lucklore-5b602",
+    "storage_bucket": "lucklore-5b602.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:22cfcb1edd781a478308e4",
+        "mobilesdk_app_id": "1:183155196837:android:1d95df7feb0784a59fde4c",
         "android_client_info": {
-          "package_name": "com.apllication.onepmdelivery"
+          "package_name": "com.application.luckloredelivery"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
+          "current_key": "AIzaSyApCGUsEreg4Q8c0W7UZmEVdSFafQ0UjfU"
         }
       ],
       "services": {
@@ -26,15 +26,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:151e4821cba33a898308e4",
+        "mobilesdk_app_id": "1:183155196837:android:3ae1e9146df1599c9fde4c",
         "android_client_info": {
-          "package_name": "com.application.onepm"
+          "package_name": "com.application.luclorevendor"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
+          "current_key": "AIzaSyApCGUsEreg4Q8c0W7UZmEVdSFafQ0UjfU"
         }
       ],
       "services": {
@@ -45,26 +45,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:90f0df43316cb80d8308e4",
-        "android_client_info": {
-          "package_name": "com.application.openpmvendor"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:417474721005:android:62aaf2694d7c08bf8308e4",
+        "mobilesdk_app_id": "1:183155196837:android:7fa7828f9c93c6999fde4c",
         "android_client_info": {
           "package_name": "com.ftechiz.lucklore"
         }
@@ -72,7 +53,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQt2LEbxOlgKCv1HXB08ZulnFF526KZPM"
+          "current_key": "AIzaSyApCGUsEreg4Q8c0W7UZmEVdSFafQ0UjfU"
         }
       ],
       "services": {
