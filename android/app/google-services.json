@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "534442184736",
-    "project_id": "a2zcart-cecd2",
-    "storage_bucket": "a2zcart-cecd2.firebasestorage.app"
+    "project_number": "883048804010",
+    "project_id": "easyshop-3b5e4",
+    "storage_bucket": "easyshop-3b5e4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:534442184736:android:5e017f33cbd317148b6c45",
+        "mobilesdk_app_id": "1:883048804010:android:e996778eed65b7e04cead3",
         "android_client_info": {
-          "package_name": "com.application.a2zcart"
+          "package_name": "com.application.easyshop"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDqtz3QctA4BCj_sE_1UIrkI_C7oPxO6cI"
+          "current_key": "AIzaSyAEa51b9i81E_rx80rzekHdwSgCn8m6Sy8"
         }
       ],
       "services": {

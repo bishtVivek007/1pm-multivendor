@@ -51,13 +51,13 @@ Future<void> main() async {
 
   if(GetPlatform.isWeb){
     await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyBPk9_-LMzdt_xtkp-K630BctEl3diTSZc",
-        authDomain: "a2zcart-cecd2.firebaseapp.com",
-        projectId: "a2zcart-cecd2",
-        storageBucket: "a2zcart-cecd2.firebasestorage.app",
-        messagingSenderId: "534442184736",
-        appId: "1:534442184736:web:35e0ed5d8d8178da8b6c45",
-        measurementId: "G-NNS69B1YVF"
+        apiKey: "AIzaSyB9fNxE0W5zh1fg_5b6ppNgfq54oDC3xEo",
+        authDomain: "easyshop-3b5e4.firebaseapp.com",
+        projectId: "easyshop-3b5e4",
+        storageBucket: "easyshop-3b5e4.firebasestorage.app",
+        messagingSenderId: "883048804010",
+        appId: "1:883048804010:web:056416232c02d84c4cead3",
+        measurementId: "G-LR7ZTW8DKW"
     ));
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(

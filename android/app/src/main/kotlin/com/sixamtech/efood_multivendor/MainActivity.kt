@@ -1,4 +1,4 @@
-package com.application.a2zcart
+package com.application.easyshop
 
 import io.flutter.embedding.android.FlutterActivity
 
