@@ -3,6 +3,8 @@ import 'package:sixam_mart/features/item/domain/models/item_model.dart';
 class CartModel {
   int? _id;
   double? _price;
+  int? _isBaseUnit;
+  String? _unitName;
   double? _discountedPrice;
   List<Variation>? _variation;
   List<List<bool?>>? _foodVariations;
@@ -29,8 +31,11 @@ class CartModel {
     bool isCampaign,
     int? stock,
     Item? item,
-    int? quantityLimit,
-    {bool isLoading = false}) {
+    int? quantityLimit, {
+      bool isLoading = false,
+      int? isBaseUnit,
+      String? unitName,
+    }) {
     _id = id;
     _price = price;
     _discountedPrice = discountedPrice;
@@ -42,6 +47,8 @@ class CartModel {
     _addOns = addOns;
     _isCampaign = isCampaign;
     _stock = stock;
+    _isBaseUnit = isBaseUnit;
+    _unitName = unitName;
     _item = item;
     _quantityLimit = quantityLimit;
     _isLoading = isLoading;
@@ -57,6 +64,8 @@ class CartModel {
   int? get quantity => _quantity;
   // ignore: unnecessary_getters_setters
   set quantity(int? qty) => _quantity = qty;
+  int? get isBaseUnit => _isBaseUnit;
+  String? get unitName => _unitName;
   List<AddOn>? get addOnIds => _addOnIds;
   List<AddOns>? get addOns => _addOns;
   bool? get isCampaign => _isCampaign;
@@ -89,6 +98,8 @@ class CartModel {
     _discountAmount = json['discount_amount']?.toDouble();
     _quantity = json['quantity'];
     _stock = json['stock'];
+    _isBaseUnit = json['is_base_unit'] != null ? int.tryParse(json['is_base_unit'].toString()) : null;
+    _unitName = json['unit'];
     if (json['add_on_ids'] != null) {
       _addOnIds = [];
       json['add_on_ids'].forEach((v) {
@@ -115,6 +126,8 @@ class CartModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['cart_id'] = _id;
     data['price'] = _price;
+    data['is_base_unit'] = _isBaseUnit?.toString();
+    data['unit'] = _unitName;
     data['discounted_price'] = _discountedPrice;
     if (_variation != null) {
       data['variation'] = _variation!.map((v) => v.toJson()).toList();

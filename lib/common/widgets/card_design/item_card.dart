@@ -104,13 +104,13 @@ class ItemCard extends StatelessWidget {
                           ),
                         ) : const SizedBox(),
 
-                        isShop ? const SizedBox() : Positioned(
+                        /*isShop ? const SizedBox() : Positioned(
                           bottom: 10, right: 20,
                           child: CartCountView(
                             item: item,
                             index: index,
                           ),
-                        ),
+                        ),*/
 
                         Get.find<ItemController>().isAvailable(item) ? const SizedBox() : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
 
@@ -182,7 +182,7 @@ class ItemCard extends StatelessWidget {
                             ]),
                           ),
 
-                          isShop ? Positioned(
+                          /*isShop ? Positioned(
                             bottom: 0, right: 0,
                             child: CartCountView(
                               item: item,
@@ -199,7 +199,7 @@ class ItemCard extends StatelessWidget {
                                 child: Icon(isPopularItemCart ? Icons.add_shopping_cart : Icons.add, color: Theme.of(context).cardColor, size: 20),
                               ),
                             ),
-                          ) : const SizedBox(),
+                          ) : const SizedBox(),*/
                         ]),
                       ),
                     ),

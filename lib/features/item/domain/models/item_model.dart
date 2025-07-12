@@ -66,6 +66,10 @@ class ItemModel {
 class Item {
   int? id;
   String? name;
+  String? unitId;
+  String? baseUnit;
+  String? secondaryUnit;
+  String? conversionRate;
   String? description;
   String? imageFullUrl;
   List<String>? imagesFullUrl;
@@ -112,6 +116,10 @@ class Item {
     this.imagesFullUrl,
     this.categoryId,
     this.categoryIds,
+    this.unitId,
+    this.baseUnit,
+    this.secondaryUnit,
+    this.conversionRate,
     this.variations,
     this.foodVariations,
     this.addOns,
@@ -147,6 +155,13 @@ class Item {
 
   Item.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    unitId = json['unit_id']?.toString();
+
+    if (json['unit'] != null) {
+      baseUnit = json['unit']['unit'];
+      secondaryUnit = json['unit']['secondary_unit'];
+      conversionRate = json['unit']['conversion_rate']?.toString();
+    }
     name = json['name'];
     description = json['description'];
     imageFullUrl = json['image_full_url'];
@@ -276,6 +291,10 @@ class Item {
     data['nutritions_name'] = nutritionsName;
     data['allergies_name'] = allergiesName;
     data['generic_name'] = genericName;
+    data['unit_id'] = unitId;
+    data['base_unit'] = baseUnit;
+    data['secondary_unit'] = secondaryUnit;
+    data['conversion_rate'] = conversionRate;
     return data;
   }
 }

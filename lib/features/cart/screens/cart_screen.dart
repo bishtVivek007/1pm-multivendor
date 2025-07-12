@@ -15,6 +15,7 @@ import 'package:sixam_mart/helper/module_helper.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/util/styles.dart';
@@ -34,6 +35,8 @@ import 'package:sixam_mart/features/cart/widgets/web_cart_items_widget.dart';
 import 'package:sixam_mart/features/cart/widgets/web_suggested_item_view_widget.dart';
 import 'package:sixam_mart/features/home/screens/home_screen.dart';
 import 'package:sixam_mart/features/store/screens/store_screen.dart';
+import '../../../api/api_client.dart';
+import '../../item/controllers/item_controller.dart';
 
 class CartScreen extends StatefulWidget {
   final bool fromNav;
@@ -46,6 +49,8 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final ScrollController scrollController = ScrollController();
   GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
+  List<dynamic>? rawCartResponse;
+  double rawCartTotalPrice = 0;
 
   final GlobalKey _widgetKey = GlobalKey();
   double _height = 0;
@@ -59,6 +64,40 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> initCall() async {
+
+    try {
+      Response response = await Get.find<ApiClient>().getData(AppConstants.getCartListUri);
+
+      if (response.statusCode == 200 && response.body != null && response.body is List) {
+        rawCartResponse = response.body;
+
+        rawCartTotalPrice = 0; // Reset
+        for (var item in rawCartResponse!) {
+          if (item.containsKey('item_type')) {
+            // Start summing from the next items after item_type
+            bool startSumming = false;
+            item.forEach((key, value) {
+              if (startSumming && key == 'price' && value != null) {
+                rawCartTotalPrice += double.tryParse(value.toString()) ?? 0;
+              }
+              if (key == 'item_type') {
+                startSumming = true;
+              }
+            });
+          }
+        }
+
+        debugPrint('✅ Total Price of Items after item_type: $rawCartTotalPrice');
+      } else {
+        debugPrint('❌ Invalid cart API response format or status');
+      }
+    } catch (e, stack) {
+      debugPrint('💥 Error while fetching or parsing: $e');
+      debugPrint(stack.toString());
+    }
+
+
+    // await Get.find<CartController>().getCartDataOnline();
     _initialBottomSheetShowHide();
     if(Get.find<CartController>().cartList.isEmpty) {
       await Get.find<CartController>().getCartDataOnline();
@@ -264,22 +303,24 @@ class _CartScreenState extends State<CartScreen> {
                       child: Column(children: [
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           Text('item_price'.tr, style: robotoRegular),
-                          PriceConverter.convertAnimationPrice(cartController.itemPrice, textStyle: robotoRegular),
+                          // PriceConverter.convertAnimationPrice(cartController.cartList.first.item?.price ?? 0.0, textStyle: robotoRegular),
+                          // PriceConverter.convertAnimationPrice(Get.find<ItemController>().item!.price! ?? 0.0, textStyle: robotoRegular),
+                          PriceConverter.convertAnimationPrice(rawCartTotalPrice, textStyle: robotoRegular),
                         ]),
                         SizedBox(height: cartController.variationPrice > 0 && ModuleHelper.getModuleConfig(cartController.cartList.first.item!.moduleType).newVariation!
                             ? Dimensions.paddingSizeSmall : 0),
 
-                        cartController.variationPrice > 0 && ModuleHelper.getModuleConfig(cartController.cartList.first.item!.moduleType).newVariation! ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('variations'.tr, style: robotoRegular),
-                            Text(
-                              '(+) ${PriceConverter.convertPrice(cartController.variationPrice)}',
-                              style: robotoRegular, textDirection: TextDirection.ltr,
-                            ),
-                          ],
-                        ) : const SizedBox(),
-                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                        // cartController.variationPrice > 0 && ModuleHelper.getModuleConfig(cartController.cartList.first.item!.moduleType).newVariation! ? Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text('variations'.tr, style: robotoRegular),
+                        //     Text(
+                        //       '(+) ${PriceConverter.convertPrice(cartController.variationPrice)}',
+                        //       style: robotoRegular, textDirection: TextDirection.ltr,
+                        //     ),
+                        //   ],
+                        // ) : const SizedBox(),
+                        // const SizedBox(height: Dimensions.paddingSizeSmall),
 
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           Text('discount'.tr, style: robotoRegular),
@@ -310,7 +351,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
 
-            ResponsiveHelper.isDesktop(context) ? const SizedBox.shrink() : CheckoutButton(cartController: cartController, availableList: cartController.availableList),
+            ResponsiveHelper.isDesktop(context) ? const SizedBox.shrink() : CheckoutButton(rawDataPrice: rawCartTotalPrice, cartController: cartController, availableList: cartController.availableList),
 
           ]) : const NoDataScreen(isCart: true, text: '', showFooter: true);
         });
@@ -416,7 +457,8 @@ class _CartScreenState extends State<CartScreen> {
               child: Column(children: [
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('item_price'.tr, style: robotoRegular),
-                  PriceConverter.convertAnimationPrice(cartController.itemPrice, textStyle: robotoRegular),
+                  PriceConverter.convertAnimationPrice(rawCartTotalPrice, textStyle: robotoRegular),
+                  // PriceConverter.convertAnimationPrice(cartController.itemPrice, textStyle: robotoRegular),
                 ]),
                 SizedBox(height: cartController.variationPrice > 0 ? Dimensions.paddingSizeSmall : 0),
 
@@ -449,7 +491,7 @@ class _CartScreenState extends State<CartScreen> {
               ]),
             ) : const SizedBox(),
 
-            ResponsiveHelper.isDesktop(context) ? CheckoutButton(cartController: cartController, availableList: cartController.availableList) : const SizedBox.shrink(),
+            ResponsiveHelper.isDesktop(context) ? CheckoutButton(rawDataPrice: rawCartTotalPrice, cartController: cartController, availableList: cartController.availableList) : const SizedBox.shrink(),
 
           ]);
         }
@@ -526,9 +568,10 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class CheckoutButton extends StatelessWidget {
+  final double rawDataPrice;
   final CartController cartController;
   final List<bool> availableList;
-  const CheckoutButton({super.key, required this.cartController, required this.availableList});
+  const CheckoutButton({super.key, required this.rawDataPrice, required this.cartController, required this.availableList});
 
   @override
   Widget build(BuildContext context) {
@@ -581,11 +624,11 @@ class CheckoutButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('subtotal'.tr, style: robotoMedium.copyWith(color:  ResponsiveHelper.isDesktop(context) ? Theme.of(context).textTheme.bodyLarge!.color : Theme.of(context).primaryColor)),
-                    PriceConverter.convertAnimationPrice(cartController.subTotal, textStyle: robotoRegular.copyWith(color: Theme.of(context).primaryColor)),
-                    // Text(
-                    //   PriceConverter.convertPrice(cartController.subTotal),
-                    //   style: robotoMedium.copyWith(color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).textTheme.bodyLarge!.color : Theme.of(context).primaryColor), textDirection: TextDirection.ltr,
-                    // ),
+                    // PriceConverter.convertAnimationPrice(cartController.cartList.first.item?.price ?? 0.0, textStyle: robotoRegular.copyWith(color: Theme.of(context).primaryColor)),
+                    Text(
+                      PriceConverter.convertPrice(rawDataPrice - cartController.itemDiscountPrice),
+                      style: robotoMedium.copyWith(color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).textTheme.bodyLarge!.color : Theme.of(context).primaryColor), textDirection: TextDirection.ltr,
+                    ),
                   ],
                 ),
               ),

@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:sixam_mart/features/checkout/widgets/bottom_section.dart';
 import 'package:sixam_mart/features/checkout/widgets/top_section.dart';
 import 'package:flutter/material.dart';
+import '../../../api/api_client.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartModel?>? cartList;
@@ -80,6 +81,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   final FocusNode guestConfirmPasswordNode = FocusNode();
 
   bool _firstTimeCheckPayment = false;
+  List<dynamic>? rawCartResponse;
+  double rawCartTotalPrice = 0;
 
   @override
   void initState() {
@@ -90,6 +93,36 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> initCall() async {
       bool isLoggedIn = AuthHelper.isLoggedIn();
+      try {
+        Response response = await Get.find<ApiClient>().getData(AppConstants.getCartListUri);
+
+        if (response.statusCode == 200 && response.body != null && response.body is List) {
+          rawCartResponse = response.body;
+
+          rawCartTotalPrice = 0; // Reset
+          for (var item in rawCartResponse!) {
+            if (item.containsKey('item_type')) {
+              // Start summing from the next items after item_type
+              bool startSumming = false;
+              item.forEach((key, value) {
+                if (startSumming && key == 'price' && value != null) {
+                  rawCartTotalPrice += double.tryParse(value.toString()) ?? 0;
+                }
+                if (key == 'item_type') {
+                  startSumming = true;
+                }
+              });
+            }
+          }
+
+          debugPrint('✅ Total Price of Items after item_type: Checkout Screen $rawCartTotalPrice');
+        } else {
+          debugPrint('❌ Invalid cart API response format or status');
+        }
+      } catch (e, stack) {
+        debugPrint('💥 Error while fetching or parsing: $e');
+        debugPrint(stack.toString());
+      }
       // Get.find<CheckoutController>().setGuestAddress(null, isUpdate: false);
       Get.find<CheckoutController>().streetNumberController.text = AddressHelper.getUserAddressFromSharedPref()!.streetNumber ?? '';
       Get.find<CheckoutController>().houseController.text = AddressHelper.getUserAddressFromSharedPref()!.house ?? '';
@@ -237,7 +270,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           double extraPackagingCharge = _calculateExtraPackagingCharge(checkoutController);
 
           double total = _calculateTotal(
-            subTotal: subTotal, deliveryCharge: deliveryCharge, discount: discount,
+            subTotal: rawCartTotalPrice, deliveryCharge: deliveryCharge, discount: discount,
             couponDiscount: couponDiscount, taxIncluded: taxIncluded, tax: tax, orderType: checkoutController.orderType!,
             tips: checkoutController.tips, additionalCharge: additionalCharge, extraPackagingCharge: extraPackagingCharge,
           );
@@ -292,7 +325,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(width: Dimensions.paddingSizeLarge),
 
                       Expanded(flex: 4, child: BottomSection(
-                        checkoutController: checkoutController, total: total, module: module!, subTotal: subTotal,
+                        checkoutController: checkoutController, total: total, module: module!, subTotal: rawCartTotalPrice,
                         discount: discount, couponController: couponController, taxIncluded: taxIncluded, tax: tax,
                         deliveryCharge: deliveryCharge,
                         todayClosed: todayClosed, tomorrowClosed: tomorrowClosed, orderAmount: orderAmount,
@@ -321,7 +354,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                     ),
 
                     BottomSection(
-                      checkoutController: checkoutController, total: total, module: module!, subTotal: subTotal,
+                      checkoutController: checkoutController, total: total, module: module!, subTotal: rawCartTotalPrice,
                       discount: discount, couponController: couponController, taxIncluded: taxIncluded, tax: tax,
                       deliveryCharge: deliveryCharge,
                       todayClosed: todayClosed,tomorrowClosed: tomorrowClosed, orderAmount: orderAmount,

@@ -35,6 +35,7 @@ class ItemDetailsScreen extends StatefulWidget {
 }
 
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
+  late TextEditingController _quantityController;
   final Size size = Get.size;
   final GlobalKey<ScaffoldMessengerState> _globalKey = GlobalKey();
   final GlobalKey<DetailsAppBarWidgetState> _key = GlobalKey();
@@ -42,9 +43,77 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   @override
   void initState() {
     super.initState();
-
+    _quantityController = TextEditingController(text: '1'); // default value
+    Get.find<ItemController>().setEnteredUnitQty('1');
     Get.find<ItemController>().getProductDetails(widget.item!);
     Get.find<ItemController>().setSelect(0, false);
+  }
+
+  Widget _buildUnitButton(BuildContext context, int index, String label) {
+    final itemController = Get.find<ItemController>();
+    bool isSelected = itemController.selectedUnitIndex == index;
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => itemController.setSelectedUnitIndex(index),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Theme.of(context).primaryColor : Colors.white,
+            border: Border.all(color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            label,
+            style: robotoMedium.copyWith(
+              color: isSelected ? Colors.white : Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _calculateFinalUnitPrice({
+    required Item item,
+    required List<int?> variationIndex,
+    required int selectedUnitIndex,
+  }) {
+    String variationType = '';
+    for (int index = 0; index < item.choiceOptions!.length; index++) {
+      variationType +=
+          (index == 0 ? '' : '-') + item.choiceOptions![index].options![variationIndex[index]!].replaceAll(' ', '');
+    }
+
+    double price = item.price ?? 0;
+    Variation? selectedVariation;
+
+    for (Variation v in item.variations!) {
+      if (v.type == variationType) {
+        price = v.price!;
+        selectedVariation = v;
+        break;
+      }
+    }
+
+    double? discount = (item.availableDateStarts != null || item.storeDiscount == 0)
+        ? item.discount
+        : item.storeDiscount;
+    String? discountType = (item.availableDateStarts != null || item.storeDiscount == 0)
+        ? item.discountType
+        : 'percent';
+
+    double finalPrice = PriceConverter.convertWithDiscount(price, discount, discountType)!;
+
+    // Apply unit conversion
+    double quantityInBaseUnit = selectedUnitIndex == 0
+        ? 1
+        : (1 / (double.tryParse(item.conversionRate ?? '1') ?? 1));
+
+    finalPrice *= quantityInBaseUnit;
+
+    return finalPrice.toString();
   }
 
   @override
@@ -89,7 +158,13 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               double? discount = (itemController.item!.availableDateStarts != null || itemController.item!.storeDiscount == 0) ? itemController.item!.discount : itemController.item!.storeDiscount;
               String? discountType = (itemController.item!.availableDateStarts != null || itemController.item!.storeDiscount == 0) ? itemController.item!.discountType : 'percent';
               double priceWithDiscount = PriceConverter.convertWithDiscount(price, discount, discountType)!;
-              double priceWithQuantity = priceWithDiscount * itemController.quantity!;
+              double quantityInBaseUnit = itemController.selectedUnitIndex == 0
+                  ? itemController.enteredUnitQty
+                  : (itemController.enteredUnitQty / (double.tryParse(itemController.item!.conversionRate ?? '1') ?? 1));
+
+              double priceWithQuantity = priceWithDiscount * quantityInBaseUnit;
+
+              // double priceWithQuantity = priceWithDiscount * itemController.quantity!;
               double addonsCost = 0;
               List<AddOn> addOnIdList = [];
               List<AddOns> addOnsList = [];
@@ -100,6 +175,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   addOnsList.add(itemController.item!.addOns![index]);
                 }
               }
+
 
               cartModel = CartModel(
                   null, price, priceWithDiscount, variation != null ? [variation] : [], [],
@@ -112,13 +188,29 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               List<int?> listOfAddOnQty = _getSelectedAddonQtnList(addOnIdList: addOnIdList);
 
               cart = OnlineCart(
-                  cartId, widget.item!.id, null, priceWithDiscount.toString(), '',
+                  unitName: itemController.selectedUnitIndex == 0
+                      ? widget.item!.baseUnit
+                      : widget.item!.secondaryUnit,
+                  baseUnit: itemController.selectedUnitIndex == 0 ? 1 : 0,
+                  cartId, widget.item!.id, null,
+                  // itemController.cartIndex != -1 ?
+                  // _calculateFinalUnitPrice(
+                  //   item: widget.item!,
+                  //   variationIndex: itemController.variationIndex!,
+                  //   selectedUnitIndex: itemController.selectedUnitIndex,
+                  // ),
+                  priceWithDiscount.toString(),
+                  '',
                   variation != null ? [variation] : [], null,
-                  itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity
-                      : itemController.quantity, listOfAddOnId, addOnsList, listOfAddOnQty, 'Item'
+                  itemController.enteredUnitQty.toInt(),
+                  listOfAddOnId, addOnsList, listOfAddOnQty, 'Item'
               );
               priceWithAddons = priceWithQuantity + (Get.find<SplashController>().configModel!.moduleConfig!.module!.addOn! ? addonsCost : 0);
             }
+
+            // double convertedQty = itemController.selectedUnitIndex == 0
+            //     ? itemController.enteredUnitQty
+            //     : (itemController.enteredUnitQty / (double.tryParse(itemController.item!.conversionRate ?? '1') ?? 1));
 
             return Scaffold(
               key: _globalKey,
@@ -196,53 +288,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ),
                         itemController.item!.choiceOptions!.isNotEmpty ? const SizedBox(height: Dimensions.paddingSizeLarge) : const SizedBox(),
 
-                        // Quantity
-                        GetBuilder<CartController>(
-                          builder: (cartController) {
-                            return Row(children: [
-                              Text('quantity'.tr, style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                              const Expanded(child: SizedBox()),
-                              Container(
-                                decoration: BoxDecoration(color: Theme.of(context).disabledColor, borderRadius: BorderRadius.circular(5)),
-                                child: Row(children: [
-                                  InkWell(
-                                    onTap: cartController.isLoading ? null : () {
-                                      if(itemController.cartIndex != -1) {
-                                        if(cartController.cartList[itemController.cartIndex].quantity! > 1) {
-                                          cartController.setQuantity(false, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantity);
-                                        }
-                                      }else {
-                                        if(itemController.quantity! > 1) {
-                                          itemController.setQuantity(false, stock, itemController.item!.quantityLimit);
-                                        }
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                                      child: Icon(Icons.remove, size: 20),
-                                    ),
-                                  ),
-
-                                  Text(
-                                    itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity.toString()
-                                        : itemController.quantity.toString(),
-                                    style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                                  ),
-
-                                  InkWell(
-                                    onTap: cartController.isLoading ? null : () => itemController.cartIndex != -1
-                                        ? cartController.setQuantity(true, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantityLimit)
-                                        : itemController.setQuantity(true, stock, itemController.item!.quantityLimit),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                                      child: Icon(Icons.add, size: 20),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                            ]);
-                          }
-                        ),
                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
                         Row(children: [
@@ -256,6 +301,37 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             style:robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge),
                           ),
                         ]),
+                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                        Row(children: [
+                          Text('${'Units'.tr}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                          const SizedBox(width: Dimensions.paddingSizeSmall),
+
+                          Expanded(
+                            child: Row(children: [
+                              _buildUnitButton(context, 0, itemController.item!.baseUnit ?? 'Base'),
+                              const SizedBox(width: Dimensions.paddingSizeSmall),
+                              _buildUnitButton(context, 1, itemController.item!.secondaryUnit ?? 'Secondary'),
+                            ]),
+                          ),
+                        ]),
+
+                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                        TextField(
+                          controller: _quantityController,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          decoration: InputDecoration(
+                            labelText: 'Enter Quantity (${itemController.selectedUnitIndex == 0 ? itemController.item?.baseUnit : itemController.item?.secondaryUnit})',
+                            border: const OutlineInputBorder(),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          ),
+                          onChanged: (value) {
+                            Get.find<ItemController>().setEnteredUnitQty(value);
+                          },
+                        ),
+
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
                         itemController.item!.isPrescriptionRequired! ? Container(

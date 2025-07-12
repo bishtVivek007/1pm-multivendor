@@ -113,6 +113,23 @@ class ItemController extends GetxController implements GetxService {
   int _selectedCategory = 0;
   int get selectedCategory => _selectedCategory;
 
+  int selectedUnitIndex = 0;
+  double enteredUnitQty = 1;
+
+  void setSelectedUnitIndex(int index) {
+    selectedUnitIndex = index;
+    update();
+  }
+
+  void setEnteredUnitQty(String value) {
+    double parsed = double.tryParse(value) ?? 1;
+    enteredUnitQty = parsed;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update(); // Safe to call here
+    });
+  }
+
   void selectCategory(int index) {
     _selectedCategory = index;
     update();

@@ -2,6 +2,8 @@ import 'package:sixam_mart/features/item/domain/models/item_model.dart' as produ
 
 class OnlineCartModel {
   int? id;
+  String? unitName;
+  String? baseUnit;
   int? userId;
   int? moduleId;
   int? itemId;
@@ -20,6 +22,8 @@ class OnlineCartModel {
   OnlineCartModel({
     this.id,
     this.userId,
+    this.unitName,
+    this.baseUnit,
     this.moduleId,
     this.itemId,
     this.isGuest,
@@ -37,6 +41,8 @@ class OnlineCartModel {
   OnlineCartModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    unitName = json['unit'];
+    baseUnit = json['is_base_unit'];
     moduleId = json['module_id'];
     itemId = json['item_id'];
     isGuest = json['is_guest'];
@@ -64,6 +70,8 @@ class OnlineCartModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['is_base_unit'] = baseUnit;
+    data['unit'] = unitName;
     data['user_id'] = userId;
     data['module_id'] = moduleId;
     data['item_id'] = itemId;
