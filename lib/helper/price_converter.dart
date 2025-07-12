@@ -40,7 +40,7 @@ class PriceConverter {
       textDirection: TextDirection.ltr,
       child: AnimatedFlipCounter(
         duration: const Duration(milliseconds: 500),
-        value: toFixed(price!),
+        value: toFixed(price ?? 0),
         textStyle: textStyle ?? robotoMedium,
         fractionDigits: forDM ? 0 : Get.find<SplashController>().configModel!.digitAfterDecimalPoint!,
         prefix: isRightSide ? '' : '${Get.find<SplashController>().configModel!.currencySymbol!} ',
