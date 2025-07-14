@@ -37,6 +37,8 @@ import 'package:sixam_mart/features/cart/widgets/web_suggested_item_view_widget.
 import 'package:sixam_mart/features/home/screens/home_screen.dart';
 import 'package:sixam_mart/features/store/screens/store_screen.dart';
 import '../../../api/api_client.dart';
+import '../../../common/widgets/not_logged_in_screen.dart';
+import '../../../helper/auth_helper.dart';
 import '../../item/controllers/item_controller.dart';
 
 class CartScreen extends StatefulWidget {
@@ -151,7 +153,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: CustomAppBar(title: 'my_cart'.tr, backButton: (ResponsiveHelper.isDesktop(context) || !widget.fromNav)),
       endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
-      body: GetBuilder<StoreController>(builder: (storeController) {
+      body: AuthHelper.isLoggedIn() ? GetBuilder<StoreController>(builder: (storeController) {
         return GetBuilder<CartController>(builder: (cartController) {
           return cartController.cartList.isNotEmpty ? Column(children: [
 
@@ -358,6 +360,9 @@ class _CartScreenState extends State<CartScreen> {
 
           ]) : const NoDataScreen(isCart: true, text: '', showFooter: true);
         });
+      }) :  NotLoggedInScreen(callBack: (value){
+        initCall();
+        setState(() {});
       }),
     );
   }
