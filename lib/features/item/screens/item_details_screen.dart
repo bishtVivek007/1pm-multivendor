@@ -296,11 +296,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
                           Text(
                             PriceConverter.convertPrice(itemController.cartIndex != -1
-                                ? _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])
+                                ? priceWithAddons
                                 // : _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])), textDirection: TextDirection.ltr,
                                 : priceWithAddons), textDirection: TextDirection.ltr,
                             style:robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge),
                           ),
+                          // Text('${'total_amount'.tr}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                         ]),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
