@@ -404,9 +404,9 @@ class SearchScreenState extends State<SearchScreen> with TickerProviderStateMixi
           }),
         )),
 
-        bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+      /*  bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
           return cartController.cartList.isNotEmpty && !ResponsiveHelper.isDesktop(context) ? const BottomCartWidget() : const SizedBox();
-        })
+        })*/
       ),
     );
   }

@@ -824,9 +824,9 @@ class _StoreScreenState extends State<StoreScreen> {
         }
       ),
 
-      bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
-        return cartController.cartList.isNotEmpty && !ResponsiveHelper.isDesktop(context) ? const BottomCartWidget() : const SizedBox();
-      })
+      // bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+      //   return cartController.cartList.isNotEmpty && !ResponsiveHelper.isDesktop(context) ? const BottomCartWidget() : const SizedBox();
+      // })
     );
   }
 }
