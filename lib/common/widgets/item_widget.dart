@@ -261,16 +261,16 @@ class ItemWidget extends StatelessWidget {
                         ]),
                       ),
 
-                      Column(mainAxisAlignment: isStore ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween, children: [
+                      // Column(mainAxisAlignment: isStore ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween, children: [
 
-                        const SizedBox(),
+                        // const SizedBox(),
 
-                        CartCountView(
-                          item: item!,
-                          index: index,
-                        ),
+                        // CartCountView(
+                        //   item: item!,
+                        //   index: index,
+                        // ),
 
-                      ]),
+                      // ]),
 
                     ]),
                   )),

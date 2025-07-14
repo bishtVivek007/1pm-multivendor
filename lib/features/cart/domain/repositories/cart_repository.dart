@@ -48,6 +48,9 @@ class CartRepository implements CartRepositoryInterface<OnlineCart> {
     List<OnlineCartModel>? onlineCartList;
     Response response = await apiClient.postData('${AppConstants.addCartUri}${!AuthHelper.isLoggedIn() ? '?guest_id=${AuthHelper.getGuestId()}' : ''}', cart.toJson());
     if(response.statusCode == 200) {
+      print(11331133);
+      print(cart.unitName);
+      print(11331133);
       onlineCartList = [];
       response.body.forEach((cart) => onlineCartList!.add(OnlineCartModel.fromJson(cart)));
     }

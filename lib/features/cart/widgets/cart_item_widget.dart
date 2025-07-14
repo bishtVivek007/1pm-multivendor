@@ -17,12 +17,15 @@ import 'package:sixam_mart/common/widgets/quantity_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../domain/models/online_cart_model.dart';
+
 class CartItemWidget extends StatelessWidget {
   final CartModel cart;
+  final OnlineCartModel cart2;
   final int cartIndex;
   final List<AddOns> addOns;
   final bool isAvailable;
-  const CartItemWidget({super.key, required this.cart, required this.cartIndex, required this.isAvailable, required this.addOns});
+  const CartItemWidget({super.key, required this.cart, required this.cart2, required this.cartIndex, required this.isAvailable, required this.addOns});
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +168,7 @@ class CartItemWidget extends StatelessWidget {
 
                       Wrap(children: [
                         Text(
-                          '${PriceConverter.convertPrice(startingPrice, discount: discount, discountType: discountType)}'
+                          '${PriceConverter.convertPrice(startingPrice, discount: discount, discountType: discountType)} / ${cart.item?.baseUnit}'
                               '${endingPrice!= null ? ' - ${PriceConverter.convertPrice(endingPrice, discount: discount, discountType: discountType)}' : ''}',
                           style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall), textDirection: TextDirection.ltr,
                         ),
@@ -219,31 +222,31 @@ class CartItemWidget extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
                         child: Row(children: [
-                          QuantityButton(
-                            onTap: cartController.isLoading ? null : () {
-                              if (cart.quantity! > 1) {
-                                Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
-                              }else {
-                                Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
-                              }
-                            },
-                            isIncrement: false,
-                            showRemoveIcon: cart.quantity! == 1,
-                          ),
+                          // QuantityButton(
+                          //   onTap: cartController.isLoading ? null : () {
+                          //     if (cart.quantity! > 1) {
+                          //       Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
+                          //     }else {
+                          //       Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                          //     }
+                          //   },
+                          //   isIncrement: false,
+                          //   showRemoveIcon: cart.quantity! == 1,
+                          // ),
 
                           Text(
-                            cart.quantity.toString(),
+                           'Qty. ${cart.quantity}',
                             style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
                           ),
 
-                          QuantityButton(
-                            onTap: cartController.isLoading ? null : () {
-                              Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
-                              Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
-                            },
-                            isIncrement: true,
-                            color: cartController.isLoading ? Theme.of(context).disabledColor : null,
-                          ),
+                          // QuantityButton(
+                          //   onTap: cartController.isLoading ? null : () {
+                          //     Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
+                          //     Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
+                          //   },
+                          //   isIncrement: true,
+                          //   color: cartController.isLoading ? Theme.of(context).disabledColor : null,
+                          // ),
                         ]),
                       );
                     }

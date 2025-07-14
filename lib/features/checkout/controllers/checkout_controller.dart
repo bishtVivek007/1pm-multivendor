@@ -384,6 +384,11 @@ class CheckoutController extends GetxController implements GetxService {
     Response response = await checkoutServiceInterface.placeOrder(placeOrderBody, multiParts);
     _isLoading = false;
     if (response.statusCode == 200) {
+      print('321321321');
+      print('*********');
+      print('321321321');
+      print(response.body['price']);
+      print(response.body['price']);
       String? message = response.body['message'];
       orderID = response.body['order_id'].toString();
       if(response.body['user_id'] != null) {

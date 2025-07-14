@@ -2,6 +2,7 @@ import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
+import 'package:sixam_mart/features/cart/domain/models/online_cart_model.dart';
 import 'package:sixam_mart/features/cart/widgets/extra_packaging_widget.dart';
 import 'package:sixam_mart/features/cart/widgets/not_available_bottom_sheet_widget.dart';
 import 'package:sixam_mart/features/coupon/controllers/coupon_controller.dart';
@@ -216,7 +217,9 @@ class _CartScreenState extends State<CartScreen> {
                                           itemCount: cartController.cartList.length,
                                           padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                                           itemBuilder: (context, index) {
-                                            return CartItemWidget(cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
+                                            return CartItemWidget(
+                                              cart2: OnlineCartModel(),
+                                                cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
                                           },
                                         ),
 

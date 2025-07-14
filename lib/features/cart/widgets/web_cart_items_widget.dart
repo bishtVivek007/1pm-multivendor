@@ -10,6 +10,8 @@ import 'package:sixam_mart/common/widgets/web_constrained_box.dart';
 import 'package:sixam_mart/features/cart/widgets/cart_item_widget.dart';
 import 'package:sixam_mart/features/store/screens/store_screen.dart';
 
+import '../domain/models/online_cart_model.dart';
+
 class WebCardItemsWidget extends StatelessWidget {
   final List<CartModel> cartList;
   const WebCardItemsWidget({super.key, required this.cartList});
@@ -38,7 +40,9 @@ class WebCardItemsWidget extends StatelessWidget {
                     itemCount: cartList.length,
                     padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     itemBuilder: (context, index) {
-                      return CartItemWidget(cart: cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
+                      return CartItemWidget(
+                          cart2: OnlineCartModel(),
+                          cart: cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
                     },
                     separatorBuilder: (BuildContext context, int index) => const Divider(),
                   ),

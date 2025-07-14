@@ -408,21 +408,21 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
                        double? cost = PriceConverter.convertWithDiscount((price! * itemController.quantity!), discount, discountType);
                        double withAddonCost = cost! + addonsCost;
                         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text('${'total_amount'.tr}:', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor)),
-                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                          Row(children: [
-                            discount! > 0 ? PriceConverter.convertAnimationPrice(
-                              (price * itemController.quantity!) + addonsCost,
-                              textStyle: robotoMedium.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall, decoration: TextDecoration.lineThrough),
-                            ) : const SizedBox(),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                            PriceConverter.convertAnimationPrice(
-                              withAddonCost,
-                              textStyle: robotoBold.copyWith(color: Theme.of(context).primaryColor),
-                            ),
-                          ]),
+                          // Text('${'total_amount'.tr}:', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor)),
+                          // const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                          //
+                          // Row(children: [
+                          //   discount! > 0 ? PriceConverter.convertAnimationPrice(
+                          //     (price * itemController.quantity!) + addonsCost,
+                          //     textStyle: robotoMedium.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall, decoration: TextDecoration.lineThrough),
+                          //   ) : const SizedBox(),
+                          //   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                          //
+                          //   PriceConverter.convertAnimationPrice(
+                          //     withAddonCost,
+                          //     textStyle: robotoBold.copyWith(color: Theme.of(context).primaryColor),
+                          //   ),
+                          // ]),
                         ]);
                       }
                     ),
@@ -430,26 +430,27 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
 
                     SafeArea(
                       child: Row(children: [
-                          // Quantity
-                          Row(children: [
-                            QuantityButton(
-                              onTap: () {
-                                if (itemController.quantity! > 1) {
-                                  itemController.setQuantity(false, stock, widget.item!.quantityLimit, getxSnackBar: true);
-                                }
-                              },
-                              isIncrement: false,
-                              fromSheet: true,
-                            ),
-                            Text(itemController.quantity.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                            QuantityButton(
-                              onTap: () => itemController.setQuantity(true, stock, widget.item!.quantityLimit, getxSnackBar: true),
-                              isIncrement: true,
-                              fromSheet: true,
-                            ),
-                          ]),
+                          // // Quantity
+                          // Row(children: [
+                          //   QuantityButton(
+                          //     onTap: () {
+                          //       if (itemController.quantity! > 1) {
+                          //         itemController.setQuantity(false, stock, widget.item!.quantityLimit, getxSnackBar: true);
+                          //       }
+                          //     },
+                          //     isIncrement: false,
+                          //     fromSheet: true,
+                          //   ),
+                          //   Text(itemController.quantity.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                          //   QuantityButton(
+                          //     onTap: () => itemController.setQuantity(true, stock, widget.item!.quantityLimit, getxSnackBar: true),
+                          //     isIncrement: true,
+                          //     fromSheet: true,
+                          //   ),
+                          // ]),
                           const SizedBox(width: Dimensions.paddingSizeSmall),
 
+                          if (widget.cart == null || itemController.cartIndex == -1)
                           Expanded(child: GetBuilder<CartController>(
                             builder: (cartController) {
                               return CustomButton(

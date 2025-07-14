@@ -297,6 +297,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           Text(
                             PriceConverter.convertPrice(itemController.cartIndex != -1
                                 ? _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])
+                                // : _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])), textDirection: TextDirection.ltr,
                                 : priceWithAddons), textDirection: TextDirection.ltr,
                             style:robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge),
                           ),
@@ -329,6 +330,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           ),
                           onChanged: (value) {
                             Get.find<ItemController>().setEnteredUnitQty(value);
+                            if (itemController.cartIndex == -1) {
+                              Get.find<ItemController>().setEnteredUnitQty(value);
+
+                            }
                           },
                         ),
 
@@ -392,6 +397,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       ],
                     ))))),
 
+                if(itemController.cartIndex == -1)
                 GetBuilder<CartController>(
                   builder: (cartController) {
                     return Container(

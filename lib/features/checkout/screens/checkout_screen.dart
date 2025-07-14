@@ -698,7 +698,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     if(cartList != null) {
       for (var cartModel in cartList) {
         if(Get.find<SplashController>().getModuleConfig(cartModel!.item!.moduleType).newVariation!){
-          price = price + (cartModel.item!.price! * cartModel.quantity!);
+          price = price + (cartModel.price! * cartModel.quantity!);
         } else {
           price = _calculateVariationPrice(store: store, cartList: cartList);
         }

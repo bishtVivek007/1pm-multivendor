@@ -207,6 +207,8 @@ class PlaceOrderBodyModel {
     }
     data['order_amount'] = _orderAmount.toString();
     data['order_type'] = _orderType!;
+    // data['unit'] = _unitName!.toString();
+    // data['is_base_unit'] = _baseUnit!.toString();
     data['payment_method'] = _paymentMethod!;
     if (_orderNote != null && _orderNote!.isNotEmpty) {
       data['order_note'] = _orderNote!;
@@ -270,6 +272,8 @@ class PlaceOrderBodyModel {
 class OnlineCart {
   int? _cartId;
   int? _itemId;
+  String? _unitName;
+  int? _baseUnit;
   int? _itemCampaignId;
   String? _price;
   String? _variant;
@@ -295,7 +299,11 @@ class OnlineCart {
     List<AddOns>? addOns,
     List<int?> addOnQtys,
     String model,
-    {String? itemType}){
+    {
+      String? itemType,
+      String? unitName,
+      int? baseUnit,
+    }){
     _cartId = cartId;
     _itemId = itemId;
     _itemCampaignId = itemCampaignId;
@@ -309,6 +317,8 @@ class OnlineCart {
     _addOnQtys = addOnQtys;
     _model = model;
     _itemType = itemType;
+    _unitName = unitName;
+    _baseUnit = baseUnit;
   }
 
   int? get cartId => _cartId;
@@ -323,6 +333,12 @@ class OnlineCart {
   List<int?>? get addOnQtys => _addOnQtys;
   String? get model => _model;
   String? get itemType => _itemType;
+  String? get unitName => _unitName;
+  int? get baseUnit => _baseUnit;
+
+  void setPrice(String price) {
+    _price = price;
+  }
 
   OnlineCart.fromJson(Map<String, dynamic> json) {
     _cartId = json['cart_id'];
@@ -330,6 +346,8 @@ class OnlineCart {
     _itemCampaignId = json['item_campaign_id'];
     _price = json['price'];
     _variant = json['variant'];
+    _unitName = json['unit'];
+    _baseUnit = json['is_base_unit'];
     if (json['variation'] != null && json['variation'].isNotEmpty && json['variation'][0]['price'] != null) {
       _variation = [];
       json['variation'].forEach((v) {
@@ -360,6 +378,8 @@ class OnlineCart {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['item_id'] = _itemId;
     data['cart_id'] = _cartId;
+    data['unit'] = _unitName;
+    data['is_base_unit'] = _baseUnit;
     data['item_campaign_id'] = _itemCampaignId;
     data['price'] = _price;
     data['variant'] = _variant;
