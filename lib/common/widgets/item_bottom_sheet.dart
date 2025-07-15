@@ -947,14 +947,16 @@ class NewVariationView extends StatelessWidget {
                         const Spacer(),
 
                         showOriginalPrice ? Text(
-                          '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice)}',
+                          '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice! + item!.price!)}',
+                          // '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice)}',
                           maxLines: 1, overflow: TextOverflow.ellipsis, textDirection: TextDirection.ltr,
                           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor, decoration: TextDecoration.lineThrough),
                         ) : const SizedBox(),
                         SizedBox(width: showOriginalPrice ? Dimensions.paddingSizeExtraSmall : 0),
 
                         Text(
-                          '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice, discount: discount, discountType: discountType, isFoodVariation: true)}',
+                          // '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice, discount: discount, discountType: discountType, isFoodVariation: true)}',
+                          '+${PriceConverter.convertPrice(item!.foodVariations![index].variationValues![i].optionPrice! + item!.price!, discount: discount, discountType: discountType, isFoodVariation: true)}',
                           maxLines: 1, overflow: TextOverflow.ellipsis, textDirection: TextDirection.ltr,
                           style: itemController.selectedVariations[index][i]! ? robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall)
                               : robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),

@@ -99,7 +99,7 @@ class CartItemWidget extends StatelessWidget {
                         top: 0, left: 0, bottom: 0, right: 0,
                         child: Container(
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.black.withValues(alpha: 0.6)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.black.withOpacity(0.6)),
                           child: Text('not_available_now_break'.tr, textAlign: TextAlign.center, style: robotoRegular.copyWith(
                             color: Colors.white, fontSize: 8,
                           )),
@@ -130,7 +130,7 @@ class CartItemWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                            color: Theme.of(context).primaryColor.withOpacity(0.1),
                           ),
                           child: Text(
                             cart.item!.unitType ?? '',
@@ -141,7 +141,7 @@ class CartItemWidget extends StatelessWidget {
                         SizedBox(width: cart.item!.isStoreHalalActive! && cart.item!.isHalalItem! ? Dimensions.paddingSizeExtraSmall : 0),
 
                         cart.item!.isStoreHalalActive! && cart.item!.isHalalItem! ? const CustomAssetImageWidget(
-                         Images.halalTag, height: 13, width: 13) : const SizedBox(),
+                            Images.halalTag, height: 13, width: 30) : const SizedBox(),
 
                       ]),
 
@@ -207,7 +207,7 @@ class CartItemWidget extends StatelessWidget {
                           Text('${'variations'.tr}: ', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
                           Flexible(child: Text(
                             variationText,
-                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).dividerColor),
                           )),
                         ]),
                       ) : const SizedBox(),
@@ -215,38 +215,38 @@ class CartItemWidget extends StatelessWidget {
                   ),
 
                   GetBuilder<CartController>(
-                    builder: (cartController) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
-                        child: Row(children: [
-                          QuantityButton(
-                            onTap: cartController.isLoading ? null : () {
-                              if (cart.quantity! > 1) {
-                                Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
-                              }else {
-                                Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
-                              }
-                            },
-                            isIncrement: false,
-                            showRemoveIcon: cart.quantity! == 1,
-                          ),
+                      builder: (cartController) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
+                          child: Row(children: [
+                            QuantityButton(
+                              onTap: cartController.isLoading ? null : () {
+                                if (cart.quantity! > 1) {
+                                  Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
+                                }else {
+                                  Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                                }
+                              },
+                              isIncrement: false,
+                              showRemoveIcon: cart.quantity! == 1,
+                            ),
 
-                          Text(
-                            cart.quantity.toString(),
-                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                          ),
+                            Text(
+                              cart.quantity.toString(),
+                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                            ),
 
-                          QuantityButton(
-                            onTap: cartController.isLoading ? null : () {
-                              Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
-                              Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
-                            },
-                            isIncrement: true,
-                            color: cartController.isLoading ? Theme.of(context).disabledColor : null,
-                          ),
-                        ]),
-                      );
-                    }
+                            QuantityButton(
+                              onTap: cartController.isLoading ? null : () {
+                                Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
+                                Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
+                              },
+                              isIncrement: true,
+                              color: cartController.isLoading ? Theme.of(context).disabledColor : null,
+                            ),
+                          ]),
+                        );
+                      }
                   ),
                 ]),
 
@@ -286,34 +286,44 @@ class CartItemWidget extends StatelessWidget {
   String? _setupVariationText({required CartModel cart}) {
     String? variationText = '';
 
-    if(Get.find<SplashController>().getModuleConfig(cart.item!.moduleType).newVariation!) {
-      if(cart.foodVariations!.isNotEmpty) {
-        for(int index=0; index<cart.foodVariations!.length; index++) {
-          if(cart.foodVariations![index].contains(true)) {
+    if (Get.find<SplashController>().getModuleConfig(cart.item!.moduleType).newVariation!) {
+      if (cart.foodVariations!.isNotEmpty) {
+        for (int index = 0; index < cart.foodVariations!.length; index++) {
+          if (cart.foodVariations![index].contains(true)) {
             variationText = '${variationText!}${variationText.isNotEmpty ? ', ' : ''}${cart.item!.foodVariations![index].name} (';
-            for(int i=0; i<cart.foodVariations![index].length; i++) {
-              if(cart.foodVariations![index][i]!) {
-                variationText = '${variationText!}${variationText.endsWith('(') ? '' : ', '}${cart.item!.foodVariations![index].variationValues![i].level}';
+
+            for (int i = 0; i < cart.foodVariations![index].length; i++) {
+              if (cart.foodVariations![index][i]!) {
+                final level = cart.item!.foodVariations![index].variationValues![i].level;
+                final price = cart.item!.foodVariations![index].variationValues![i].optionPrice;
+                variationText = '${variationText!}${variationText.endsWith('(') ? '' : ', '}$level - ₹$price';
+                print('➡️ Selected Variation: $level | Price: ₹$price');
               }
             }
+
             variationText = '${variationText!})';
           }
         }
       }
-    }else {
-      if(cart.variation!.isNotEmpty) {
+    } else {
+      if (cart.variation!.isNotEmpty) {
         List<String> variationTypes = cart.variation![0].type!.split('-');
-        if(variationTypes.length == cart.item!.choiceOptions!.length) {
+        if (variationTypes.length == cart.item!.choiceOptions!.length) {
           int index0 = 0;
           for (var choice in cart.item!.choiceOptions!) {
-            variationText = '${variationText!}${(index0 == 0) ? '' : ',  '}${choice.title} - ${variationTypes[index0]}';
-            index0 = index0 + 1;
+            variationText = '${variationText!}${(index0 == 0) ? '' : ', '}${choice.title} - ${variationTypes[index0]}';
+            print('➡️ Old Variation: ${choice.title} - ${variationTypes[index0]}');
+            index0++;
           }
-        }else {
-          variationText = cart.item!.variations![0].type;
+        } else {
+          final price = cart.item!.variations![0].price;
+          variationText = price.toString();
+          print('➡️ Old Variation Price Only: ₹$price');
         }
       }
     }
+
+    print('🟢 Final variationText: $variationText');
     return variationText;
   }
 
