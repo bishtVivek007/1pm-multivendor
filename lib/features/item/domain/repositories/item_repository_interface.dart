@@ -2,6 +2,8 @@ import 'package:sixam_mart/common/enums/data_source_enum.dart';
 import 'package:sixam_mart/features/item/domain/models/basic_medicine_model.dart';
 import 'package:sixam_mart/interfaces/repository_interface.dart';
 
+import '../models/item_model.dart';
+
 abstract class ItemRepositoryInterface implements RepositoryInterface {
   // Future<dynamic> getPopularItemList(String type);
   @override
@@ -12,6 +14,7 @@ abstract class ItemRepositoryInterface implements RepositoryInterface {
   // Future<dynamic> getDiscountedItemList();
   // Future<dynamic> getItemDetails(int? itemID);
   Future<BasicMedicineModel?> getBasicMedicine(DataSourceEnum source);
+  Future<List<Item>?> getOnDemandProducts();
   @override
   Future get(String? id, {bool isConditionWiseItem = false});
   // Future<dynamic> getCommonConditions();

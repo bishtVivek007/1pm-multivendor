@@ -26,6 +26,7 @@ class AppConstants {
   static const String categoryItemUri = '/api/v1/categories/items/';
   static const String categoryStoreUri = '/api/v1/categories/stores/';
   static const String configUri = '/api/v1/config';
+  static const String onDemandProductsUri = '/api/v1/items/on-demand-products';
   static const String trackUri = '/api/v1/customer/order/track?order_id=';
   static const String messageUri = '/api/v1/customer/message/get';
   static const String forgetPasswordUri = '/api/v1/auth/forgot-password';

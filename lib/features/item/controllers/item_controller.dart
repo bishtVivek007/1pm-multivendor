@@ -116,6 +116,21 @@ class ItemController extends GetxController implements GetxService {
   int selectedUnitIndex = 0;
   double enteredUnitQty = 1;
 
+  List<Item>? _onDemandProducts;
+  List<Item>? get onDemandProducts => _onDemandProducts;
+
+  Future<void> getOnDemandProducts(bool reload) async {
+    if (_onDemandProducts == null || reload) {
+      _isLoading = true;
+      update();
+
+      _onDemandProducts = await itemServiceInterface.getOnDemandProducts();
+
+      _isLoading = false;
+      update();
+    }
+  }
+
   void setSelectedUnitIndex(int index) {
     selectedUnitIndex = index;
     update();

@@ -53,6 +53,7 @@ class HomeScreen extends StatefulWidget {
 
   static Future<void> loadData(bool reload, {bool fromModule = false}) async {
     Get.find<LocationController>().syncZoneData();
+    await Get.find<ItemController>().getOnDemandProducts(false);
     Get.find<FlashSaleController>().setEmptyFlashSale(fromModule: fromModule);
     // print('------------call from home');
     // await Get.find<CartController>().getCartDataOnline();
@@ -218,6 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
           body: isParcel ? const ParcelCategoryScreen() : SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
+                await Get.find<ItemController>().getOnDemandProducts(true);
                 splashController.setRefreshing(true);
                 Get.find<CategoryController>().getMainCategoryList();
                 Get.find<CategoryController>().update();

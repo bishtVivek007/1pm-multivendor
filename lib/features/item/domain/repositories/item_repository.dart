@@ -16,6 +16,31 @@ class ItemRepository implements ItemRepositoryInterface {
   ItemRepository({required this.apiClient});
 
   @override
+  Future<List<Item>?> getOnDemandProducts() async {
+    List<Item>? onDemandProducts;
+    final cacheId = '${AppConstants.onDemandProductsUri}-${Get.find<SplashController>().module!.id!}';
+    switch (DataSourceEnum.client) {
+
+      case DataSourceEnum.client:
+        Response response = await apiClient.getData(AppConstants.onDemandProductsUri);
+        if (response.statusCode == 200) {
+          onDemandProducts = ItemModel.fromJson(response.body).items!;
+          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+        } else {
+        }
+      case DataSourceEnum.local:
+        String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
+        if (cacheResponseData != null) {
+          onDemandProducts = ItemModel.fromJson(jsonDecode(cacheResponseData)).items!;
+        } else {
+          print('⚠️ No local cache data found.');
+        }
+    }
+    return onDemandProducts;
+  }
+
+
+  @override
   Future<BasicMedicineModel?> getBasicMedicine(DataSourceEnum source) async {
     BasicMedicineModel? basicMedicineModel;
     String cacheId = '${AppConstants.basicMedicineUri}?offset=1&limit=50-${Get.find<SplashController>().module!.id!}';

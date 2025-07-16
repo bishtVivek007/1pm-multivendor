@@ -24,8 +24,9 @@ class MostPopularItemView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
       child: GetBuilder<ItemController>(builder: (itemController) {
         List<Item>? itemList = itemController.popularItemList;
+        List<Item>? onDemandList = itemController.onDemandProducts;
 
-          return (itemList != null) ? itemList.isNotEmpty ? Container(
+        return (itemList != null) ? itemList.isNotEmpty ? Container(
             color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
             child: Column(children: [
 
@@ -59,6 +60,52 @@ class MostPopularItemView extends StatelessWidget {
                   },
                 ),
               ),
+
+              if (onDemandList != null && onDemandList.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: Dimensions.paddingSizeDefault,
+                        left: Dimensions.paddingSizeDefault,
+                        right: Dimensions.paddingSizeDefault,
+                      ),
+                      child: TitleWidget(
+                        title: 'On Demand products',
+                        onTap: () {
+                          // optional: implement a route if needed
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 285,
+                      width: Get.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                        itemCount: onDemandList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: Dimensions.paddingSizeDefault,
+                              right: Dimensions.paddingSizeDefault,
+                              top: Dimensions.paddingSizeDefault,
+                            ),
+                            child: ItemCard(
+                              item: onDemandList[index],
+                              isShop: isShop,
+                              isFood: isFood,
+                              isPopularItem: false,
+                              isPopularItemCart: true,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
 
             ]),
           ) : const SizedBox() : const ItemShimmerView(isPopularItem: true);
