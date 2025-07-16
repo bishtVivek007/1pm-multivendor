@@ -15,8 +15,8 @@ class AppConstants {
 
   static const String baseUrl = 'https://mandiatdoor.in/admin';
   static const String categoryUri = '/api/v1/categories';
-  // static const String headCategoryUri = '/api/v1/categories/head-categories';
-  static const String headCategoryUri = '/api/v1/categories';
+  static const String headCategoryUri = '/api/v1/categories/head-categories';
+  // static const String headCategoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
   static const String popularItemUri = '/api/v1/items/popular';

@@ -327,7 +327,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
               const SizedBox(height: 10),
 
               (catController.subCategoryList != null && !catController.isSearching) ? Center(child: Container(
-                height: 40, width: Dimensions.webMaxWidth, color: Theme.of(context).cardColor,
+                height: 100, width: Dimensions.webMaxWidth, color: Theme.of(context).cardColor,
                 padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
                 child: ListView.builder(
                   key: scaffoldKey,
@@ -346,6 +346,21 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
                           color: index == catController.subCategoryIndex ? Theme.of(context).primaryColor.withValues(alpha: 0.1) : Colors.transparent,
                         ),
                         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          if (index != 0)
+                            ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              catController.subCategoryList?[index].imageFullUrl ?? '',
+                              height: 50,
+                              width: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => const Icon(
+                                Icons.broken_image,
+                                size: 30,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
                           Text(
                             catController.subCategoryList![index].name!,
                             style: index == catController.subCategoryIndex

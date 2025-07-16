@@ -72,7 +72,7 @@ class HomeScreen extends StatefulWidget {
       }
       Get.find<BannerController>().getPromotionalBannerList(reload);
       Get.find<ItemController>().getDiscountedItemList(reload, false, 'all');
-      Get.find<CategoryController>().getCategoryList(reload);
+      // Get.find<CategoryController>().getCategoryList(reload);
       Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
       Get.find<CampaignController>().getBasicCampaignList(reload);
       Get.find<CampaignController>().getItemCampaignList(reload);
@@ -219,6 +219,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: RefreshIndicator(
               onRefresh: () async {
                 splashController.setRefreshing(true);
+                Get.find<CategoryController>().getMainCategoryList();
+                Get.find<CategoryController>().update();
                 if (Get.find<SplashController>().module != null && !isTaxi) {
                   await Get.find<LocationController>().syncZoneData();
                   await Get.find<BannerController>().getBannerList(true);
@@ -227,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   await Get.find<BannerController>().getPromotionalBannerList(true);
                   await Get.find<ItemController>().getDiscountedItemList(true, false, 'all');
-                  await Get.find<CategoryController>().getCategoryList(true);
+                  // await Get.find<CategoryController>().getCategoryList(true);
                   await Get.find<StoreController>().getPopularStoreList(true, 'all', false);
                   await Get.find<CampaignController>().getItemCampaignList(true);
                   Get.find<CampaignController>().getBasicCampaignList(true);

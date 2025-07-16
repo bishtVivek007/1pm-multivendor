@@ -63,6 +63,18 @@ class CategoryController extends GetxController implements GetxService {
   int _offset = 1;
   int get offset => _offset;
 
+  int _selectedMainCategoryId = -1;
+  int get selectedMainCategoryId => _selectedMainCategoryId;
+
+  void setSelectedMainCategory(int id) {
+    _selectedMainCategoryId = id;
+    update(); // Refresh the UI
+  }
+
+  List<CategoryModel> getSubCategoriesByMainId(int mainId) {
+    return _categoryList!.where((cat) => cat.parentId == mainId).toList();
+  }
+
   void clearCategoryList() {
     _categoryList = null;
   }
@@ -133,6 +145,7 @@ class CategoryController extends GetxController implements GetxService {
           _mainCategoryList!.add(CategoryModel(
             id: mainCategory['id'],
             name: mainCategory['name'],
+            imageFullUrl: mainCategory['image_full_url']
           ));
 
           // Fetch and store only relevant subcategories
@@ -142,11 +155,10 @@ class CategoryController extends GetxController implements GetxService {
             parentId: mainCategory['id'],
             name: subCategory['name'],
             imageFullUrl: subCategory['image_full_url'],
-          ))
-              .toList();
+          )).toList();
 
           _categoryList!.addAll(filteredCategories);
-
+          update();
           print('✅ Main Category: ${mainCategory['name']}');
           for (var category in filteredCategories) {
             print('   → ID: ${category.id}, Name: ${category.name}, Image: ${category.imageFullUrl}');
