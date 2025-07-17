@@ -62,10 +62,10 @@ Future<void> main() async {
   } else if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyDqtz3QctA4BCj_sE_1UIrkI_C7oPxO6cI",
-        appId: "1:534442184736:android:5e017f33cbd317148b6c45",
-        messagingSenderId: "534442184736",
-        projectId: "a2zcart-cecd2",
+        apiKey: "AIzaSyAEa51b9i81E_rx80rzekHdwSgCn8m6Sy8",
+        appId: "1:883048804010:android:e996778eed65b7e04cead3",
+        messagingSenderId: "883048804010",
+        projectId: "easyshop-3b5e4",
       ),
     );
   } else {
