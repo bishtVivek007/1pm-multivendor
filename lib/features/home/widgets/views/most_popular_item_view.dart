@@ -10,6 +10,7 @@ import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/common/widgets/title_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MostPopularItemView extends StatelessWidget {
   final bool isFood;
@@ -93,12 +94,49 @@ class MostPopularItemView extends StatelessWidget {
                               right: Dimensions.paddingSizeDefault,
                               top: Dimensions.paddingSizeDefault,
                             ),
-                            child: ItemCard(
-                              item: onDemandList[index],
-                              isShop: isShop,
-                              isFood: isFood,
-                              isPopularItem: false,
-                              isPopularItemCart: true,
+                            child: Stack(
+                              children: [
+                                ItemCard(
+                                  item: onDemandList[index],
+                                  isShop: isShop,
+                                  isFood: isFood,
+                                  isPopularItem: false,
+                                  isPopularItemCart: true,
+                                ),
+                                Positioned(
+                                  bottom: 20,
+                                  right: 20,
+                                  child: FloatingActionButton(
+                                    onPressed: () async {
+                                      final item = onDemandList[index];
+                                      final productName = item.name ?? 'this product';
+                                      final imageUrl = item.imageFullUrl ?? ''; // assuming your model has this
+                                      final phone = '918851249134';
+
+                                      final message = Uri.encodeComponent(
+                                          "Hi, I have a query regarding *$productName*.\n\n\nHere is the image:\n$imageUrl"
+                                      );
+
+                                      final url = Uri.parse("https://wa.me/$phone?text=$message");
+
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text("Could not open WhatsApp")),
+                                        );
+                                      }
+                                    },
+                                    backgroundColor: Colors.transparent,
+                                    mini: true,
+                                    child: Image.asset(
+                                      'assets/image/whatsapp-icon.png',
+                                      height: 96,
+                                      width: 96,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },
