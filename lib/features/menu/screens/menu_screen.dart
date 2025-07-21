@@ -246,7 +246,6 @@ class _MenuScreenState extends State<MenuScreen> {
                       InkWell(
                         onTap: () async {
                           final phone = Get.find<SplashController>().configModel!.phone;
-customer
                           final message = Uri.encodeComponent(
                               "Hello, I have an enquiry.\n\nCould you please share today's price and availability?"
                           );
