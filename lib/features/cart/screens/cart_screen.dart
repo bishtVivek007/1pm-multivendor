@@ -54,6 +54,7 @@ class _CartScreenState extends State<CartScreen> {
   GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
   List<dynamic>? rawCartResponse;
   double rawCartTotalPrice = 0;
+  Map<int, String> cartItemUnits = {};
 
   final GlobalKey _widgetKey = GlobalKey();
   double _height = 0;
@@ -77,22 +78,23 @@ class _CartScreenState extends State<CartScreen> {
         rawCartTotalPrice = 0; // Reset
         for (var item in rawCartResponse!) {
           if (item.containsKey('item_type')) {
-            // Start summing from the next items after item_type
-            bool startSumming = false;
-            item.forEach((key, value) {
-              if (startSumming && key == 'price' && value != null) {
-                print('cart item price');
-                rawCartTotalPrice += double.tryParse(value.toString()) ?? 0;
-                print(rawCartTotalPrice);
-              }
-              if (key == 'item_type') {
-                startSumming = true;
-              }
-            });
+            // Store the unit by item_id
+            int itemId = item['item_id'];
+            String? unit = item['unit'];
+            if (unit != null) {
+              cartItemUnits[itemId] = unit;
+            }
+
+            // Start summing the price
+            double? price = double.tryParse(item['price'].toString());
+            if (price != null) {
+              rawCartTotalPrice += price;
+            }
           }
         }
 
-        debugPrint('✅ Total Price of Items after item_type: $rawCartTotalPrice');
+        debugPrint('✅ Total Price of Items: $rawCartTotalPrice');
+        debugPrint('📦 Units per item: $cartItemUnits');
       } else {
         debugPrint('❌ Invalid cart API response format or status');
       }
@@ -221,7 +223,10 @@ class _CartScreenState extends State<CartScreen> {
                                           itemCount: cartController.cartList.length,
                                           padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                                           itemBuilder: (context, index) {
+                                            final item = cartController.cartList[index];
+                                            final unit = cartItemUnits[item.item?.id] ?? ''; // Fallback if unit is missing
                                             return CartItemWidget(
+                                              unit: unit,
                                               cart2: OnlineCartModel(),
                                                 cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
                                           },

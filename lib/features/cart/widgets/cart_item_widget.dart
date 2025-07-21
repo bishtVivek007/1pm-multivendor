@@ -22,10 +22,11 @@ import '../domain/models/online_cart_model.dart';
 class CartItemWidget extends StatelessWidget {
   final CartModel cart;
   final OnlineCartModel cart2;
+  final String unit;
   final int cartIndex;
   final List<AddOns> addOns;
   final bool isAvailable;
-  const CartItemWidget({super.key, required this.cart, required this.cart2, required this.cartIndex, required this.isAvailable, required this.addOns});
+  const CartItemWidget({super.key, required this.unit, required this.cart, required this.cart2, required this.cartIndex, required this.isAvailable, required this.addOns});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class CartItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                   Stack(
                     children: [
                       ClipRRect(
@@ -129,7 +130,9 @@ class CartItemWidget extends StatelessWidget {
                             ? !Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! ? CustomAssetImageWidget(
                           cart.item!.veg == 0 ? Images.nonVegImage : Images.vegImage,
                           height: 11, width: 11,
-                        ) : Container(
+                        ) : const SizedBox()
+
+                        /*Container(
                           padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
@@ -139,7 +142,8 @@ class CartItemWidget extends StatelessWidget {
                             cart.item!.unitType ?? '',
                             style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
                           ),
-                        ) : const SizedBox(),
+                        )*/
+                            : const SizedBox(),
 
                         SizedBox(width: cart.item!.isStoreHalalActive! && cart.item!.isHalalItem! ? Dimensions.paddingSizeExtraSmall : 0),
 
@@ -222,21 +226,22 @@ class CartItemWidget extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
                         child: Row(children: [
-                          // QuantityButton(
-                          //   onTap: cartController.isLoading ? null : () {
-                          //     if (cart.quantity! > 1) {
-                          //       Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
-                          //     }else {
-                          //       Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
-                          //     }
-                          //   },
-                          //   isIncrement: false,
-                          //   showRemoveIcon: cart.quantity! == 1,
-                          // ),
+                          QuantityButton(
+                            onTap: cartController.isLoading ? null : () {
+                              if (false) {
+                                Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
+                              }else {
+                                Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                              }
+                            },
+                            isIncrement: false,
+                            showRemoveIcon: true,
+                          ),
+
 
                           Text(
-                           'Qty. ${cart.quantity}',
-                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                           'Qty. ${cart.quantity} $unit',
+                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                           ),
 
                           // QuantityButton(

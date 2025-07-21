@@ -41,6 +41,7 @@ class WebCardItemsWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     itemBuilder: (context, index) {
                       return CartItemWidget(
+                        unit: '',
                           cart2: OnlineCartModel(),
                           cart: cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
                     },
