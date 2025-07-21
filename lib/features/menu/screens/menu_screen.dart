@@ -22,6 +22,7 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/common/widgets/confirmation_dialog.dart';
 import 'package:sixam_mart/common/widgets/custom_image.dart';
 import 'package:sixam_mart/features/menu/widgets/portion_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -242,6 +243,46 @@ class _MenuScreenState extends State<MenuScreen> {
                     margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     child: Column(children: [
                       PortionWidget(icon: Images.chatIcon, title: 'live_chat'.tr, route: RouteHelper.getConversationRoute()),
+                      InkWell(
+                        onTap: () async {
+                          final phone = Get.find<SplashController>().configModel!.phone;
+customer
+                          final message = Uri.encodeComponent(
+                              "Hello, I have an enquiry.\n\nCould you please share today's price and availability?"
+                          );
+
+                          final url = Uri.parse("https://wa.me/$phone?text=$message");
+
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Could not open WhatsApp")),
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(Images.whatsappMenu, height: 24, width: 24),
+                                  const SizedBox(width: Dimensions.paddingSizeSmall),
+                                  Expanded(
+                                    child: Text(
+                                      'whatsapp'.tr,
+                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Uncomment below if you need divider or suffix later
+                              const Divider(),
+                            ],
+                          ),
+                        ),
+                      ),
                       PortionWidget(icon: Images.helpIcon, title: 'help_and_support'.tr, route: RouteHelper.getSupportRoute()),
                       PortionWidget(icon: Images.aboutIcon, title: 'about_us'.tr, route: RouteHelper.getHtmlRoute('about-us')),
                       PortionWidget(icon: Images.termsIcon, title: 'terms_conditions'.tr, route: RouteHelper.getHtmlRoute('terms-and-condition')),

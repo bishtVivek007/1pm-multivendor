@@ -108,7 +108,8 @@ class MostPopularItemView extends StatelessWidget {
                                   right: 20,
                                   child: FloatingActionButton(
                                     onPressed: () async {
-                                      final item = onDemandList[index];
+                                      Get.toNamed(RouteHelper.getConversationRoute());
+                                      /*final item = onDemandList[index];
                                       final productName = item.name ?? 'this product';
                                       final imageUrl = item.imageFullUrl ?? ''; // assuming your model has this
                                       final phone = '918860778515';
@@ -125,14 +126,14 @@ class MostPopularItemView extends StatelessWidget {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(content: Text("Could not open WhatsApp")),
                                         );
-                                      }
+                                      }*/
                                     },
                                     backgroundColor: Colors.transparent,
                                     mini: true,
                                     child: Image.asset(
-                                      'assets/image/whatsapp-icon.png',
-                                      height: 96,
-                                      width: 96,
+                                      Images.chatIcon,
+                                      height: 24,
+                                      width: 24,
                                     ),
                                   ),
                                 ),

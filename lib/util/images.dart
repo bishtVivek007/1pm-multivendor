@@ -156,6 +156,7 @@ class Images {
   static const String dmIcon = 'assets/image/dm_icon.png';
   static const String storeIcon = 'assets/image/store_icon.png';
   static const String chatIcon = 'assets/image/chat_icon.png';
+  static const String whatsappMenu = 'assets/image/whatsapp-icon.png';
   static const String helpIcon = 'assets/image/help_icon.png';
   static const String aboutIcon = 'assets/image/about_icon.png';
   static const String termsIcon = 'assets/image/terms_icon.png';
