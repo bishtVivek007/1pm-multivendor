@@ -279,7 +279,7 @@ class OnlineCart {
   String? _variant;
   List<Variation>? _variation;
   List<OrderVariation>? _variations;
-  int? _quantity;
+  double? _quantity;
   List<int?>? _addOnIds;
   List<AddOns>? _addOns;
   List<int?>? _addOnQtys;
@@ -294,7 +294,7 @@ class OnlineCart {
     String variant,
     List<Variation>? variation,
     List<OrderVariation>? variations,
-    int? quantity,
+    double? quantity,
     List<int?> addOnIds,
     List<AddOns>? addOns,
     List<int?> addOnQtys,
@@ -327,7 +327,7 @@ class OnlineCart {
   String? get price => _price;
   String? get variant => _variant;
   List<Variation>? get variation => _variation;
-  int? get quantity => _quantity;
+  double? get quantity => _quantity;
   List<int?>? get addOnIds => _addOnIds;
   List<AddOns>? get addOns => _addOns;
   List<int?>? get addOnQtys => _addOnQtys;
@@ -359,7 +359,7 @@ class OnlineCart {
         _variations!.add(OrderVariation.fromJson(v));
       });
     }
-    _quantity = json['quantity'];
+    _quantity = json['quantity']?.toDouble();
     _addOnIds = json['add_on_ids'].cast<int>();
     if (json['add_ons'] != null) {
       _addOns = [];

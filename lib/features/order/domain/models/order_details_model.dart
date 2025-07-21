@@ -11,7 +11,7 @@ class OrderDetailsModel {
   List<AddOn>? addOns;
   double? discountOnItem;
   String? discountType;
-  int? quantity;
+  double? quantity;
   double? taxAmount;
   String? variant;
   String? createdAt;
@@ -70,7 +70,7 @@ class OrderDetailsModel {
     }
     discountOnItem = json['discount_on_item']?.toDouble();
     discountType = json['discount_type'];
-    quantity = json['quantity'];
+    quantity = json['quantity']?.toDouble();
     taxAmount = json['tax_amount']?.toDouble();
     variant = json['variant'];
     createdAt = json['created_at'];
@@ -112,6 +112,8 @@ class OrderDetailsModel {
     return data;
   }
 }
+
+///1140 + 434 +
 
 class AddOn {
   String? name;

@@ -81,7 +81,9 @@ class _CartScreenState extends State<CartScreen> {
             bool startSumming = false;
             item.forEach((key, value) {
               if (startSumming && key == 'price' && value != null) {
+                print('cart item price');
                 rawCartTotalPrice += double.tryParse(value.toString()) ?? 0;
+                print(rawCartTotalPrice);
               }
               if (key == 'item_type') {
                 startSumming = true;

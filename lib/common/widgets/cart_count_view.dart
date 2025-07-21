@@ -14,7 +14,7 @@ class CartCountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
-      int cartQty = cartController.cartQuantity(item.id!);
+      double cartQty = cartController.cartQuantity(item.id!);
       int cartIndex = cartController.isExistInCart(item.id, cartController.cartVariant(item.id!), false, null);
       return cartQty != 0 ? Center(
         child: Container(

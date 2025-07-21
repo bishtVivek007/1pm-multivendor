@@ -26,7 +26,7 @@ class CartService implements CartServiceInterface {
   }
 
   @override
-  Future<bool> updateCartQuantityOnline(int cartId, double price, int quantity) async {
+  Future<bool> updateCartQuantityOnline(int cartId, double price, double quantity) async {
     return await cartRepositoryInterface.update({}, cartId, price: price, quantity: quantity, isUpdateQty: true);
   }
 
@@ -180,8 +180,8 @@ class CartService implements CartServiceInterface {
   }
 
   @override
-  Future<int> decideItemQuantity(bool isIncrement, List<CartModel> cartList, int cartIndex, int? stock, int ? quantityLimit, bool moduleStock) async{
-    int quantity = cartList[cartIndex].quantity!;
+  Future<double> decideItemQuantity(bool isIncrement, List<CartModel> cartList, int cartIndex, int? stock, int ? quantityLimit, bool moduleStock) async{
+    double quantity = cartList[cartIndex].quantity!;
     if (isIncrement) {
       if(moduleStock && cartList[cartIndex].quantity! >= stock!) {
         showCustomSnackBar('out_of_stock'.tr);
@@ -201,7 +201,7 @@ class CartService implements CartServiceInterface {
   }
 
   @override
-  Future<double> calculateDiscountedPrice(CartModel cartModel, int quantity, bool isFoodVariation) async{
+  Future<double> calculateDiscountedPrice(CartModel cartModel, double quantity, bool isFoodVariation) async{
     double? discount = cartModel.item!.storeDiscount == 0 ? cartModel.item!.discount : cartModel.item!.storeDiscount;
     String? discountType = cartModel.item!.storeDiscount == 0 ? cartModel.item!.discountType : 'percent';
     double variationPrice = 0;
@@ -243,7 +243,7 @@ class CartService implements CartServiceInterface {
       double discountedPrice = PriceConverter.convertWithDiscount(price, discount, discountType)!;
 
       double? discountAmount = price - discountedPrice;
-      int? quantity = cart.quantity;
+      double? quantity = cart.quantity;
       int? stock = cart.item!.stock ?? 0;
 
       List<List<bool?>> selectedFoodVariations = [];
@@ -321,8 +321,8 @@ class CartService implements CartServiceInterface {
   }
 
   @override
-  int cartQuantity(int itemId, List<CartModel> cartList) {
-    int quantity = 0;
+  double cartQuantity(int itemId, List<CartModel> cartList) {
+    double quantity = 0;
     for(CartModel cart in cartList) {
       if(cart.item!.id == itemId) {
         quantity += cart.quantity!;

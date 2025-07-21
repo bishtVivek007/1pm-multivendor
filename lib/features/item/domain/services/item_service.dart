@@ -207,8 +207,8 @@ class ItemService implements ItemServiceInterface {
   }
 
   @override
-  Future<int> setQuantity(bool isIncrement, bool moduleStock, int? stock, int qty, int? quantityLimit, {bool getxSnackBar = false}) async{
-    int quantity = qty;
+  Future<double> setQuantity(bool isIncrement, bool moduleStock, int? stock, double qty, int? quantityLimit, {bool getxSnackBar = false}) async{
+    double quantity = qty;
     if (isIncrement) {
       if(moduleStock && quantity >= stock!) {
         showCustomSnackBar('out_of_stock'.tr);

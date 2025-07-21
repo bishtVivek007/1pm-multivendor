@@ -14,9 +14,9 @@ abstract class CartServiceInterface {
   bool checkVariation(bool isFoodVariation, CartModel cartModel);
   Future<void> addSharedPrefCartList(List<CartModel> cartProductList);
   int? getCartId(int cartIndex, List<CartModel> cartList);
-  Future<int> decideItemQuantity(bool isIncrement, List<CartModel> cartList, int cartIndex, int? stock, int ? quantityLimit, bool moduleStock);
-  Future<double> calculateDiscountedPrice(CartModel cartModel, int quantity, bool isFoodVariation);
-  Future<bool> updateCartQuantityOnline(int cartId, double price, int quantity);
+  Future<double> decideItemQuantity(bool isIncrement, List<CartModel> cartList, int cartIndex, int? stock, int ? quantityLimit, bool moduleStock);
+  Future<double> calculateDiscountedPrice(CartModel cartModel, double quantity, bool isFoodVariation);
+  Future<bool> updateCartQuantityOnline(int cartId, double price, double quantity);
   Future<List<OnlineCartModel>?> getCartDataOnline();
   List<CartModel> formatOnlineCartToLocalCart({required List<OnlineCartModel> onlineCartModel});
   Future<List<OnlineCartModel>?> updateCartOnline(OnlineCart cart);
@@ -25,6 +25,6 @@ abstract class CartServiceInterface {
   Future<bool> clearCartOnline();
   int isExistInCart(List<CartModel> cartList, int? itemID, String variationType, bool isUpdate, int? cartIndex);
   bool existAnotherStoreItem(int? storeID, int? moduleId, List<CartModel> cartList);
-  int cartQuantity(int itemId, List<CartModel> cartList);
+  double cartQuantity(int itemId, List<CartModel> cartList);
   String cartVariant(int itemId, List<CartModel> cartList);
 }

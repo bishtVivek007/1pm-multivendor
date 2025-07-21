@@ -50,8 +50,8 @@ class ItemController extends GetxController implements GetxService {
   List<List<bool?>> _selectedVariations = [];
   List<List<bool?>> get selectedVariations => _selectedVariations;
   
-  int? _quantity = 1;
-  int? get quantity => _quantity;
+  double? _quantity = 1;
+  double? get quantity => _quantity;
   
   List<bool> _addOnActiveList = [];
   List<bool> get addOnActiveList => _addOnActiveList;

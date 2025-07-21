@@ -245,7 +245,7 @@ class CartController extends GetxController implements GetxService {
     return success;
   }
 
-  Future<void> updateCartQuantityOnline(int cartId, double price, int quantity) async {
+  Future<void> updateCartQuantityOnline(int cartId, double price, double quantity) async {
     _isLoading = true;
     update();
     bool success = await cartServiceInterface.updateCartQuantityOnline(cartId, price, quantity);
@@ -299,7 +299,7 @@ class CartController extends GetxController implements GetxService {
     return success;
   }
 
-  int cartQuantity(int itemId) {
+  double cartQuantity(int itemId) {
     return cartServiceInterface.cartQuantity(itemId, _cartList);
   }
 

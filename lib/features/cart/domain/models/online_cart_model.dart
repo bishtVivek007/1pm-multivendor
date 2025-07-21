@@ -12,7 +12,7 @@ class OnlineCartModel {
   List<int>? addOnQtys;
   String? itemType;
   double? price;
-  int? quantity;
+  double? quantity;
   List<Variation>? foodVariation;
   List<product_variation.Variation>? productVariation;
   String? createdAt;
@@ -50,7 +50,7 @@ class OnlineCartModel {
     addOnQtys = json['add_on_qtys'].cast<int>();
     itemType = json['item_type'];
     price = json['price']?.toDouble();
-    quantity = json['quantity'];
+    quantity = json['quantity']?.toDouble();
     if (json['variation'] != null) {
       foodVariation = [];
       productVariation = [];

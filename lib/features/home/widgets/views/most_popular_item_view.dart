@@ -111,10 +111,10 @@ class MostPopularItemView extends StatelessWidget {
                                       final item = onDemandList[index];
                                       final productName = item.name ?? 'this product';
                                       final imageUrl = item.imageFullUrl ?? ''; // assuming your model has this
-                                      final phone = '918851249134';
+                                      final phone = '918860778515';
 
                                       final message = Uri.encodeComponent(
-                                          "Hi, I have a query regarding *$productName*.\n\n\nHere is the image:\n$imageUrl"
+                                          "Hi, What is the today price for *$productName*.\n\n\nHere is the image:\n$imageUrl"
                                       );
 
                                       final url = Uri.parse("https://wa.me/$phone?text=$message");

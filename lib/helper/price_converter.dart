@@ -58,7 +58,7 @@ class PriceConverter {
     return price;
   }
 
-  static double calculation(double amount, double? discount, String type, int quantity) {
+  static double calculation(double amount, double? discount, String type, double quantity) {
     double calculatedAmount = 0;
     if(type == 'amount' || type == 'fixed') {
       calculatedAmount = discount! * quantity;

@@ -202,7 +202,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   priceWithDiscount.toString(),
                   '',
                   variation != null ? [variation] : [], null,
-                  itemController.enteredUnitQty.toInt(),
+                  itemController.enteredUnitQty,
                   listOfAddOnId, addOnsList, listOfAddOnQty, 'Item'
               );
               priceWithAddons = priceWithQuantity + (Get.find<SplashController>().configModel!.moduleConfig!.module!.addOn! ? addonsCost : 0);
@@ -306,7 +306,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
                         Row(children: [
-                          Text('${'Units'.tr}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                          Text('${'Units'}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                           const SizedBox(width: Dimensions.paddingSizeSmall),
 
                           Expanded(
@@ -509,7 +509,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
 class QuantityButton extends StatelessWidget {
   final bool isIncrement;
-  final int? quantity;
+  final double? quantity;
   final bool isCartWidget;
   final int? stock;
   final bool isExistInCart;

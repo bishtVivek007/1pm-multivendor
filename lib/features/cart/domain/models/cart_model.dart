@@ -9,7 +9,7 @@ class CartModel {
   List<Variation>? _variation;
   List<List<bool?>>? _foodVariations;
   double? _discountAmount;
-  int? _quantity;
+  double? _quantity;
   List<AddOn>? _addOnIds;
   List<AddOns>? _addOns;
   bool? _isCampaign;
@@ -25,7 +25,7 @@ class CartModel {
     List<Variation> variation,
     List<List<bool?>> foodVariations,
     double discountAmount,
-    int? quantity,
+    double? quantity,
     List<AddOn> addOnIds,
     List<AddOns> addOns,
     bool isCampaign,
@@ -61,9 +61,9 @@ class CartModel {
   List<List<bool?>>? get foodVariations => _foodVariations;
   double? get discountAmount => _discountAmount;
   // ignore: unnecessary_getters_setters
-  int? get quantity => _quantity;
+  double? get quantity => _quantity;
   // ignore: unnecessary_getters_setters
-  set quantity(int? qty) => _quantity = qty;
+  set quantity(double? qty) => _quantity = qty;
   int? get isBaseUnit => _isBaseUnit;
   String? get unitName => _unitName;
   List<AddOn>? get addOnIds => _addOnIds;
@@ -96,7 +96,7 @@ class CartModel {
       }
     }
     _discountAmount = json['discount_amount']?.toDouble();
-    _quantity = json['quantity'];
+    _quantity = json['quantity']?.toDouble();
     _stock = json['stock'];
     _isBaseUnit = json['is_base_unit'] != null ? int.tryParse(json['is_base_unit'].toString()) : null;
     _unitName = json['unit'];

@@ -45,6 +45,9 @@ class CartRepository implements CartRepositoryInterface<OnlineCart> {
   }
 
   Future<List<OnlineCartModel>?> _addToCartOnline(OnlineCart cart) async {
+    print(cart.quantity);
+    print(123123456456);
+    print(cart.quantity);
     List<OnlineCartModel>? onlineCartList;
     Response response = await apiClient.postData('${AppConstants.addCartUri}${!AuthHelper.isLoggedIn() ? '?guest_id=${AuthHelper.getGuestId()}' : ''}', cart.toJson());
     if(response.statusCode == 200) {
@@ -107,7 +110,7 @@ class CartRepository implements CartRepositoryInterface<OnlineCart> {
   }
 
   @override
-  Future update(Map<String, dynamic> body, int? id, {double? price, int? quantity, bool isUpdateQty = false}) async {
+  Future update(Map<String, dynamic> body, int? id, {double? price, double? quantity, bool isUpdateQty = false}) async {
     if(isUpdateQty) {
       return await _updateCartQuantityOnline(id!, price!, quantity!);
     } else {
@@ -125,7 +128,7 @@ class CartRepository implements CartRepositoryInterface<OnlineCart> {
     return onlineCartList;
   }
 
-  Future<bool> _updateCartQuantityOnline(int cartId, double price, int quantity) async {
+  Future<bool> _updateCartQuantityOnline(int cartId, double price, double quantity) async {
     Map<String, dynamic> data = {
       "cart_id": cartId,
       "price": price,
