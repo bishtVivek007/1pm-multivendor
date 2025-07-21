@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.aplication.quickshopy"
+    namespace "in_.quickshopy.shop"
     compileSdk 35
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.aplication.quickshopy"
+        applicationId "in_.quickshopy.shop"
         minSdkVersion 23
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
@@ -57,10 +57,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'groceries'
-            keyPassword 'Mali@123Gluu'
-            storeFile file('C:\\Users\\Acer\\Desktop\\vivek\\1pm-multivendor\\android\\app\\groceries.jks')
-            storePassword 'Mali@123Gluu'
+            keyAlias 'upload'
+            keyPassword 'Admin@123'
+            storeFile file('C:\\Users\\Acer\\groceries-quickshopy.jks')
+            storePassword 'Admin@123'
         }
     }
 

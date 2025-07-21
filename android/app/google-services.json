@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:17078083013:android:989557f7388d27e1cc3fac",
         "android_client_info": {
-          "package_name": "com.aplication.quickshopy"
+          "package_name": "in_.quickshopy.shop"
         }
       },
       "oauth_client": [
@@ -17,10 +17,97 @@
           "client_id": "17078083013-cpd9bmme53vnecofr603q2eag7c7vmrh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.aplication.quickshopy",
+            "package_name": "in_.quickshopy.shop",
             "certificate_hash": "585f1f2b7d2521fb4205c573ce156a0729370eac"
           }
         },
+        {
+          "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3aobvW0FVNgHR54yyy_EsZWqbw7beiIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17078083013:android:0f46331c7fc425b2cc3fac",
+        "android_client_info": {
+          "package_name": "com.application.quickshopydelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3aobvW0FVNgHR54yyy_EsZWqbw7beiIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17078083013:android:a636c1ee48549d23cc3fac",
+        "android_client_info": {
+          "package_name": "com.application.quickshopyvendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3aobvW0FVNgHR54yyy_EsZWqbw7beiIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17078083013:android:96c0ab05d587e174cc3fac",
+        "android_client_info": {
+          "package_name": "in_.quickshopy.shop"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "17078083013-b0ivl70ushf1gbm21t9tlbub7ufd4f0e.apps.googleusercontent.com",
           "client_type": 3
