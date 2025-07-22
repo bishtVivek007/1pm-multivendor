@@ -23,6 +23,7 @@ import 'package:sixam_mart/features/item/widgets/details_app_bar_widget.dart';
 import 'package:sixam_mart/features/item/widgets/details_web_view_widget.dart';
 import 'package:sixam_mart/features/item/widgets/item_image_view_widget.dart';
 import 'package:sixam_mart/features/item/widgets/item_title_view_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   final Item? item;
@@ -436,6 +437,32 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).colorScheme.error),
                           ),
                         ) : const SizedBox(),
+
+                        // (itemController.item!.youtubeLink != null && itemController.item!.youtubeLink!.isNotEmpty) ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Youtube Video Link'.tr, style: robotoMedium),
+                            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                            GestureDetector(
+                                onTap: () async {
+                                  final link = itemController.item?.youtubeLink;
+                                  if (link != null && link.isNotEmpty) {
+                                    final uri = Uri.parse(link.startsWith('http') ? link : 'https://$link');
+                                    if (await canLaunchUrl(uri)) {
+                                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                    } else {
+                                      // Optionally show an error
+                                      print('Could not launch $link');
+                                    }
+                                  }
+                                },
+                                child: Text(itemController.item!.youtubeLink ?? 'N/A', style: robotoRegular.copyWith(
+                                  color: Colors.blue
+                                ))),
+                            const SizedBox(height: Dimensions.paddingSizeLarge),
+                          ],
+                        ), // : const SizedBox(),
 
                         (itemController.item!.description != null && itemController.item!.description!.isNotEmpty) ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -88,6 +88,7 @@ class Item {
   String? name;
   String? unitId;
   String? baseUnit;
+  String? youtubeLink;
   String? secondaryUnit;
   String? conversionRate;
   String? description;
@@ -158,6 +159,7 @@ class Item {
     this.storeDiscount,
     this.scheduleOrder,
     this.avgRating,
+    this.youtubeLink,
     this.ratingCount,
     this.veg,
     this.moduleId,
@@ -245,6 +247,7 @@ class Item {
     tax = json['tax']?.toDouble();
     discount = json['discount'].toDouble();
     discountType = json['discount_type'];
+    youtubeLink = json['youtube_link'];
     availableTimeStarts = json['available_time_starts'];
     availableTimeEnds = json['available_time_ends'];
     storeId = json['store_id'];
@@ -277,6 +280,7 @@ class Item {
     data['name'] = name;
     data['description'] = description;
     data['image_full_url'] = imageFullUrl;
+    data['youtube_link'] = youtubeLink;
     data['images_full_url'] = imagesFullUrl;
     data['category_id'] = categoryId;
 
