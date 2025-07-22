@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart/features/item/domain/models/basic_medicine_model.dart';
@@ -63,6 +64,25 @@ class ItemModel {
   }
 }
 
+class WholesalePrice {
+  String? quantity;
+  String? price;
+
+  WholesalePrice({this.quantity, this.price});
+
+  WholesalePrice.fromJson(Map<String, dynamic> json) {
+    quantity = json['quantity'].toString();
+    price = json['price'].toString();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'quantity': quantity,
+      'price': price,
+    };
+  }
+}
+
 class Item {
   int? id;
   String? name;
@@ -74,6 +94,7 @@ class Item {
   String? imageFullUrl;
   List<String>? imagesFullUrl;
   int? categoryId;
+  List<WholesalePrice>? wholesalePrices;
   List<CategoryIds>? categoryIds;
   List<Variation>? variations;
   List<FoodVariation>? foodVariations;
@@ -122,6 +143,7 @@ class Item {
     this.conversionRate,
     this.variations,
     this.foodVariations,
+    this.wholesalePrices,
     this.addOns,
     this.choiceOptions,
     this.price,
@@ -156,6 +178,15 @@ class Item {
   Item.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     unitId = json['unit_id']?.toString();
+
+    if (json['wholesale_prices'] != null && json['wholesale_prices'].toString().startsWith('[')) {
+      wholesalePrices = [];
+      final parsedList = jsonDecode(json['wholesale_prices']);
+      parsedList.forEach((v) {
+        wholesalePrices!.add(WholesalePrice.fromJson(v));
+      });
+    }
+
 
     if (json['unit'] != null) {
       baseUnit = json['unit']['unit'];
@@ -248,6 +279,11 @@ class Item {
     data['image_full_url'] = imageFullUrl;
     data['images_full_url'] = imagesFullUrl;
     data['category_id'] = categoryId;
+
+    if (wholesalePrices != null) {
+      data['wholesale_prices'] = jsonEncode(wholesalePrices!.map((v) => v.toJson()).toList());
+    }
+
     if (categoryIds != null) {
       data['category_ids'] = categoryIds!.map((v) => v.toJson()).toList();
     }

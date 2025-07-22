@@ -240,6 +240,50 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ),
                         const Divider(height: 20, thickness: 2),
 
+                        if (itemController.item?.wholesalePrices != null && itemController.item!.wholesalePrices!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Wholesale Prices:',
+                                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                                ),
+                                const SizedBox(height: Dimensions.paddingSizeSmall),
+                                Table(
+                                  columnWidths: const {
+                                    0: IntrinsicColumnWidth(),
+                                    1: FixedColumnWidth(16),
+                                    2: FlexColumnWidth(),
+                                  },
+                                  children: itemController.item!.wholesalePrices!.map((wp) {
+                                    return TableRow(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4),
+                                          child: Text(
+                                            'Qty: ${wp.quantity}',
+                                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                          ),
+                                        ),
+                                        const SizedBox(),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4),
+                                          child: Text(
+                                            PriceConverter.convertPrice(double.tryParse(wp.price ?? '0') ?? 0),
+                                            style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.green),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+
+
                         // Variation
                         ListView.builder(
                           shrinkWrap: true,
