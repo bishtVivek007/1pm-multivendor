@@ -247,7 +247,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         onTap: () async {
                           final phone = Get.find<SplashController>().configModel!.phone;
                           final message = Uri.encodeComponent(
-                              "Hello, I have an enquiry.\n\nCould you please share today's price and availability?"
+                              "Hello, I have a query"
                           );
 
                           final url = Uri.parse("https://wa.me/$phone?text=$message");
