@@ -148,7 +148,7 @@ class CartItemWidget extends StatelessWidget {
                         SizedBox(width: cart.item!.isStoreHalalActive! && cart.item!.isHalalItem! ? Dimensions.paddingSizeExtraSmall : 0),
 
                         cart.item!.isStoreHalalActive! && cart.item!.isHalalItem! ? const CustomAssetImageWidget(
-                         Images.halalTag, height: 13, width: 13) : const SizedBox(),
+                            Images.halalTag, height: 13, width: 13) : const SizedBox(),
 
                       ]),
 
@@ -189,11 +189,6 @@ class CartItemWidget extends StatelessWidget {
                         ) : const SizedBox(),
                       ]),
 
-                      Text(
-                        'Qty. ${cart.quantity} $unit',
-                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                      ),
-
                       cart.item!.isPrescriptionRequired! ? Padding(
                         padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : 2),
                         child: Text(
@@ -227,35 +222,43 @@ class CartItemWidget extends StatelessWidget {
                   ),
 
                   GetBuilder<CartController>(
-                    builder: (cartController) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
-                        child: Row(children: [
-                          QuantityButton(
-                            onTap: cartController.isLoading ? null : () {
-                              Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
-                            },
-                            isIncrement: false,
-                            showRemoveIcon: true,
-                          ),
+                      builder: (cartController) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault+2),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Qty. ${cart.quantity}',
+                                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                ),
 
+                                Text(
+                                  unit,
+                                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                ),
 
-                          // Text(
-                          //  'Qty. ${cart.quantity} $unit',
-                          //   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                          // ),
+                                SizedBox(height: 10,),
 
-                          // QuantityButton(
-                          //   onTap: cartController.isLoading ? null : () {
-                          //     Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
-                          //     Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
-                          //   },
-                          //   isIncrement: true,
-                          //   color: cartController.isLoading ? Theme.of(context).disabledColor : null,
-                          // ),
-                        ]),
-                      );
-                    }
+                                QuantityButton(
+                                  onTap: cartController.isLoading ? null : () {
+                                    Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                                  },
+                                  isIncrement: false,
+                                  showRemoveIcon: true,
+                                ),
+
+                            // QuantityButton(
+                            //   onTap: cartController.isLoading ? null : () {
+                            //     Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
+                            //     Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
+                            //   },
+                            //   isIncrement: true,
+                            //   color: cartController.isLoading ? Theme.of(context).disabledColor : null,
+                            // ),
+                          ]),
+                        );
+                      }
                   ),
                 ]),
 

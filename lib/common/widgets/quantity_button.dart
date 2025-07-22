@@ -15,7 +15,7 @@ class QuantityButton extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: Container(
         height: fromSheet ? 30 : 22, width: fromSheet ? 30 : 22,
-        margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+        // margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(width: 1, color: showRemoveIcon ? Theme.of(context).colorScheme.error : isIncrement ? Theme.of(context).primaryColor : Theme.of(context).disabledColor),
