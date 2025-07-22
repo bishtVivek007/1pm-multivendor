@@ -42,7 +42,12 @@ class ItemCard extends StatelessWidget {
             color: Theme.of(context).cardColor,
           ),
           child: CustomInkWell(
-            onTap: () => Get.find<ItemController>().navigateToItemPage(item, context),
+            onTap: () {
+              if(item.stock == 0) {
+                return;
+              }
+              Get.find<ItemController>().navigateToItemPage(item, context);
+            },
             radius: Dimensions.radiusLarge,
             child: TextHover(
                 builder: (isHovered) {
@@ -160,7 +165,7 @@ class ItemCard extends StatelessWidget {
                                 style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
                               ) : const SizedBox(),
 
-                              discount != null && discount > 0  ? Text(
+                              discount != null && discount > 0 && item.stock!=0 ? Text(
                                 PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(item)),
                                 style: robotoMedium.copyWith(
                                   fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
@@ -169,13 +174,14 @@ class ItemCard extends StatelessWidget {
                               ) : const SizedBox(),
                               // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
 
+                              item.stock!=0 ?
                               Text(
                                 PriceConverter.convertPrice(
                                   Get.find<ItemController>().getStartingPrice(item), discount: discount,
                                   discountType: discountType,
                                 ),
                                 textDirection: TextDirection.ltr, style: robotoMedium,
-                              ),
+                              ) : const SizedBox(),
 
                               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 

@@ -109,24 +109,6 @@ class MostPopularItemView extends StatelessWidget {
                                   child: FloatingActionButton(
                                     onPressed: () async {
                                       Get.toNamed(RouteHelper.getConversationRoute());
-                                      /*final item = onDemandList[index];
-                                      final productName = item.name ?? 'this product';
-                                      final imageUrl = item.imageFullUrl ?? ''; // assuming your model has this
-                                      final phone = '918860778515';
-
-                                      final message = Uri.encodeComponent(
-                                          "Hi, What is the today price for *$productName*.\n\n\nHere is the image:\n$imageUrl"
-                                      );
-
-                                      final url = Uri.parse("https://wa.me/$phone?text=$message");
-
-                                      if (await canLaunchUrl(url)) {
-                                        await launchUrl(url, mode: LaunchMode.externalApplication);
-                                      } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text("Could not open WhatsApp")),
-                                        );
-                                      }*/
                                     },
                                     backgroundColor: Colors.transparent,
                                     mini: true,
