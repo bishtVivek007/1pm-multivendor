@@ -75,7 +75,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     );
   }
 
-  String _calculateFinalUnitPrice({
+  /*String _calculateFinalUnitPrice({
     required Item item,
     required List<int?> variationIndex,
     required int selectedUnitIndex,
@@ -114,7 +114,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     finalPrice *= quantityInBaseUnit;
 
     return finalPrice.toString();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -157,10 +157,51 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
               double? discount = (itemController.item!.availableDateStarts != null || itemController.item!.storeDiscount == 0) ? itemController.item!.discount : itemController.item!.storeDiscount;
               String? discountType = (itemController.item!.availableDateStarts != null || itemController.item!.storeDiscount == 0) ? itemController.item!.discountType : 'percent';
-              double priceWithDiscount = PriceConverter.convertWithDiscount(price, discount, discountType)!;
+              // double priceWithDiscount = PriceConverter.convertWithDiscount(price, discount, discountType)!;
+              // double quantityInBaseUnit = itemController.selectedUnitIndex == 0
+              //     ? itemController.enteredUnitQty
+              //     : (itemController.enteredUnitQty / (double.tryParse(itemController.item!.conversionRate ?? '1') ?? 1));
+              //
+              // double priceWithQuantity = priceWithDiscount * quantityInBaseUnit;
+
+              double priceWithDiscount;
+              double enteredQty = itemController.enteredUnitQty;
+
+              double _getWholesaleUnitPrice(double qty, List<WholesalePrice> prices) {
+                prices.sort((a, b) => double.parse(b.quantity!).compareTo(double.parse(a.quantity!)));
+                for (var wp in prices) {
+                  double minQty = double.tryParse(wp.quantity ?? '0') ?? 0;
+                  if (qty >= minQty) {
+                    return double.tryParse(wp.price ?? '0') ?? 0;
+                  }
+                }
+                return 0;
+              }
+
+
+              bool isWholesale = false;
+              double wholesaleUnitPrice = 0;
+
+              if (
+              itemController.selectedUnitIndex == 0 && // ✅ Base unit selected
+                  itemController.item!.wholesalePrices != null &&
+                  itemController.item!.wholesalePrices!.isNotEmpty
+              ) {
+                wholesaleUnitPrice = _getWholesaleUnitPrice(enteredQty, itemController.item!.wholesalePrices!);
+                if (wholesaleUnitPrice > 0) {
+                  priceWithDiscount = wholesaleUnitPrice;
+                  isWholesale = true;
+                } else {
+                  priceWithDiscount = PriceConverter.convertWithDiscount(price, discount, discountType)!;
+                }
+              } else {
+                priceWithDiscount = PriceConverter.convertWithDiscount(price, discount, discountType)!;
+              }
+
+
               double quantityInBaseUnit = itemController.selectedUnitIndex == 0
-                  ? itemController.enteredUnitQty
-                  : (itemController.enteredUnitQty / (double.tryParse(itemController.item!.conversionRate ?? '1') ?? 1));
+                  ? enteredQty
+                  : (enteredQty / (double.tryParse(itemController.item!.conversionRate ?? '1') ?? 1));
 
               double priceWithQuantity = priceWithDiscount * quantityInBaseUnit;
 
@@ -345,7 +386,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 : priceWithAddons), textDirection: TextDirection.ltr,
                             style:robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge),
                           ),
-                          // Text('${'total_amount'.tr}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                         ]),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 

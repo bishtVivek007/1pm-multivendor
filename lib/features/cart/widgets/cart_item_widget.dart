@@ -189,6 +189,11 @@ class CartItemWidget extends StatelessWidget {
                         ) : const SizedBox(),
                       ]),
 
+                      Text(
+                        'Qty. ${cart.quantity} $unit',
+                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                      ),
+
                       cart.item!.isPrescriptionRequired! ? Padding(
                         padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : 2),
                         child: Text(
@@ -228,21 +233,17 @@ class CartItemWidget extends StatelessWidget {
                         child: Row(children: [
                           QuantityButton(
                             onTap: cartController.isLoading ? null : () {
-                              if (false) {
-                                Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
-                              }else {
-                                Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
-                              }
+                              Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
                             },
                             isIncrement: false,
                             showRemoveIcon: true,
                           ),
 
 
-                          Text(
-                           'Qty. ${cart.quantity} $unit',
-                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                          ),
+                          // Text(
+                          //  'Qty. ${cart.quantity} $unit',
+                          //   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                          // ),
 
                           // QuantityButton(
                           //   onTap: cartController.isLoading ? null : () {
