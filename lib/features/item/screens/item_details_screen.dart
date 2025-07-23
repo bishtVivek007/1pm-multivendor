@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
@@ -38,6 +40,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   final Size size = Get.size;
   final GlobalKey<ScaffoldMessengerState> _globalKey = GlobalKey();
   final GlobalKey<DetailsAppBarWidgetState> _key = GlobalKey();
+  TextEditingController _quantityController = TextEditingController();
+  int? _pendingQty;
 
   @override
   void initState() {
@@ -45,6 +49,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
     Get.find<ItemController>().getProductDetails(widget.item!);
     Get.find<ItemController>().setSelect(0, false);
+
+    int initialQty = widget.item != null ? widget.item!.quantityLimit ?? 1 : 1;
+    _quantityController.text = initialQty.toString();
   }
 
   @override
@@ -199,46 +206,100 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         // Quantity
                         GetBuilder<CartController>(
                           builder: (cartController) {
+                            _quantityController.text = (itemController.cartIndex != -1
+                                ? cartController.cartList[itemController.cartIndex].quantity
+                                : itemController.quantity).toString();
                             return Row(children: [
-                              Text('quantity'.tr, style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                              Text('Add ${'quantity'.tr}', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                               const Expanded(child: SizedBox()),
                               Container(
-                                decoration: BoxDecoration(color: Theme.of(context).disabledColor, borderRadius: BorderRadius.circular(5)),
-                                child: Row(children: [
-                                  InkWell(
-                                    onTap: cartController.isLoading ? null : () {
-                                      if(itemController.cartIndex != -1) {
-                                        if(cartController.cartList[itemController.cartIndex].quantity! > 1) {
-                                          cartController.setQuantity(false, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantity);
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: cartController.isLoading
+                                          ? null
+                                          : () {
+                                        if (itemController.cartIndex != -1) {
+                                          if (cartController.cartList[itemController.cartIndex].quantity! > 1) {
+                                            cartController.setQuantity(false, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantity);
+                                          }
+                                        } else {
+                                          if (itemController.quantity! > 1) {
+                                            itemController.setQuantity(false, stock, itemController.item!.quantityLimit);
+                                          }
                                         }
-                                      }else {
-                                        if(itemController.quantity! > 1) {
-                                          itemController.setQuantity(false, stock, itemController.item!.quantityLimit);
-                                        }
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                                      child: Icon(Icons.remove, size: 20),
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                        child: Icon(Icons.remove, size: 20),
+                                      ),
                                     ),
-                                  ),
 
-                                  Text(
-                                    itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity.toString()
-                                        : itemController.quantity.toString(),
-                                    style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                                  ),
+                                    /// Editable Quantity
+                                    SizedBox(
+                                      width: 40,
+                                      child: TextFormField(
+                                        controller: _quantityController,
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(4), // Optional: rounded corners
+                                          ),
+                                          isDense: true,
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                                        ),
+                                        onChanged: (value) {
+                                          if (value.isEmpty) return;
 
-                                  InkWell(
-                                    onTap: cartController.isLoading ? null : () => itemController.cartIndex != -1
-                                        ? cartController.setQuantity(true, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantityLimit)
-                                        : itemController.setQuantity(true, stock, itemController.item!.quantityLimit),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                                      child: Icon(Icons.add, size: 20),
+                                          int qty = int.tryParse(value) ?? 1;
+
+                                          if (qty < 1) qty = 1;
+                                          if (qty > stock!) qty = stock;
+
+                                          _pendingQty = qty;
+
+                                          if (itemController.cartIndex != -1) {
+                                            cartController.setQuantityManually(qty, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantityLimit);
+                                          } else {
+                                            itemController.setQuantityManually(qty, stock, itemController.item!.quantityLimit);
+                                          }
+                                        },
+                                        onFieldSubmitted: (value) {
+                                          int qty = int.tryParse(value) ?? 1;
+
+                                          if (qty < 1) qty = 1;
+                                          if (qty > stock!) qty = stock;
+
+                                          _quantityController.text = qty.toString(); // clean format
+
+                                          if (itemController.cartIndex != -1) {
+                                            cartController.setQuantityManually(qty, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantityLimit);
+                                          } else {
+                                            itemController.setQuantityManually(qty, stock, itemController.item!.quantityLimit);
+                                          }
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ]),
+
+                                    InkWell(
+                                      onTap: cartController.isLoading
+                                          ? null
+                                          : () => itemController.cartIndex != -1
+                                          ? cartController.setQuantity(true, itemController.cartIndex, stock, cartController.cartList[itemController.cartIndex].quantityLimit)
+                                          : itemController.setQuantity(true, stock, itemController.item!.quantityLimit),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                        child: Icon(Icons.add, size: 20),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ]);
                           }

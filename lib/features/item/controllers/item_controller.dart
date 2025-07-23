@@ -55,7 +55,7 @@ class ItemController extends GetxController implements GetxService {
   
   int? _quantity = 1;
   int? get quantity => _quantity;
-  
+
   List<bool> _addOnActiveList = [];
   List<bool> get addOnActiveList => _addOnActiveList;
   
@@ -498,6 +498,24 @@ class ItemController extends GetxController implements GetxService {
     _addOnQtyList[index] = itemServiceInterface.setAddOnQuantity(isIncrement, _addOnQtyList[index]!);
     update();
   }
+
+  void setQuantityManually(int quantity, int stock, int? quantityLimit) {
+    int finalQty = quantity;
+
+    if (finalQty > stock) {
+      finalQty = stock;
+    }
+    if (quantityLimit != null && finalQty > quantityLimit) {
+      finalQty = quantityLimit;
+    }
+    if (finalQty < 1) {
+      finalQty = 1;
+    }
+
+    _quantity = finalQty;
+    update(); // Notify listeners/UI
+  }
+
 
   Future<void> setQuantity(bool isIncrement, int? stock,  int? quantityLimit, {bool getxSnackBar = false}) async {
     _quantity = await itemServiceInterface.setQuantity(isIncrement, Get.find<SplashController>().configModel!.moduleConfig!.module!.stock!, stock, _quantity!, quantityLimit, getxSnackBar: getxSnackBar);

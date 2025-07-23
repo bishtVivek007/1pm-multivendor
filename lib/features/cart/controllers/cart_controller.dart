@@ -162,6 +162,24 @@ class CartController extends GetxController implements GetxService {
     return cartServiceInterface.getCartId(cartIndex, _cartList);
   }
 
+  void setQuantityManually(int quantity, int index, int stock, int? quantityLimit) {
+    int finalQty = quantity;
+
+    if (finalQty > stock) {
+      finalQty = stock;
+    }
+    if (quantityLimit != null && finalQty > quantityLimit) {
+      finalQty = quantityLimit;
+    }
+    if (finalQty < 1) {
+      finalQty = 1;
+    }
+
+    cartList[index].quantity = finalQty;
+    update(); // Notify UI
+  }
+
+
   Future<void> setQuantity(bool isIncrement, int cartIndex, int? stock, int ? quantityLimit) async {
     _isLoading = true;
     update();
