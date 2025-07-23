@@ -34,7 +34,7 @@ class ResponsiveHelper {
 
   static bool isDesktop(context) {
     final size = MediaQuery.of(context).size.width;
-    if (size >= 1300) {
+    if (size >= 1200) {
       return true;
     } else {
       return false;
