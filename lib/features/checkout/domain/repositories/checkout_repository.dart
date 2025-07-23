@@ -23,6 +23,11 @@ class CheckoutRepository implements CheckoutRepositoryInterface {
   }
 
   @override
+  Future<Response> getPayLaterCoupons() async {
+    return await apiClient.getData(AppConstants.payLaterCouponUri);
+  }
+
+  @override
   Future<bool> saveSharedPrefDmTipIndex(String index) async {
     return await sharedPreferences.setString(AppConstants.dmTipIndex, index);
   }

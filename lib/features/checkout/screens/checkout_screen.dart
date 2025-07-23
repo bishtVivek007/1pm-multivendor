@@ -56,6 +56,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
   double? _taxPercent = 0;
   bool? _isCashOnDeliveryActive = false;
+  String? _payLaterCouponCode;
   bool? _isDigitalPaymentActive = false;
   bool _isOfflinePaymentActive = false;
   List<CartModel?>? _cartList;
@@ -142,6 +143,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
         notify: false,
       );
       Get.find<CheckoutController>().tipController.text = Get.find<CheckoutController>().selectedTips != -1 ? AppConstants.tips[Get.find<CheckoutController>().selectedTips] : '';
+
+      var coupons = Get.find<CheckoutController>().payLaterCoupons;
+      if (coupons != null) {
+        for (var coupon in coupons) {
+          _payLaterCouponCode = coupon['code'];
+          debugPrint('Pay Later Coupon Code: ${coupon['code']}');
+        }
+      } else {
+        debugPrint('No pay later coupons available.');
+      }
 
   }
 
@@ -276,6 +287,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                     child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
                       Expanded(flex: 6, child: TopSection(
+                        payLaterCouponCode: _payLaterCouponCode ?? '',
                         checkoutController: checkoutController, charge: originalCharge, deliveryCharge: deliveryCharge,
                         addressList: addressList,
                         tomorrowClosed: tomorrowClosed, todayClosed: todayClosed, module : module, price: price,
@@ -306,6 +318,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                   ) : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
                     TopSection(
+                      payLaterCouponCode: _payLaterCouponCode ?? '',
                       checkoutController: checkoutController, charge: originalCharge, deliveryCharge: deliveryCharge,
                       addressList: addressList,
                       tomorrowClosed: tomorrowClosed, todayClosed: todayClosed, module : module, price: price,
@@ -434,6 +447,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           }else if(checkoutController.paymentMethodIndex == -1) {
             if(ResponsiveHelper.isDesktop(context)){
               Get.dialog(Dialog(backgroundColor: Colors.transparent, child: PaymentMethodBottomSheet(
+                payLaterCouponCode: _payLaterCouponCode,
                 isCashOnDeliveryActive: _isCashOnDeliveryActive!, isDigitalPaymentActive: _isDigitalPaymentActive!,
                 isWalletActive: _isWalletActive, storeId: widget.storeId, totalPrice: total, isOfflinePaymentActive: _isOfflinePaymentActive,
               )));
@@ -441,6 +455,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               showModalBottomSheet(
                 context: context, isScrollControlled: true, backgroundColor: Colors.transparent,
                 builder: (con) => PaymentMethodBottomSheet(
+                  payLaterCouponCode: _payLaterCouponCode,
                   isCashOnDeliveryActive: _isCashOnDeliveryActive!, isDigitalPaymentActive: _isDigitalPaymentActive!,
                   isWalletActive: _isWalletActive, storeId: widget.storeId, totalPrice: total, isOfflinePaymentActive: _isOfflinePaymentActive,
                 ),
@@ -525,11 +540,12 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               }
 
               PlaceOrderBodyModel placeOrderBody = PlaceOrderBodyModel(
+                paylater: checkoutController.paymentMethodIndex == 4 ? 1: 0,
                 cart: carts, couponDiscountAmount: Get.find<CouponController>().discount, distance: checkoutController.distance,
                 scheduleAt: !checkoutController.store!.scheduleOrder! ? null : (checkoutController.selectedDateSlot == 0
                     && checkoutController.selectedTimeSlot == 0) ? null : DateConverter.dateToDateAndTime(scheduleEndDate),
                 orderAmount: total, orderNote: checkoutController.noteController.text, orderType: checkoutController.orderType,
-                paymentMethod: checkoutController.paymentMethodIndex == 0 ? 'cash_on_delivery'
+                paymentMethod: checkoutController.paymentMethodIndex == 0 || checkoutController.paymentMethodIndex == 4 ? 'cash_on_delivery'
                     : checkoutController.paymentMethodIndex == 1 ? 'wallet'
                     : checkoutController.paymentMethodIndex == 2 ? 'digital_payment' : 'offline_payment',
                 couponCode: (Get.find<CouponController>().discount! > 0 || (Get.find<CouponController>().coupon != null

@@ -7,6 +7,7 @@ import 'package:sixam_mart/interfaces/repository_interface.dart';
 abstract class CheckoutRepositoryInterface extends RepositoryInterface {
   Future<int> getDmTipMostTapped();
   String getSharedPrefDmTipIndex();
+  Future<Response> getPayLaterCoupons();
   Future<bool> saveSharedPrefDmTipIndex(String index);
   Future<Response> getDistanceInMeter(LatLng originLatLng, LatLng destinationLatLng);
   Future<double> getExtraCharge(double? distance);

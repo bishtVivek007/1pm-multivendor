@@ -138,11 +138,32 @@ class CheckoutController extends GetxController implements GetxService {
   bool _isExpand = false;
   bool get isExpand => _isExpand;
 
+  List<dynamic>? _payLaterCoupons;
+  List<dynamic>? get payLaterCoupons => _payLaterCoupons;
+
+  Future<void> getPayLaterCouponList() async {
+    _isLoading = true;
+    update();
+
+    final response = await checkoutServiceInterface.getPayLaterCoupons();
+
+    if (response.statusCode == 200) {
+      _payLaterCoupons = response.body;
+    } else {
+      showCustomSnackBar('Failed to load coupons');
+    }
+
+    _isLoading = false;
+    update();
+  }
+
+
   Future<void> initCheckoutData(int? storeId) async {
     Get.find<CouponController>().removeCouponData(false);
     clearPrevData();
     _store = await Get.find<StoreController>().getStoreDetails(Store(id: storeId), false);
     initializeTimeSlot(_store!);
+    await getPayLaterCouponList();
   }
 
   void showTipsField(){

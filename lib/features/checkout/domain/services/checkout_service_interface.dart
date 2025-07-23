@@ -9,6 +9,7 @@ import 'package:sixam_mart/features/checkout/domain/models/timeslote_model.dart'
 abstract class CheckoutServiceInterface {
   Future<List<OfflineMethodModel>?> getOfflineMethodList();
   Future<int> getDmTipMostTapped();
+  Future<Response> getPayLaterCoupons();
   String getSharedPrefDmTipIndex();
   Future<bool> saveSharedPrefDmTipIndex(String index);
   Future<List<TimeSlotModel>?> initializeTimeSlot(Store store, int? scheduleOrderSlotDuration);

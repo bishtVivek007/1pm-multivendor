@@ -19,6 +19,7 @@ class AppConstants {
   static const String storeItemUri = '/api/v1/items/latest';
   static const String popularItemUri = '/api/v1/items/popular';
   static const String reviewedItemUri = '/api/v1/items/most-reviewed';
+  static const String payLaterCouponUri = '/api/v1/coupon/pay-later-coupon';
   static const String searchItemUri = '/api/v1/items/details/';
   static const String subCategoryUri = '/api/v1/categories/childes/';
   static const String categoryItemUri = '/api/v1/categories/items/';

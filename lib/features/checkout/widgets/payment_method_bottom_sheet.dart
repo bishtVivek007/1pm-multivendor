@@ -19,10 +19,11 @@ class PaymentMethodBottomSheet extends StatefulWidget {
   final bool isCashOnDeliveryActive;
   final bool isDigitalPaymentActive;
   final bool isOfflinePaymentActive;
+  final String? payLaterCouponCode;
   final bool isWalletActive;
   final int? storeId;
   final double totalPrice;
-  const PaymentMethodBottomSheet({super.key, required this.isCashOnDeliveryActive, required this.isDigitalPaymentActive,
+  const PaymentMethodBottomSheet({super.key, required this.payLaterCouponCode, required this.isCashOnDeliveryActive, required this.isDigitalPaymentActive,
     required this.isWalletActive, required this.storeId, required this.totalPrice, required this.isOfflinePaymentActive});
 
   @override
@@ -167,6 +168,22 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
 
                         ]),
                         const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                        widget.payLaterCouponCode != null ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Pay Within 30 Days'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
+                            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                            PaymentButtonNew(
+                              icon: Images.coupon,
+                              title: widget.payLaterCouponCode!,
+                              isSelected: checkoutController.paymentMethodIndex == 4,
+                              onTap: () {
+                                checkoutController.setPaymentMethod(4);
+                              },
+                            ),
+                          ],
+                        ) : SizedBox(),
 
                         widget.storeId == null && widget.isDigitalPaymentActive && notHideDigital ? Row(children: [
                           Text('pay_via_online'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),

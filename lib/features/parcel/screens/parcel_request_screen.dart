@@ -597,10 +597,12 @@ class _ParcelRequestScreenState extends State<ParcelRequestScreen> {
           showCustomSnackBar('confirm_password_does_not_matched'.tr);
         }else {
 
+          final CheckoutController checkoutController = Get.find<CheckoutController>();
           PlaceOrderBodyModel placeOrderBody = PlaceOrderBodyModel(
+            paylater: checkoutController.paymentMethodIndex == 4 ? 1: 0,
             cart: [], couponDiscountAmount: null, distance: parcelController.distance, scheduleAt: null,
             orderAmount: charge, orderNote: '', orderType: 'parcel', receiverDetails: widget.destinationAddress,
-            paymentMethod: parcelController.paymentIndex == 0 ? 'cash_on_delivery'
+            paymentMethod: parcelController.paymentIndex == 0 || checkoutController.paymentMethodIndex == 4 ? 'cash_on_delivery'
                 : parcelController.paymentIndex == 1 ? 'wallet'
                 : parcelController.paymentIndex == 2 ? 'digital_payment' : 'offline_payment',
             couponCode: null, storeId: null, address: widget.pickedUpAddress.address, latitude: widget.pickedUpAddress.latitude,

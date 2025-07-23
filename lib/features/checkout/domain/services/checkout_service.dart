@@ -24,6 +24,11 @@ class CheckoutService implements CheckoutServiceInterface {
   }
 
   @override
+  Future<Response> getPayLaterCoupons() async {
+    return await checkoutRepositoryInterface.getPayLaterCoupons();
+  }
+
+  @override
   String getSharedPrefDmTipIndex() {
     return checkoutRepositoryInterface.getSharedPrefDmTipIndex();
   }

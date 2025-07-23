@@ -11,6 +11,7 @@ class PlaceOrderBodyModel {
   String? _orderNote;
   String? _couponCode;
   int? _storeId;
+  int? _payLater;
   double? _distance;
   String? _scheduleAt;
   double? _discountAmount;
@@ -48,6 +49,7 @@ class PlaceOrderBodyModel {
     required String? orderType,
     required String paymentMethod,
     required int? storeId,
+    required int? paylater,
     required double? distance,
     required String? scheduleAt,
     required double? discountAmount,
@@ -83,6 +85,7 @@ class PlaceOrderBodyModel {
     _orderAmount = orderAmount;
     _orderType = orderType;
     _paymentMethod = paymentMethod;
+    _payLater = paylater;
     _orderNote = orderNote;
     _couponCode = couponCode;
     _storeId = storeId;
@@ -164,6 +167,7 @@ class PlaceOrderBodyModel {
     _orderType = json['order_type'];
     _paymentMethod = json['payment_method'];
     _orderNote = json['order_note'];
+    _payLater = json['paylater_coupon'];
     _couponCode = json['coupon_code'];
     _storeId = json['store_id'] != null ? int.parse(json['store_id'].toString()) : null;
     _distance = double.parse(json['distance'].toString());
@@ -208,6 +212,7 @@ class PlaceOrderBodyModel {
     data['order_amount'] = _orderAmount.toString();
     data['order_type'] = _orderType!;
     data['payment_method'] = _paymentMethod!;
+    data['paylater_coupon'] = _payLater.toString();
     if (_orderNote != null && _orderNote!.isNotEmpty) {
       data['order_note'] = _orderNote!;
     }

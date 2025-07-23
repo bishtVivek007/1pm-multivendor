@@ -59,6 +59,7 @@ class TopSection extends StatelessWidget {
   final FocusNode guestConfirmPasswordNode;
   final double variationPrice;
   final String deliveryChargeForView;
+  final String payLaterCouponCode;
   final double badWeatherCharge;
   final double extraChargeForToolTip;
 
@@ -66,7 +67,7 @@ class TopSection extends StatelessWidget {
     super.key, required this.deliveryCharge, required  this.charge, required this.tomorrowClosed,
     required this.todayClosed, required this.price, required this.discount, required this.addOns,
     required this.addressList, required this.checkoutController,
-    this.module, this.storeId, required this.address, required this.cartList,
+    this.module, this.storeId, required this.address, required this.cartList, required this.payLaterCouponCode,
     required this.isCashOnDeliveryActive, required this.isDigitalPaymentActive, required this.isWalletActive,
     required this.total, required this.isOfflinePaymentActive, required this.guestNameTextEditingController,
     required this.guestNumberTextEditingController, required this.guestNumberNode,
@@ -298,6 +299,7 @@ class TopSection extends StatelessWidget {
           child: Column(children: [
 
             PaymentSection(
+              payLaterCouponCode: payLaterCouponCode,
               storeId: storeId, isCashOnDeliveryActive: isCashOnDeliveryActive, isDigitalPaymentActive: isDigitalPaymentActive,
               isWalletActive: isWalletActive, total: total, checkoutController: checkoutController, isOfflinePaymentActive: isOfflinePaymentActive,
             ),
