@@ -148,10 +148,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
       if (coupons != null) {
         for (var coupon in coupons) {
           _payLaterCouponCode = coupon['code'];
-          debugPrint('Pay Later Coupon Code: ${coupon['code']}');
+          debugPrint('1211a Pay Later Coupon Code: ${coupon['code']}');
         }
       } else {
-        debugPrint('No pay later coupons available.');
+        debugPrint('1211b No pay later coupons available.');
       }
 
   }
@@ -680,7 +680,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     double price = 0;
     if(cartList != null) {
       for (var cartModel in cartList) {
-        if(Get.find<SplashController>().getModuleConfig(cartModel!.item!.moduleType).newVariation!){
+        if(!Get.find<SplashController>().getModuleConfig(cartModel!.item!.moduleType).newVariation!){
           price = price + (cartModel.item!.price! * cartModel.quantity!);
         } else {
           price = _calculateVariationPrice(store: store, cartList: cartList);

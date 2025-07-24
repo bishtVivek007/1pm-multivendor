@@ -169,7 +169,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                         ]),
                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
-                        widget.payLaterCouponCode != null ? Column(
+                          widget.payLaterCouponCode!.isNotEmpty ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Pay Within 30 Days'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
