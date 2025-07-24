@@ -60,6 +60,7 @@ class ConfigModel {
   int? taxIncluded;
   String? cookiesText;
   int? homeDeliveryStatus;
+  Map<String, dynamic>? homePageSections;
   int? takeawayStatus;
   bool? partialPaymentStatus;
   String? partialPaymentMethod;
@@ -88,6 +89,7 @@ class ConfigModel {
     this.businessName,
     this.logoFullUrl,
     this.address,
+    this.homePageSections,
     this.phone,
     this.email,
     this.country,
@@ -173,6 +175,7 @@ class ConfigModel {
     address = json['address'];
     phone = json['phone'];
     email = json['email'];
+    homePageSections = json['home_page_sections'];
     country = json['country'];
     defaultLocation = json['default_location'] != null ? DefaultLocation.fromJson(json['default_location']) : null;
     currencySymbol = json['currency_symbol'];
@@ -294,6 +297,7 @@ class ConfigModel {
     data['app_minimum_version_ios'] = appMinimumVersionIos;
     data['app_url_ios'] = appUrlIos;
     data['customer_verification'] = customerVerification;
+    data['home_page_sections'] = homePageSections;
     data['schedule_order'] = scheduleOrder;
     data['order_delivery_verification'] = orderDeliveryVerification;
     data['cash_on_delivery'] = cashOnDelivery;

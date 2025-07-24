@@ -208,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bool isShop = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.ecommerce;
       bool isGrocery = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.grocery;
       bool isTaxi = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.taxi;
+      final configModel = Get.find<SplashController>().configModel;
 
       return GetBuilder<HomeController>(builder: (homeController) {
         return Scaffold(
@@ -341,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   /// Search Button
-                  !showMobileModule && !isTaxi ? SliverPersistentHeader(
+                  !showMobileModule && !isTaxi && configModel?.homePageSections?['product_search_enable'] == 1 ? SliverPersistentHeader(
                     pinned: true,
                     delegate: SliverDelegate(callback: (val){}, child: Center(child: Container(
                       height: 50, width: Dimensions.webMaxWidth,
@@ -392,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
                   ),
 
-                  !showMobileModule && !isTaxi ? SliverPersistentHeader(
+                  !showMobileModule && !isTaxi && configModel?.homePageSections?['all_stores_enable'] == 1 ? SliverPersistentHeader(
                     key: _headerKey,
                     pinned: true,
                     delegate: SliverDelegate(
@@ -407,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SliverToBoxAdapter(child: !showMobileModule && !isTaxi ? Center(child: GetBuilder<StoreController>(builder: (storeController) {
                     return Padding(
                       padding: EdgeInsets.only(bottom: ResponsiveHelper.isDesktop(context) ? 0 : 100),
-                      child: PaginatedListView(
+                      child: configModel?.homePageSections?['all_stores_enable'] == 1 ? PaginatedListView(
                         scrollController: _scrollController,
                         totalSize: storeController.storeModel?.totalSize,
                         offset: storeController.storeModel?.offset,
@@ -422,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault,
                           ),
                         ),
-                      ),
+                      ) : const SizedBox(),
                     );
                   }),) : const SizedBox()),
 

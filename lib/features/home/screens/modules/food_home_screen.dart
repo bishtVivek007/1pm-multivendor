@@ -17,12 +17,15 @@ import 'package:sixam_mart/features/home/widgets/views/special_offer_view.dart';
 import 'package:sixam_mart/features/home/widgets/views/visit_again_view.dart';
 import 'package:sixam_mart/features/home/widgets/banner_view.dart';
 
+import '../../../splash/controllers/splash_controller.dart';
+
 class FoodHomeScreen extends StatelessWidget {
   const FoodHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = AuthHelper.isLoggedIn();
+    final configModel = Get.find<SplashController>().configModel;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
       Container(
@@ -43,17 +46,17 @@ class FoodHomeScreen extends StatelessWidget {
         ),
       ),
 
-      const CategoryView(),
+      configModel?.homePageSections?['category_list_enable'] == 1 ? const CategoryView() : const SizedBox(),
       isLoggedIn ? const VisitAgainView(fromFood: true) : const SizedBox(),
-      const SpecialOfferView(isFood: true, isShop: false),
+      configModel?.homePageSections?['special_offer_enable'] == 1 ? const SpecialOfferView(isFood: true, isShop: false) : const SizedBox(),
       const HighlightWidget(),
-      const TopOffersNearMe(),
-      const BestReviewItemView(),
-      const BestStoreNearbyView(),
+      configModel?.homePageSections?['top_offer_near_me_stores_enable'] == 1 ? const TopOffersNearMe() : const SizedBox(),
+      configModel?.homePageSections?['best_reviewed_item_enable'] == 1 ? const BestReviewItemView() : const SizedBox(),
+      configModel?.homePageSections?['popular_store_enable'] == 1 ? const BestStoreNearbyView() : const SizedBox(),
       const ItemThatYouLoveView(forShop: false),
-      const MostPopularItemView(isFood: true, isShop: false),
-      const JustForYouView(),
-      const NewOnMartView(isNewStore: true, isPharmacy: false, isShop: false),
+      configModel?.homePageSections?['popular_item_enable'] == 1 ? const MostPopularItemView(isFood: true, isShop: false) : const SizedBox(),
+      configModel?.homePageSections?['item_campaign_enable'] == 1 ? const JustForYouView() : const SizedBox(),
+      configModel?.homePageSections?['latest_stores_enable'] == 1 ? const NewOnMartView(isNewStore: true, isPharmacy: false, isShop: false) : const SizedBox(),
     ]);
   }
 }
