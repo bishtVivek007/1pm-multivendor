@@ -65,7 +65,10 @@ class _CartScreenState extends State<CartScreen> {
 
     initCall();
 
+  }void refreshCart() {
+    initCall();
   }
+
 
   Future<void> initCall() async {
 
@@ -209,7 +212,7 @@ class _CartScreenState extends State<CartScreen> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ResponsiveHelper.isDesktop(context) ? WebCardItemsWidget(cartList: cartController.cartList) :
+                                ResponsiveHelper.isDesktop(context) ? WebCardItemsWidget(cartList: cartController.cartList, onCartUpdated: refreshCart,) :
                                 Expanded(
                                   flex: 7,
                                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -227,6 +230,7 @@ class _CartScreenState extends State<CartScreen> {
                                             final unit = cartItemUnits[item.item?.id] ?? ''; // Fallback if unit is missing
                                             return CartItemWidget(
                                               unit: unit,
+                                              onCartUpdated: refreshCart,
                                               cart2: OnlineCartModel(),
                                                 cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);
                                           },

@@ -18,7 +18,7 @@ class ItemRepository implements ItemRepositoryInterface {
   @override
   Future<List<Item>?> getOnDemandProducts() async {
     List<Item>? onDemandProducts;
-    final cacheId = '${AppConstants.onDemandProductsUri}-${Get.find<SplashController>().module!.id!}';
+    final cacheId = '${AppConstants.onDemandProductsUri}-${Get.find<SplashController>().module?.id ?? ''}';
     switch (DataSourceEnum.client) {
 
       case DataSourceEnum.client:

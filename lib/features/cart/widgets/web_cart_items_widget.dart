@@ -14,7 +14,9 @@ import '../domain/models/online_cart_model.dart';
 
 class WebCardItemsWidget extends StatelessWidget {
   final List<CartModel> cartList;
-  const WebCardItemsWidget({super.key, required this.cartList});
+  final VoidCallback onCartUpdated;
+
+  const WebCardItemsWidget({super.key, required this.cartList, required this.onCartUpdated});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class WebCardItemsWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     itemBuilder: (context, index) {
                       return CartItemWidget(
+                        onCartUpdated: onCartUpdated,
                         unit: '',
                           cart2: OnlineCartModel(),
                           cart: cartList[index], cartIndex: index, addOns: cartController.addOnsList[index], isAvailable: cartController.availableList[index]);

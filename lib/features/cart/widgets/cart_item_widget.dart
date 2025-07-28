@@ -26,7 +26,9 @@ class CartItemWidget extends StatelessWidget {
   final int cartIndex;
   final List<AddOns> addOns;
   final bool isAvailable;
-  const CartItemWidget({super.key, required this.unit, required this.cart, required this.cart2, required this.cartIndex, required this.isAvailable, required this.addOns});
+  final VoidCallback onCartUpdated;
+
+  const CartItemWidget({super.key, required this.unit, required this.cart, required this.cart2, required this.cartIndex, required this.onCartUpdated, required this.isAvailable, required this.addOns});
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +245,7 @@ class CartItemWidget extends StatelessWidget {
                                 QuantityButton(
                                   onTap: cartController.isLoading ? null : () {
                                     Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                                    onCartUpdated();
                                   },
                                   isIncrement: false,
                                   showRemoveIcon: true,
