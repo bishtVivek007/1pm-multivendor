@@ -67,7 +67,7 @@ class _CategoryViewState extends State<CategoryView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
-                      tileColor: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : null,
+                      tileColor: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.1) : null,
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
