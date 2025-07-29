@@ -57,10 +57,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'groceries'
-            keyPassword 'Mali@123Gluu'
-            storeFile file('C:\\Users\\hp-pc\\Desktop\\vb\\1pm-multivendor\\android\\app\\groceries.jks')
-            storePassword 'Mali@123Gluu'
+            keyAlias 'atozcart'
+            keyPassword 'atozcart'
+            storeFile file('C:\\Users\\Acer\\Desktop\\vivek\\1pm-multivendor\\android\\atozcart.jks')
+            storePassword 'atozcart'
         }
     }
 
