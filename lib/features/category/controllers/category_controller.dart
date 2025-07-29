@@ -72,7 +72,7 @@ class CategoryController extends GetxController implements GetxService {
   }
 
   List<CategoryModel> getSubCategoriesByMainId(int mainId) {
-    return _categoryList!.where((cat) => cat.parentId == mainId).toList();
+    return _categoryList?.where((cat) => cat.parentId == mainId).toList() ?? [];
   }
 
   void clearCategoryList() {
