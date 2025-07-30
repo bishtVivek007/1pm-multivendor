@@ -21,12 +21,57 @@ import 'package:sixam_mart/features/checkout/screens/checkout_screen.dart';
 import 'package:sixam_mart/features/item/screens/item_details_screen.dart';
 import 'package:sixam_mart/features/item/widgets/item_title_view_widget.dart';
 
-class DetailsWebViewWidget extends StatelessWidget {
+class DetailsWebViewWidget extends StatefulWidget {
   final CartModel? cartModel;
   final int? stock;
   final double priceWithAddOns;
   final OnlineCart? cart;
   const DetailsWebViewWidget({super.key, required this.cartModel, required this.stock, required this.priceWithAddOns, this.cart});
+
+  @override
+  State<DetailsWebViewWidget> createState() => _DetailsWebViewWidgetState();
+}
+
+class _DetailsWebViewWidgetState extends State<DetailsWebViewWidget> {
+  late TextEditingController _quantityController;
+
+  @override
+  void initState() {
+    super.initState();
+    _quantityController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildUnitButton(BuildContext context, int index, String label) {
+    final itemController = Get.find<ItemController>();
+    bool isSelected = itemController.selectedUnitIndex == index;
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => itemController.setSelectedUnitIndex(index),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Theme.of(context).primaryColor : Colors.white,
+            border: Border.all(color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            label,
+            style: robotoMedium.copyWith(
+              color: isSelected ? Colors.white : Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +137,7 @@ class DetailsWebViewWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ItemTitleViewWidget(item: itemController.item, inStock: Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && stock! <= 0),
+                        ItemTitleViewWidget(item: itemController.item, inStock: Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && widget.stock! <= 0),
 
                         (itemController.item!.description != null && itemController.item!.description!.isNotEmpty) ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +268,7 @@ class DetailsWebViewWidget extends StatelessWidget {
                               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                               Text(PriceConverter.convertPrice(itemController.cartIndex != -1
                                   ? _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])
-                                  : priceWithAddOns), textDirection: TextDirection.ltr, style: robotoBold.copyWith(
+                                  : widget.priceWithAddOns), textDirection: TextDirection.ltr, style: robotoBold.copyWith(
                                 color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge,
                               )),
                             ]);
@@ -231,48 +276,129 @@ class DetailsWebViewWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 30),
 
+                        if (itemController.item?.wholesalePrices != null && itemController.item!.wholesalePrices!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Wholesale Prices:',
+                                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                                ),
+                                const SizedBox(height: Dimensions.paddingSizeSmall),
+                                Table(
+                                  columnWidths: const {
+                                    0: IntrinsicColumnWidth(),
+                                    1: FixedColumnWidth(16),
+                                    2: FlexColumnWidth(),
+                                  },
+                                  children: itemController.item!.wholesalePrices!.map((wp) {
+                                    return TableRow(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4),
+                                          child: Text(
+                                            'Qty: ${wp.quantity}',
+                                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                          ),
+                                        ),
+                                        const SizedBox(),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4),
+                                          child: Text(
+                                            PriceConverter.convertPrice(double.tryParse(wp.price ?? '0') ?? 0),
+                                            style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.green),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(height: 30),
+
                         Row(children: [
+                          Text('${'Units'}:', style:robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                          const SizedBox(width: Dimensions.paddingSizeSmall),
 
-                          GetBuilder<CartController>(builder: (cartController) {
-                            return Row(children: [
-                              QuantityButton(
-                                isIncrement: false, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
-                                stock: stock, isExistInCart : itemController.cartIndex != -1, cartIndex: itemController.cartIndex,
-                                quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
-                                cartController: cartController,
-                              ),
-                              const SizedBox(width: 30),
+                          Expanded(
+                            child: Row(children: [
+                              _buildUnitButton(context, 0, itemController.item!.baseUnit ?? 'Base'),
+                              const SizedBox(width: Dimensions.paddingSizeSmall),
+                              _buildUnitButton(context, 1, itemController.item!.secondaryUnit ?? 'Secondary'),
+                            ]),
+                          ),
+                        ]),
 
-                              Text(
-                                itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity.toString() : itemController.quantity.toString(),
-                                style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                              ),
-                              const SizedBox(width: 30),
+                        const SizedBox(height: 30),
 
-                              QuantityButton(
-                                isIncrement: true, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
-                                stock: stock, cartIndex: itemController.cartIndex, isExistInCart: itemController.cartIndex != -1,
-                                quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
-                                cartController: cartController,
-                              ),
+                        TextField(
+                          controller: _quantityController,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          decoration: InputDecoration(
+                            labelText: 'Enter Quantity (${itemController.selectedUnitIndex == 0 ? itemController.item?.baseUnit : itemController.item?.secondaryUnit})',
+                            border: const OutlineInputBorder(),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          ),
+                          onChanged: (value) {
+                            Get.find<ItemController>().setEnteredUnitQty(value);
+                            if (itemController.cartIndex == -1) {
+                              Get.find<ItemController>().setEnteredUnitQty(value);
+                            }
+                          },
+                        ),
 
-                            ]);
-                          }),
-                          const SizedBox(width: Dimensions.paddingSizeLarge),
+                        const SizedBox(height: 30),
 
+
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                          // GetBuilder<CartController>(builder: (cartController) {
+                          //   return Row(children: [
+                          //     QuantityButton(
+                          //       isIncrement: false, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
+                          //       stock: widget.stock, isExistInCart : itemController.cartIndex != -1, cartIndex: itemController.cartIndex,
+                          //       quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
+                          //       cartController: cartController,
+                          //     ),
+                          //     const SizedBox(width: 30),
+                          //
+                          //     Text(
+                          //       itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity.toString() : itemController.quantity.toString(),
+                          //       style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                          //     ),
+                          //     const SizedBox(width: 30),
+                          //
+                          //     QuantityButton(
+                          //       isIncrement: true, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
+                          //       stock: widget.stock, cartIndex: itemController.cartIndex, isExistInCart: itemController.cartIndex != -1,
+                          //       quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
+                          //       cartController: cartController,
+                          //     ),
+                          //
+                          //   ]);
+                          // }),
+                          // const SizedBox(width: Dimensions.paddingSizeLarge),
+
+                              if(itemController.cartIndex == -1)
                           GetBuilder<CartController>(
                             builder: (cartController) {
                               return CustomButton(
                                 width: 300,
                                 isLoading: cartController.isLoading,
-                                buttonText: (Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && stock! <= 0) ? 'out_of_stock'.tr
+                                buttonText: (Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && widget.stock! <= 0) ? 'out_of_stock'.tr
                                     : itemController.item!.availableDateStarts != null ? 'order_now'.tr : itemController.cartIndex != -1 ? 'update_in_cart'.tr : 'add_to_cart'.tr,
-                                onPressed: (!Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! || stock! > 0) ?  () async {
+                                onPressed: (!Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! || widget.stock! > 0) ?  () async {
                                   if(itemController.item!.availableDateStarts != null) {
                                     Get.toNamed(RouteHelper.getCheckoutRoute('campaign'), arguments: CheckoutScreen(
-                                      storeId: null, fromCart: false, cartList: [cartModel],
+                                      storeId: null, fromCart: false, cartList: [widget.cartModel],
                                     ));
-                                  }else if (Get.find<CartController>().existAnotherStoreItem(cartModel!.item!.storeId, Get.find<SplashController>().module!.id)) {
+                                  }else if (Get.find<CartController>().existAnotherStoreItem(widget.cartModel!.item!.storeId, Get.find<SplashController>().module!.id)) {
                                     Get.dialog(ConfirmationDialog(
                                       icon: Images.warning,
                                       title: 'are_you_sure_to_reset'.tr,
@@ -282,7 +408,7 @@ class DetailsWebViewWidget extends StatelessWidget {
                                         Get.back();
                                         cartController.clearCartOnline().then((success) async {
                                           if(success) {
-                                            await cartController.addToCartOnline(cart!);
+                                            await cartController.addToCartOnline(widget.cart!);
                                             itemController.setExistInCart(itemController.item, null);
                                             showCartSnackBar();
                                           }
@@ -291,14 +417,14 @@ class DetailsWebViewWidget extends StatelessWidget {
                                     ), barrierDismissible: false);
                                   } else {
                                     if(itemController.cartIndex == -1) {
-                                      await cartController.addToCartOnline(cart!).then((success) {
+                                      await cartController.addToCartOnline(widget.cart!).then((success) {
                                         if(success){
                                           itemController.setExistInCart(itemController.item, null);
                                           showCartSnackBar();
                                         }
                                       });
                                     } else {
-                                      await cartController.updateCartOnline(cart!).then((success) {
+                                      await cartController.updateCartOnline(widget.cart!).then((success) {
                                         if(success) {
                                           showCartSnackBar();
                                         }
