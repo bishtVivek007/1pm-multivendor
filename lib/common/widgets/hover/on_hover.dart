@@ -15,6 +15,8 @@ class OnHover extends StatefulWidget {
 
 class _OnHoverState extends State<OnHover> {
   bool isHovered = false;
+  final ValueNotifier<bool> hoverNotifier = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     final hoverTransformed = Matrix4.identity()..scale(1.05, 1.03);
@@ -54,8 +56,10 @@ class _OnHoverState extends State<OnHover> {
   }
 
   void onEntered(bool isHovered) {
-    setState(() {
-      this.isHovered = isHovered;
-    });
+    if (isHovered != isHovered) {
+      setState(() {
+        isHovered = isHovered;
+      });
+    }
   }
 }

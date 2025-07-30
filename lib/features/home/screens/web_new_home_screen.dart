@@ -61,6 +61,8 @@ class _WebNewHomeScreenState extends State<WebNewHomeScreen> {
     super.initState();
     _isLogin = AuthHelper.isLoggedIn();
     Get.find<SplashController>().getWebSuggestedLocationStatus();
+    Get.find<CategoryController>().getMainCategoryList();
+    Get.find<CategoryController>().getCategoryList(false);
 
     if(_isLogin){
       suggestAddressBottomSheet();

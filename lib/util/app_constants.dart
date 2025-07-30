@@ -11,6 +11,7 @@ class AppConstants {
   static const bool payInWevView = false;
   static const int balanceInputLen = 10;
   static const String webHostedUrl = 'https://mandiatdoor.in';
+  // static const String webHostedUrl = 'https://mandiatdoor.in/admin';
   static const bool useReactWebsite = false;
 
   static const String baseUrl = 'https://mandiatdoor.in/admin';

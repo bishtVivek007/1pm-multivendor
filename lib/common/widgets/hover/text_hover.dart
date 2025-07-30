@@ -10,6 +10,7 @@ class TextHover extends StatefulWidget {
 
 class _TextHoverState extends State<TextHover> {
   bool isHovered = false;
+  final ValueNotifier<bool> hoverNotifier = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,11 @@ class _TextHoverState extends State<TextHover> {
   }
 
   void onEntered(bool isHovered) {
-    setState(() {
-      this.isHovered = isHovered;
-    });
+    if (isHovered != isHovered) {
+      setState(() {
+        isHovered = isHovered;
+      });
+    }
   }
 
 }

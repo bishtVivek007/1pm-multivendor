@@ -21,133 +21,158 @@ class WebCategoryViewWidget extends StatefulWidget {
 }
 
 class _WebCategoryViewWidgetState extends State<WebCategoryViewWidget> {
-  ScrollController scrollController = ScrollController();
-  bool showBackButton = false;
-  bool showForwardButton = false;
-  bool isFirstTime = true;
+  int selectedMainCategoryId = -1;
+  bool _dataInitialized = false;
+
+
+  Future<void> _initializeData() async {
+    final controller = widget.categoryController;
+
+    if (!_dataInitialized && controller.mainCategoryList == null) {
+      _dataInitialized = true;
+      await controller.getMainCategoryList();
+
+      if (!mounted) return;
+
+      if (controller.mainCategoryList != null && controller.mainCategoryList!.isNotEmpty) {
+        selectedMainCategoryId = controller.mainCategoryList!.first.id!;
+        controller.setSelectedMainCategory(selectedMainCategoryId);
+      }
+
+      // Safely trigger UI update after build
+      if (mounted) {
+        Future.delayed(Duration.zero, () {
+          if (mounted) setState(() {});
+        });
+      }
+    } else {
+      selectedMainCategoryId = controller.selectedMainCategoryId;
+    }
+  }
 
   @override
   void initState() {
-    scrollController.addListener(_checkScrollPosition);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  void _checkScrollPosition() {
-    setState(() {
-      if (scrollController.position.pixels <= 0) {
-        showBackButton = false;
-      } else {
-        showBackButton = true;
-      }
-
-      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
-        showForwardButton = false;
-      } else {
-        showForwardButton = true;
-      }
-    });
+    final controller = widget.categoryController;
+    _initializeData();
+    // Load main and subcategories
+    // if (controller.mainCategoryList == null) {
+    //   controller.getMainCategoryList().then((_) {
+    //     if (controller.mainCategoryList != null && controller.mainCategoryList!.isNotEmpty) {
+    //       selectedMainCategoryId = controller.mainCategoryList!.first.id!;
+    //       controller.setSelectedMainCategory(selectedMainCategoryId);
+    //     }
+    //     setState(() {});
+    //   });
+    // } else {
+    //   selectedMainCategoryId = controller.selectedMainCategoryId;
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isPharmacy = Get.find<SplashController>().module != null && Get.find<SplashController>().module!.moduleType.toString() == AppConstants.pharmacy;
-    bool isFood = Get.find<SplashController>().module != null && Get.find<SplashController>().module!.moduleType.toString() == AppConstants.food;
+    var controller = widget.categoryController;
+    var mainCategories = controller.mainCategoryList ?? [];
+    var subCategories = controller.getSubCategoriesByMainId(selectedMainCategoryId);
 
-    if(widget.categoryController.categoryList != null && widget.categoryController.categoryList!.length > 9 && isFirstTime){
-      showForwardButton = true;
-      isFirstTime = false;
-    }
+    return mainCategories.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          runSpacing: 8,
+          spacing: 12,
+          children: mainCategories.map((mainCategory) {
+            bool isSelected = selectedMainCategoryId == mainCategory.id;
 
-    return isPharmacy ? PharmacyCategoryView(categoryController: widget.categoryController) : isFood ? FoodCategoryView(categoryController: widget.categoryController) : Stack(children: [
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-        SizedBox(
-          height: 190, width: Get.width,
-          child: widget.categoryController.categoryList != null ? ListView.builder(
-            controller: scrollController,
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraSmall),
-            itemCount: widget.categoryController.categoryList!.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeLarge, right: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeExtremeLarge),
-                child: InkWell(
-                  hoverColor: Colors.transparent,
-                  onTap: () => Get.toNamed(RouteHelper.getCategoryItemRoute(
-                    widget.categoryController.categoryList![index].id, widget.categoryController.categoryList![index].name!,
-                  )),
-                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  child: TextHover(
-                    builder: (hovered) {
-                      return Container(
-                        width: 108,
-                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(Dimensions.radiusSmall)
-                        ),
-                        child: Column(children: [
-
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                              color: Theme.of(context).disabledColor.withValues(alpha: 0.3),
-                              border: Border.all(color: hovered ? Theme.of(context).primaryColor : Theme.of(context).cardColor, width: hovered ? 1 : 0),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                              child: CustomImage(
-                                isHovered: hovered,
-                                image: '${widget.categoryController.categoryList![index].imageFullUrl}',
-                                height: 80, width: double.infinity, fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                          Expanded(child: Text(
-                            widget.categoryController.categoryList![index].name!,
-                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyMedium!.color),
-                            maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
-                          )),
-                        ]),
-                      );
-                    }
+            return InkWell(
+              onTap: () {
+                setState(() {
+                  selectedMainCategoryId = mainCategory.id!;
+                  controller.setSelectedMainCategory(selectedMainCategoryId);
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isSelected ? Theme.of(context).primaryColor : Colors.grey.shade300,
+                    width: isSelected ? 1.5 : 1,
                   ),
                 ),
-              );
-            },
-          ) : WebCategoryShimmer(categoryController: widget.categoryController),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: CustomImage(
+                        image: mainCategory.imageFullUrl ?? '',
+                        height: 36,
+                        width: 36,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(mainCategory.name ?? '',
+                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault)),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
         ),
-      ]),
 
-      if(showForwardButton)
-      Positioned(
-        top: 80, right: 0,
-        child: ArrowIconButton(
-          onTap: () => scrollController.animateTo(scrollController.offset + Dimensions.webMaxWidth,
-              duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
-        ),
-      ),
+        const SizedBox(height: Dimensions.paddingSizeLarge),
 
-      if(showBackButton)
-      Positioned(
-        top: 80, left: 0,
-        child: ArrowIconButton(
-          onTap: () => scrollController.animateTo(scrollController.offset - Dimensions.webMaxWidth,
-              duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
-          isRight: false,
-        ),
-      ),
-    ]);
+        // 🔸 Subcategories (Horizontal Scroll)
+        if (subCategories.isNotEmpty)
+          SizedBox(
+            height: 150,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: subCategories.length,
+              itemBuilder: (context, index) {
+                final sub = subCategories[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      Get.toNamed(RouteHelper.getCategoryItemRoute(sub.id!, sub.name!));
+                    },
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CustomImage(
+                            image: sub.imageFullUrl ?? '',
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            sub.name ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+      ],
+    );
   }
 }
 
