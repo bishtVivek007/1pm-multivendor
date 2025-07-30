@@ -108,7 +108,7 @@ class _TrackingMapWidgetState extends State<TrackingMapWidget> {
         width: isRestaurant ? 50 : 40, imagePath: parcel ? Images.userMarker : isRestaurant ? Images.restaurantMarker : Images.markerStore,
       );
       BitmapDescriptor deliveryBoyImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
-        width: 30, imagePath: Images.deliveryManMarker,
+        width: 50, imagePath: Images.deliveryManMarker,
       );
       BitmapDescriptor destinationImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
         width: takeAway ? 30 : 30, imagePath: takeAway ? Images.myLocationMarker : Images.userMarker,

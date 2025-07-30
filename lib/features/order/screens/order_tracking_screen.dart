@@ -196,10 +196,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
       );
 
       BitmapDescriptor deliveryBoyImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
-        width: 30, imagePath: Images.deliveryManMarker,
+        width: 50, imagePath: Images.deliveryManMarker,
       );
       BitmapDescriptor destinationImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
-        width: 30, imagePath: takeAway ? Images.myLocationMarker : Images.userMarker,
+        width: 50, imagePath: takeAway ? Images.myLocationMarker : Images.userMarker,
       );
 
       /// Animate to coordinate
