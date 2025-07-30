@@ -14,6 +14,7 @@ class OrderDetailsModel {
   double? quantity;
   double? taxAmount;
   String? variant;
+  String? unit;
   String? createdAt;
   String? updatedAt;
   int? itemCampaignId;
@@ -31,6 +32,7 @@ class OrderDetailsModel {
     this.foodVariation,
     this.addOns,
     this.discountOnItem,
+    this.unit,
     this.discountType,
     this.quantity,
     this.taxAmount,
@@ -45,6 +47,7 @@ class OrderDetailsModel {
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    unit = json['unit'];
     itemId = json['item_id'];
     orderId = json['order_id'];
     price = json['price'].toDouble();
@@ -86,6 +89,7 @@ class OrderDetailsModel {
     data['id'] = id;
     data['item_id'] = itemId;
     data['order_id'] = orderId;
+    data['unit'] = unit;
     data['price'] = price;
     if (itemDetails != null) {
       data['item_details'] = itemDetails!.toJson();
