@@ -18,7 +18,6 @@ import 'package:sixam_mart/common/widgets/custom_button.dart';
 import 'package:sixam_mart/common/widgets/custom_image.dart';
 import 'package:sixam_mart/common/widgets/footer_view.dart';
 import 'package:sixam_mart/features/checkout/screens/checkout_screen.dart';
-import 'package:sixam_mart/features/item/screens/item_details_screen.dart';
 import 'package:sixam_mart/features/item/widgets/item_title_view_widget.dart';
 
 class DetailsWebViewWidget extends StatefulWidget {
@@ -267,7 +266,7 @@ class _DetailsWebViewWidgetState extends State<DetailsWebViewWidget> {
                               Text('${'total_amount'.tr}:', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
                               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                               Text(PriceConverter.convertPrice(itemController.cartIndex != -1
-                                  ? _getItemDetailsDiscountPrice(cart: Get.find<CartController>().cartList[itemController.cartIndex])
+                                  ? widget.priceWithAddOns
                                   : widget.priceWithAddOns), textDirection: TextDirection.ltr, style: robotoBold.copyWith(
                                 color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge,
                               )),
@@ -357,34 +356,6 @@ class _DetailsWebViewWidgetState extends State<DetailsWebViewWidget> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
-                          // GetBuilder<CartController>(builder: (cartController) {
-                          //   return Row(children: [
-                          //     QuantityButton(
-                          //       isIncrement: false, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
-                          //       stock: widget.stock, isExistInCart : itemController.cartIndex != -1, cartIndex: itemController.cartIndex,
-                          //       quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
-                          //       cartController: cartController,
-                          //     ),
-                          //     const SizedBox(width: 30),
-                          //
-                          //     Text(
-                          //       itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity.toString() : itemController.quantity.toString(),
-                          //       style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                          //     ),
-                          //     const SizedBox(width: 30),
-                          //
-                          //     QuantityButton(
-                          //       isIncrement: true, quantity: itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantity : itemController.quantity,
-                          //       stock: widget.stock, cartIndex: itemController.cartIndex, isExistInCart: itemController.cartIndex != -1,
-                          //       quantityLimit : itemController.cartIndex != -1 ? cartController.cartList[itemController.cartIndex].quantityLimit : itemController.item!.quantityLimit,
-                          //       cartController: cartController,
-                          //     ),
-                          //
-                          //   ]);
-                          // }),
-                          // const SizedBox(width: Dimensions.paddingSizeLarge),
-
                               if(itemController.cartIndex == -1)
                           GetBuilder<CartController>(
                             builder: (cartController) {
