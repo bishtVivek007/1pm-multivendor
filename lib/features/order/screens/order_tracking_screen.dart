@@ -192,12 +192,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     try {
 
       BitmapDescriptor restaurantImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
-        width: (isRestaurant || parcel) ? 30 : isRestaurant ? 30 : 50,
+        width: (isRestaurant || parcel) ? 30 : isRestaurant ? 30 : 30,
         imagePath: parcel ? Images.userMarker : isRestaurant ? Images.restaurantMarker : Images.markerStore,
       );
 
       BitmapDescriptor deliveryBoyImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
-        width: 30, imagePath: Images.deliveryManMarker,
+        width: 30, height: 30, imagePath: Images.deliveryManMarker,
       );
       BitmapDescriptor destinationImageData = await MarkerHelper.convertAssetToBitmapDescriptor(
         width: 30, imagePath: takeAway ? Images.myLocationMarker : Images.userMarker,
