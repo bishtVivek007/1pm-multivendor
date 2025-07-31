@@ -447,7 +447,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           }else if(checkoutController.paymentMethodIndex == -1) {
             if(ResponsiveHelper.isDesktop(context)){
               Get.dialog(Dialog(backgroundColor: Colors.transparent, child: PaymentMethodBottomSheet(
-                payLaterCouponCode: _payLaterCouponCode,
+                payLaterCouponCode: _payLaterCouponCode ?? '',
                 isCashOnDeliveryActive: _isCashOnDeliveryActive!, isDigitalPaymentActive: _isDigitalPaymentActive!,
                 isWalletActive: _isWalletActive, storeId: widget.storeId, totalPrice: total, isOfflinePaymentActive: _isOfflinePaymentActive,
               )));
@@ -455,7 +455,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               showModalBottomSheet(
                 context: context, isScrollControlled: true, backgroundColor: Colors.transparent,
                 builder: (con) => PaymentMethodBottomSheet(
-                  payLaterCouponCode: _payLaterCouponCode,
+                  payLaterCouponCode: _payLaterCouponCode ?? '',
                   isCashOnDeliveryActive: _isCashOnDeliveryActive!, isDigitalPaymentActive: _isDigitalPaymentActive!,
                   isWalletActive: _isWalletActive, storeId: widget.storeId, totalPrice: total, isOfflinePaymentActive: _isOfflinePaymentActive,
                 ),

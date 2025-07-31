@@ -19,7 +19,7 @@ class PaymentMethodBottomSheet extends StatefulWidget {
   final bool isCashOnDeliveryActive;
   final bool isDigitalPaymentActive;
   final bool isOfflinePaymentActive;
-  final String? payLaterCouponCode;
+  final String payLaterCouponCode;
   final bool isWalletActive;
   final int? storeId;
   final double totalPrice;
@@ -169,7 +169,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                         ]),
                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
-                          widget.payLaterCouponCode!.isNotEmpty ? Column(
+                          widget.payLaterCouponCode.isNotEmpty ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Pay Within 30 Days'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
