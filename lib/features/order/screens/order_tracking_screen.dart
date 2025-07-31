@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:sixam_mart/common/controllers/theme_controller.dart';
@@ -291,7 +292,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
           title: 'delivery_man'.tr,
           snippet: deliveryMan.location,
         ),
-        rotation: rotation,
+        rotation: double.parse(deliveryMan.lng ?? '0') < double.parse(addressModel?.longitude ?? '0') ? 0 : 180,
         icon: deliveryBoyImageData,
       )) : const SizedBox();
 
@@ -348,4 +349,16 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     }
   }
 
+  double calculateBearing(LatLng start, LatLng end) {
+    final lat1 = start.latitude * (pi / 180);
+    final lon1 = start.longitude * (pi / 180);
+    final lat2 = end.latitude * (pi / 180);
+    final lon2 = end.longitude * (pi / 180);
+
+    final dLon = lon2 - lon1;
+    final y = sin(dLon) * cos(lat2);
+    final x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
+    final bearing = atan2(y, x);
+    return (bearing * (180 / pi) + 360) % 360;
+  }
 }

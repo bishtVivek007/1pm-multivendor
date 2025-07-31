@@ -371,6 +371,7 @@ class Images {
   static const String taxiEmptyCart = 'assets/image/taxi_empty_cart.svg';
   static const String taxiEnjoyIcon = 'assets/image/enjoy_image.svg';
 
+
   static const String mapIconExtended = 'assets/json/map-picker-1.json';
   static const String mapIconMinimised = 'assets/json/map-picker-2.json';
 }
