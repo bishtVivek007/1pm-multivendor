@@ -11,6 +11,8 @@ import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/common/widgets/title_widget.dart';
 import 'package:sixam_mart/common/widgets/card_design/item_card.dart';
 import 'package:sixam_mart/features/home/widgets/web/widgets/arrow_icon_button.dart';
+import '../../../../common/widgets/custom_ink_well.dart';
+import '../../../../util/styles.dart';
 
 class WebMostPopularItemViewWidget extends StatefulWidget {
   final bool isFood;
@@ -62,6 +64,7 @@ class _WebMostPopularItemViewWidgetState extends State<WebMostPopularItemViewWid
 
     return GetBuilder<ItemController>(builder: (itemController) {
       List<Item>? itemList = itemController.popularItemList;
+      List<Item>? onDemandList = itemController.onDemandProducts;
 
       if(itemList != null && itemList.length > 5 && isFirstTime){
         showForwardButton = true;
@@ -70,47 +73,129 @@ class _WebMostPopularItemViewWidgetState extends State<WebMostPopularItemViewWid
 
       return itemList != null ? itemList.isNotEmpty ? Stack(children: [
 
-        Container(
-          margin: const EdgeInsets.only(top: Dimensions.paddingSizeLarge, bottom: Dimensions.paddingSizeLarge),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-          ),
-          child: Column(children: [
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraLarge, vertical: Dimensions.paddingSizeExtremeLarge),
-              child: TitleWidget(
-                title: isShop ? 'most_popular_products'.tr : 'most_popular_items'.tr,
-                image: Images.mostPopularIcon,
-                onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(true, false)),
+        Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: Dimensions.paddingSizeLarge, bottom: Dimensions.paddingSizeLarge),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
               ),
+              child: Column(children: [
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraLarge, vertical: Dimensions.paddingSizeExtremeLarge),
+                  child: TitleWidget(
+                    title: isShop ? 'most_popular_products'.tr : 'most_popular_items'.tr,
+                    image: Images.mostPopularIcon,
+                    onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(true, false)),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 285, width: Get.width,
+                  child: ListView.builder(
+                    controller: scrollController,
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
+                    itemCount: itemList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
+                        child: ItemCard(
+                          isPopularItem: isShop ? false : true,
+                          isPopularItemCart: true,
+                          item: itemList[index],
+                          isFood: widget.isFood,
+                          isShop: widget.isShop,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+              ]),
             ),
 
-            SizedBox(
-              height: 285, width: Get.width,
-              child: ListView.builder(
-                controller: scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
-                itemCount: itemList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
-                    child: ItemCard(
-                      isPopularItem: isShop ? false : true,
-                      isPopularItemCart: true,
-                      item: itemList[index],
-                      isFood: widget.isFood,
-                      isShop: widget.isShop,
+            if (onDemandList != null && onDemandList.isNotEmpty)
+              Container(
+                margin: const EdgeInsets.only(top: Dimensions.paddingSizeLarge, bottom: Dimensions.paddingSizeLarge),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                ),
+                child: Column(children: [
+
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraLarge, vertical: Dimensions.paddingSizeExtremeLarge),
+                    child: TitleWidget(
+                      title: 'On Demand products',
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
 
-          ]),
+                  SizedBox(
+                    height: 320, width: Get.width,
+                    child: ListView.builder(
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
+                      itemCount: onDemandList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              ItemCard(
+                                isPopularItem: isShop ? false : true,
+                                isPopularItemCart: true,
+                                item: onDemandList[index],
+                                isFood: widget.isFood,
+                                isShop: widget.isShop,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 50,
+                                left: 50,
+                                child: CustomInkWell(
+                                  onTap: () {
+                                    Get.toNamed(RouteHelper.getConversationRoute());
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('Ask price', style: robotoMedium.copyWith(fontSize: 10)),
+                                        const SizedBox(width: 4),
+                                        Container(
+                                          height: 24,
+                                          width: 24,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).primaryColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Image.asset(
+                                            Images.chatIcon,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ]),
+              ),
+          ],
         ),
 
         if(showBackButton)
