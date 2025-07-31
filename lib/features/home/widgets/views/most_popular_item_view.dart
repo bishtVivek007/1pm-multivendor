@@ -85,17 +85,14 @@ class MostPopularItemView extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
+                  const Padding(
+                    padding: EdgeInsets.only(
                       top: Dimensions.paddingSizeDefault,
                       left: Dimensions.paddingSizeDefault,
                       right: Dimensions.paddingSizeDefault,
                     ),
                     child: TitleWidget(
                       title: 'On Demand products',
-                      onTap: () {
-                        // Implement navigation if needed
-                      },
                     ),
                   ),
                   SizedBox(
