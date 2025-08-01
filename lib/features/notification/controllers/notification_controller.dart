@@ -28,7 +28,7 @@ class NotificationController extends GetxController implements GetxService {
       }
       update();
     }
-    return _notificationList!.length;
+    return _notificationList?.length ?? 0;
   }
 
   void saveSeenNotificationCount(int count) {
