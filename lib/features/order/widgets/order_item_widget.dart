@@ -18,6 +18,9 @@ class OrderItemWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    double quantity = (orderDetails.quantity is String)
+        ? double.tryParse(orderDetails.quantity as String) ?? 1
+        : (orderDetails.quantity as num?)?.toDouble() ?? 1;
     String addOnText = '';
     for (var addOn in orderDetails.addOns!) {
       addOnText = '$addOnText${(addOnText.isEmpty) ? '' : ',  '}${addOn.name} (${addOn.quantity})';
@@ -84,7 +87,7 @@ class OrderItemWidget extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               Row(children: [
                 Expanded(child: Text(
-                  PriceConverter.convertPrice(orderDetails.price),
+                  PriceConverter.convertPrice(orderDetails.price! * quantity),
                   style: robotoMedium, textDirection: TextDirection.ltr,
                 )),
 
@@ -100,7 +103,7 @@ class OrderItemWidget extends StatelessWidget {
                     color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                   ),
                   child: Text(
-                    orderDetails.itemDetails!.unitType ?? '',
+                    orderDetails.unit ?? '',
                     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
                   ),
                 ) : const SizedBox(),
