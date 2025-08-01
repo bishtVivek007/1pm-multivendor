@@ -13,6 +13,9 @@ void showCustomSnackBar(String? message, {bool isError = true, bool getXSnackBar
   } if (message == "Internal Server Error") {
     print('internal servver error loop 123123');
     return;
+  } if (message.toString().toLowerCase() == "module id required") {
+    print('module id required');
+    return;
   }
   if(message != null && message.isNotEmpty) {
     if(getXSnackBar) {
