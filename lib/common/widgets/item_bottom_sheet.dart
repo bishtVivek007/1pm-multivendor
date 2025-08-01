@@ -87,7 +87,7 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
         double? initialDiscount = (widget.isCampaign || widget.item!.storeDiscount == 0) ? widget.item!.discount : widget.item!.storeDiscount;
         double? discount = (widget.isCampaign || widget.item!.storeDiscount == 0) ? widget.item!.discount : widget.item!.storeDiscount;
         String? discountType = (widget.isCampaign || widget.item!.storeDiscount == 0) ? widget.item!.discountType : 'percent';
-        int? stock = widget.item!.stock ?? 0;
+        double? stock = widget.item!.stock ?? 0;
 
         if(discountType == 'amount'){
           discount = discount! * itemController.quantity!;

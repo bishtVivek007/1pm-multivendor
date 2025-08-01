@@ -451,7 +451,7 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> setQuantity(bool isIncrement, int? stock,  int? quantityLimit, {bool getxSnackBar = false}) async {
+  Future<void> setQuantity(bool isIncrement, double? stock,  int? quantityLimit, {bool getxSnackBar = false}) async {
     _quantity = await itemServiceInterface.setQuantity(isIncrement, Get.find<SplashController>().configModel!.moduleConfig!.module!.stock!, stock, _quantity!, quantityLimit, getxSnackBar: getxSnackBar);
     update();
   }

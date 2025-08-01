@@ -436,7 +436,7 @@ class Items {
   int? ratingCount;
   String? rating;
   int? moduleId;
-  int? stock;
+  double? stock;
   int? unitId;
   List<String>? images;
   String? foodVariations;
@@ -515,7 +515,7 @@ class Items {
     ratingCount = json['rating_count'];
     rating = json['rating'];
     moduleId = json['module_id'];
-    stock = json['stock'];
+    stock = json['stock'].toDouble();
     unitId = json['unit_id'];
     images = json['images'].cast<String>();
     foodVariations = json['food_variations'];

@@ -24,9 +24,9 @@ class FlashProductCardWidget extends StatelessWidget {
     double? discount = product.item!.storeDiscount == 0 ? product.item!.discount : product.item!.storeDiscount;
     String? discountType = product.item!.storeDiscount == 0 ? product.item!.discountType : 'percent';
 
-    int stock = product.stock!;
+    double stock = product.stock!;
     int sold = product.sold!;
-    int remaining = stock - sold;
+    double remaining = stock - sold;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,

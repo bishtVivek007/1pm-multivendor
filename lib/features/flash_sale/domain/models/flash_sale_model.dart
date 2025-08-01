@@ -80,7 +80,7 @@ class ActiveProducts {
   int? id;
   int? flashSaleId;
   int? itemId;
-  int? stock;
+  double? stock;
   int? sold;
   int? availableStock;
   String? discountType;
@@ -113,7 +113,7 @@ class ActiveProducts {
     id = json['id'];
     flashSaleId = json['flash_sale_id'];
     itemId = json['item_id'];
-    stock = json['stock'];
+    stock = json['stock'].toDouble();
     sold = json['sold'];
     availableStock = json['available_stock'];
     discountType = json['discount_type'];

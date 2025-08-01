@@ -24,8 +24,8 @@ class _WebFlashSaleViewWidgetState extends State<WebFlashSaleViewWidget> {
   Widget build(BuildContext context) {
     return GetBuilder<FlashSaleController>(builder: (flashSaleController) {
       Item? item;
-      int stock = 0;
-      int remaining = 0;
+      double stock = 0;
+      double remaining = 0;
       int sold = 0;
       if(flashSaleController.flashSaleModel != null && flashSaleController.flashSaleModel!.activeProducts != null) {
         int index = flashSaleController.flashSaleModel!.activeProducts!.length > 1 ? flashSaleController.pageIndex : 0;

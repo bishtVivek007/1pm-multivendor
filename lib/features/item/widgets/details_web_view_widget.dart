@@ -22,7 +22,7 @@ import 'package:sixam_mart/features/item/widgets/item_title_view_widget.dart';
 
 class DetailsWebViewWidget extends StatefulWidget {
   final CartModel? cartModel;
-  final int? stock;
+  final double? stock;
   final double priceWithAddOns;
   final OnlineCart? cart;
   const DetailsWebViewWidget({super.key, required this.cartModel, required this.stock, required this.priceWithAddOns, this.cart});

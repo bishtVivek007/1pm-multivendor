@@ -118,7 +118,7 @@ class Item {
   int? moduleId;
   String? moduleType;
   String? unitType;
-  int? stock;
+  double? stock;
   String? availableDateStarts;
   int? organic;
   int? quantityLimit;
@@ -260,7 +260,9 @@ class Item {
     moduleId = json['module_id'];
     moduleType = json['module_type'];
     veg = json['veg'] != null ? int.parse(json['veg'].toString()) : 0;
-    stock = json['stock'];
+    stock = json['stock'] is String
+        ? double.tryParse(json['stock'])
+        : json['stock']?.toDouble();
     unitType = json['unit_type'];
     availableDateStarts = json['available_date_starts'];
     organic = json['organic'];
@@ -361,14 +363,14 @@ class CategoryIds {
 class Variation {
   String? type;
   double? price;
-  int? stock;
+  double? stock;
 
   Variation({this.type, this.price, this.stock});
 
   Variation.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     price = json['price']?.toDouble();
-    stock = int.parse(json['stock'] != null ? json['stock'].toString() : '0');
+    stock = double.parse(json['stock'] != null ? json['stock'].toString() : '0');
   }
 
   Map<String, dynamic> toJson() {

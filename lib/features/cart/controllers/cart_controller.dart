@@ -162,7 +162,7 @@ class CartController extends GetxController implements GetxService {
     return cartServiceInterface.getCartId(cartIndex, _cartList);
   }
 
-  Future<void> setQuantity(bool isIncrement, int cartIndex, int? stock, int ? quantityLimit) async {
+  Future<void> setQuantity(bool isIncrement, int cartIndex, double? stock, int ? quantityLimit) async {
     _isLoading = true;
     update();
 

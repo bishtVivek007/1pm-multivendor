@@ -123,7 +123,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       builder: (cartController) {
         return GetBuilder<ItemController>(
           builder: (itemController) {
-            int? stock = 0;
+            double? stock = 0;
             CartModel? cartModel;
             OnlineCart? cart;
             double priceWithAddons = 0;
@@ -622,7 +622,7 @@ class QuantityButton extends StatelessWidget {
   final bool isIncrement;
   final double? quantity;
   final bool isCartWidget;
-  final int? stock;
+  final double? stock;
   final bool isExistInCart;
   final int cartIndex;
   final int? quantityLimit;

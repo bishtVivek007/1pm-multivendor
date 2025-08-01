@@ -13,7 +13,7 @@ class CartModel {
   List<AddOn>? _addOnIds;
   List<AddOns>? _addOns;
   bool? _isCampaign;
-  int? _stock;
+  double? _stock;
   Item? _item;
   int? _quantityLimit;
   bool? _isLoading;
@@ -29,7 +29,7 @@ class CartModel {
     List<AddOn> addOnIds,
     List<AddOns> addOns,
     bool isCampaign,
-    int? stock,
+    double? stock,
     Item? item,
     int? quantityLimit, {
       bool isLoading = false,
@@ -69,7 +69,7 @@ class CartModel {
   List<AddOn>? get addOnIds => _addOnIds;
   List<AddOns>? get addOns => _addOns;
   bool? get isCampaign => _isCampaign;
-  int? get stock => _stock;
+  double? get stock => _stock;
   Item? get item => _item;
   int? get quantityLimit => _quantityLimit;
   // ignore: unnecessary_getters_setters
