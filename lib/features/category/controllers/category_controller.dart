@@ -66,6 +66,8 @@ class CategoryController extends GetxController implements GetxService {
   int _selectedMainCategoryId = -1;
   int get selectedMainCategoryId => _selectedMainCategoryId;
 
+  bool _mainCategoryFetched = false;
+
   void setSelectedMainCategory(int id) {
     _selectedMainCategoryId = id;
     update(); // Refresh the UI
@@ -122,7 +124,9 @@ class CategoryController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getMainCategoryList() async {
+  Future<void> getMainCategoryList({bool reload = false}) async {
+    if (_mainCategoryFetched && !reload) return;
+
     _mainCategoryList = [];
     _categoryList = [];
     _isLoading = true;
@@ -158,7 +162,7 @@ class CategoryController extends GetxController implements GetxService {
           )).toList();
 
           _categoryList!.addAll(filteredCategories);
-          update();
+          // update();
           print('✅ Main Category: ${mainCategory['name']}');
           for (var category in filteredCategories) {
             print('   → ID: ${category.id}, Name: ${category.name}, Image: ${category.imageFullUrl}');
@@ -173,6 +177,7 @@ class CategoryController extends GetxController implements GetxService {
     }
 
     _isLoading = false;
+    _mainCategoryFetched = true;
     update(); // Notify UI that loading is complete
   }
 

@@ -18,6 +18,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
   final CategoryController catController = Get.find<CategoryController>();
   final Map<int, List> subCategoryMap = {}; // Stores subcategories for each category
   bool isLoading = true; // Track overall loading state
+  final bool _isDataLoaded = true;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
 
   Future<void> fetchMainCategories() async {
     await catController.getMainCategoryList();
-    catController.update(); // Ensure UI updates after fetching main categories
+    // catController.update(); // Ensure UI updates after fetching main categories
   }
 
   Future<void> fetchSubCategories(String categoryId) async {
@@ -37,7 +38,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
       subCategoryMap[int.parse(categoryId)] = List.from(catController.subCategoryList ?? []);
     });
 
-    catController.update();
+    // catController.update();
   }
 
   @override
@@ -60,13 +61,13 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
       ) : null,
       body: Padding(
         padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-        child: SingleChildScrollView(
+        child: _isDataLoaded ? SingleChildScrollView(
           child: Column(
             children: [
               // Display Main Categories
               GetBuilder<CategoryController>(
                 builder: (catController) {
-                  if (catController.mainCategoryList == null) {
+                  if (catController.isLoading || catController.mainCategoryList == null) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return Column(
@@ -162,7 +163,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
               ),
             ],
           ),
-        ),
+        ) : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
