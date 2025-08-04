@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.ftechiz.lucklore"
+    namespace "com.application.lucklore"
     compileSdk 35
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.ftechiz.lucklore"
+        applicationId "com.application.lucklore"
         minSdkVersion 23
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
@@ -59,7 +59,7 @@ android {
         release {
             keyAlias 'groceries'
             keyPassword 'Mali@123Gluu'
-            storeFile file('/home/acerpc/Desktop/1pm-multivendor-app/android/app/groceries.jks')
+            storeFile file('C:\\Users\\Acer\\Desktop\\vivek\\1pm-multivendor\\android\\app\\groceries.jks')
             storePassword 'Mali@123Gluu'
         }
     }
