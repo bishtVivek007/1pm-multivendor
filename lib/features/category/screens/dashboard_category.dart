@@ -103,7 +103,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
                                       crossAxisCount: 4, // Adjust grid count as needed
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 10,
-                                      childAspectRatio: .575, // Adjust aspect ratio for better fit
+                                      childAspectRatio: .5, // Adjust aspect ratio for better fit
                                     ),
                                     itemCount: subCategories.length,
                                     itemBuilder: (context, subIndex) {
