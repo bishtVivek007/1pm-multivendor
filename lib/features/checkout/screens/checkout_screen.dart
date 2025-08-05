@@ -593,6 +593,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                   maxCodOrderAmount: maxCodOrderAmount, fromCart: widget.fromCart, isCodActive: _isCashOnDeliveryActive, forParcel: false,
                 ));
               } else {
+                if(placeOrderBody.house.toString().isEmpty || placeOrderBody.house.toString() == '') {
+                  showCustomSnackBar('Please Enter the House Number'.tr);
+                  return;
+                }
                 checkoutController.placeOrder(placeOrderBody, checkoutController.store!.zoneId, total, maxCodOrderAmount, widget.fromCart, _isCashOnDeliveryActive!, checkoutController.pickedPrescriptions);
               }
             }else{
