@@ -5,6 +5,7 @@ import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
 
 import '../../../helper/route_helper.dart';
+import '../domain/models/category_model.dart';
 
 class DashboardCategoryScreen extends StatefulWidget {
   final bool isDashboard;
@@ -70,20 +71,34 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
                   if (catController.isLoading || catController.mainCategoryList == null) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  var mainCategoriesRaw = catController.mainCategoryList!;
+                  var uniqueMainCategoryMap = <String, CategoryModel>{};
+                  for (var mainCat in mainCategoriesRaw) {
+                    uniqueMainCategoryMap[mainCat.name!] = mainCat; // latest occurrence stays
+                  }
+                  var uniqueMainCategories = uniqueMainCategoryMap.values.toList();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: catController.mainCategoryList!.length,
+                        itemCount: uniqueMainCategories.length,
                         itemBuilder: (context, index) {
-                          var mainCategory = catController.mainCategoryList![index];
+                          var mainCategory = uniqueMainCategories[index];
 
-                          var subCategories = catController.categoryList!
+                          var subCategoriesRaw = catController.categoryList!
                               .where((category) => category.parentId == mainCategory.id)
                               .toList();
-          
+
+                          // Remove duplicate subcategory names
+                          var subCategories = <String, CategoryModel>{};
+                          for (var subCat in subCategoriesRaw) {
+                            subCategories[subCat.name!] = subCat;  // If duplicate name, only latest will remain
+                          }
+                          var uniqueSubCategories = subCategories.values.toList();
+
+
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -93,7 +108,7 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
                               ),
           
                               // Grid of subcategories under this main category
-                              if (subCategories.isNotEmpty)
+                              if (uniqueSubCategories.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                                   child: GridView.builder(
@@ -105,9 +120,9 @@ class _DashboardCategoryScreenState extends State<DashboardCategoryScreen> {
                                       mainAxisSpacing: 10,
                                       childAspectRatio: .5, // Adjust aspect ratio for better fit
                                     ),
-                                    itemCount: subCategories.length,
+                                    itemCount: uniqueSubCategories.length,
                                     itemBuilder: (context, subIndex) {
-                                      var subCategory = subCategories[subIndex];
+                                      var subCategory = uniqueSubCategories[subIndex];
           
                                       return Column(
                                         children: [

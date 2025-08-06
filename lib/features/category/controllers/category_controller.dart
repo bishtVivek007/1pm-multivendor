@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:sixam_mart/common/enums/data_source_enum.dart';
 import 'package:sixam_mart/features/category/domain/models/category_model.dart';
 import 'package:sixam_mart/features/item/domain/models/item_model.dart';
@@ -177,7 +178,7 @@ class CategoryController extends GetxController implements GetxService {
     }
 
     _isLoading = false;
-    _mainCategoryFetched = true;
+    // _mainCategoryFetched = true;
     update(); // Notify UI that loading is complete
   }
 
