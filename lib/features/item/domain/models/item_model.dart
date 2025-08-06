@@ -83,12 +83,31 @@ class WholesalePrice {
   }
 }
 
+class YoutubeData {
+  String? topic;
+  String? link;
+
+  YoutubeData({this.topic, this.link});
+
+  YoutubeData.fromJson(Map<String, dynamic> json) {
+    topic = json['topic'];
+    link = json['link'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['topic'] = topic;
+    data['link'] = link;
+    return data;
+  }
+}
+
 class Item {
   int? id;
   String? name;
+  List<YoutubeData>? youtubeData;
   String? unitId;
   String? baseUnit;
-  String? youtubeLink;
   String? secondaryUnit;
   String? conversionRate;
   String? description;
@@ -136,6 +155,7 @@ class Item {
     this.description,
     this.imageFullUrl,
     this.imagesFullUrl,
+    this.youtubeData,
     this.categoryId,
     this.categoryIds,
     this.unitId,
@@ -159,7 +179,6 @@ class Item {
     this.storeDiscount,
     this.scheduleOrder,
     this.avgRating,
-    this.youtubeLink,
     this.ratingCount,
     this.veg,
     this.moduleId,
@@ -247,7 +266,12 @@ class Item {
     tax = json['tax']?.toDouble();
     discount = json['discount'].toDouble();
     discountType = json['discount_type'];
-    youtubeLink = json['youtube_link'];
+    if (json['youtube_data'] != null) {
+      youtubeData = [];
+      json['youtube_data'].forEach((v) {
+        youtubeData!.add(YoutubeData.fromJson(v));
+      });
+    }
     availableTimeStarts = json['available_time_starts'];
     availableTimeEnds = json['available_time_ends'];
     storeId = json['store_id'];
@@ -282,7 +306,9 @@ class Item {
     data['name'] = name;
     data['description'] = description;
     data['image_full_url'] = imageFullUrl;
-    data['youtube_link'] = youtubeLink;
+    if (youtubeData != null) {
+      data['youtube_data'] = youtubeData!.map((v) => v.toJson()).toList();
+    }
     data['images_full_url'] = imagesFullUrl;
     data['category_id'] = categoryId;
 

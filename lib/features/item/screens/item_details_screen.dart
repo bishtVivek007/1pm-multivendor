@@ -442,24 +442,40 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Youtube Video Link'.tr, style: robotoMedium),
+                            Text('Youtube Video Links'.tr, style: robotoMedium),
                             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                            GestureDetector(
-                                onTap: () async {
-                                  final link = itemController.item?.youtubeLink;
-                                  if (link != null && link.isNotEmpty) {
-                                    final uri = Uri.parse(link.startsWith('http') ? link : 'https://$link');
-                                    if (await canLaunchUrl(uri)) {
-                                      await launchUrl(uri, mode: LaunchMode.externalApplication);
-                                    } else {
-                                      // Optionally show an error
-                                      print('Could not launch $link');
+
+                            itemController.item?.youtubeData != null && itemController.item!.youtubeData!.isNotEmpty
+                                ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: itemController.item!.youtubeData!.map((youtubeItem) => Padding(
+                                padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    final link = youtubeItem.link;
+                                    if (link != null && link.isNotEmpty) {
+                                      final uri = Uri.parse(link.startsWith('http') ? link : 'https://$link');
+                                      if (await canLaunchUrl(uri)) {
+                                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                      } else {
+                                        print('Could not launch $link');
+                                      }
                                     }
-                                  }
-                                },
-                                child: Text(itemController.item!.youtubeLink ?? 'N/A', style: robotoRegular.copyWith(
-                                  color: Colors.blue
-                                ))),
+                                  },
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(text: '${youtubeItem.topic}: ', style: robotoMedium.copyWith(color: Colors.black)),
+                                        TextSpan(
+                                          text: youtubeItem.link ?? 'N/A',
+                                          style: robotoRegular.copyWith(color: Colors.blue),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )).toList(),
+                            ) : Text('No Youtube Links Available'.tr, style: robotoRegular),
                             const SizedBox(height: Dimensions.paddingSizeLarge),
                           ],
                         ), // : const SizedBox(),
