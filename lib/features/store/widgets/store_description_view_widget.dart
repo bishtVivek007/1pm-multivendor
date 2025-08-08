@@ -15,6 +15,7 @@ import 'package:sixam_mart/common/widgets/custom_image.dart';
 import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StoreDescriptionViewWidget extends StatelessWidget {
   final Store? store;
@@ -150,126 +151,286 @@ class StoreDescriptionViewWidget extends StatelessWidget {
 
      ResponsiveHelper.isDesktop(context) ?
      IntrinsicHeight(
-       child: Row(children: [
-         const Expanded(child: SizedBox()),
-         InkWell(
-           onTap: () => Get.toNamed(RouteHelper.getStoreReviewRoute(store!.id, store!.name, store!)),
-           child: Column(children: [
-             Row(children: [
-               Icon(Icons.star, color: Theme.of(context).primaryColor, size: 20),
+       child: Column(
+         children: [
+           Row(children: [
+             const Expanded(child: SizedBox()),
+             InkWell(
+               onTap: () => Get.toNamed(RouteHelper.getStoreReviewRoute(store!.id, store!.name, store!)),
+               child: Column(children: [
+                 Row(children: [
+                   Icon(Icons.star, color: Theme.of(context).primaryColor, size: 20),
+                   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                   Text(
+                     store!.avgRating!.toStringAsFixed(1),
+                     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
+                   ),
+                 ]),
+                 const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                 Text(
+                   '${store!.ratingCount} + ${'ratings'.tr}',
+                   style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
+                 ),
+               ]),
+             ),
+             const Expanded(child: SizedBox()),
+
+             const VerticalDivider(color: Colors.white, thickness: 1),
+             const Expanded(child: SizedBox()),
+
+             InkWell(
+               onTap: () => Get.toNamed(RouteHelper.getMapRoute(
+                   AddressModel(id: store!.id, address: store!.address, latitude: store!.latitude,
+                     longitude: store!.longitude, contactPersonNumber: '', contactPersonName: '', addressType: '',
+                   ), 'store', Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module!.moduleType!).newVariation!,
+                 storeName: store!.name,
+               )),
+               child: Column(children: [
+                 // Icon(Icons.location_on, color: Theme.of(context).primaryColor, size: 20),
+                 Image.asset(Images.storeLocationIcon, height: 20, width: 20),
+                 const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                 Text('location'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
+               ]),
+             ),
+             const Expanded(child: SizedBox()),
+             const VerticalDivider(color: Colors.white, thickness: 1),
+             const Expanded(child: SizedBox()),
+
+             Column(children: [
+               Image.asset(Images.storeDeliveryTimeIcon, height: 20, width: 20),
+               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+               Text(store!.deliveryTime!, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
+             ]),
+
+             (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
+             (store!.delivery! && store!.freeDelivery!) ? const VerticalDivider(color: Colors.white, thickness: 1) : const SizedBox(),
+             (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
+
+             (store!.delivery! && store!.freeDelivery!) ? Column(children: [
+               Icon(Icons.money_off, color: Theme.of(context).primaryColor, size: 20),
+               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+               Text('free_delivery'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
+             ]) : const SizedBox(),
+             const Expanded(child: SizedBox()),
+           ]),
+           if (ResponsiveHelper.isDesktop(context)) ...[
+             const SizedBox(height: 20),
+             Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 // CALL STORE (fixed width looks better on web)
+                 SizedBox(
+                   width: 220,
+                   child: InkWell(
+                     onTap: () async {
+                       final Uri callUri = Uri(scheme: 'tel', path: store!.phone.toString());
+                       if (await canLaunchUrl(callUri)) {
+                         await launchUrl(callUri);
+                       } else {
+                         showCustomSnackBar('Could not launch dialer');
+                       }
+                     },
+                     child: Container(
+                       padding: const EdgeInsets.symmetric(vertical: 12),
+                       decoration: BoxDecoration(
+                         color: Colors.grey.withOpacity(0.10),
+                         borderRadius: BorderRadius.circular(8),
+                       ),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           const Icon(Icons.call, color: Colors.blue),
+                           const SizedBox(width: 8),
+                           Text('Call Store', style: robotoMedium.copyWith(color: Colors.blue)),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ),
+
+                 const SizedBox(width: 16),
+
+                 // SEND WHATSAPP
+                 SizedBox(
+                   width: 220,
+                   child: InkWell(
+                     onTap: () async {
+                       final phone = store!.phone.toString(); // must be intl format, no '+' or spaces
+                       final msg = Uri.encodeComponent("Hello, I have a query");
+                       final url = Uri.parse("https://wa.me/$phone?text=$msg");
+
+                       if (await canLaunchUrl(url)) {
+                         await launchUrl(url, mode: LaunchMode.externalApplication);
+                       } else {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(content: Text("Could not open WhatsApp")),
+                         );
+                       }
+                     },
+                     child: Container(
+                       padding: const EdgeInsets.symmetric(vertical: 12),
+                       decoration: BoxDecoration(
+                         color: Colors.green.withOpacity(0.10),
+                         borderRadius: BorderRadius.circular(8),
+                       ),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Image.asset(Images.whatsappMenu, height: 22, width: 22),
+                           const SizedBox(width: 8),
+                           Text('Send WhatsApp', style: robotoMedium.copyWith(color: Colors.green)),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ),
+               ],
+             ),
+           ]
+         ],
+       ),
+     ):
+     Column(
+       children: [
+         Row(children: [
+           const Expanded(child: SizedBox()),
+           InkWell(
+             onTap: () => Get.toNamed(RouteHelper.getStoreReviewRoute(store!.id, store!.name, store!)),
+             child: Column(children: [
+               Row(children: [
+                 Icon(Icons.star, color: Theme.of(context).primaryColor, size: 20),
+                 const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                 Text(
+                   store!.avgRating!.toStringAsFixed(1),
+                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
+                 ),
+               ]),
                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                Text(
-                 store!.avgRating!.toStringAsFixed(1),
-                 style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
+                 '${store!.ratingCount} + ${'ratings'.tr}',
+                 style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
                ),
              ]),
-             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-             Text(
-               '${store!.ratingCount} + ${'ratings'.tr}',
-               style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
-             ),
-           ]),
-         ),
-         const Expanded(child: SizedBox()),
+           ),
+           const Expanded(child: SizedBox()),
 
-         const VerticalDivider(color: Colors.white, thickness: 1),
-         const Expanded(child: SizedBox()),
 
-         InkWell(
-           onTap: () => Get.toNamed(RouteHelper.getMapRoute(
+           InkWell(
+             onTap: () => Get.toNamed(RouteHelper.getMapRoute(
                AddressModel(id: store!.id, address: store!.address, latitude: store!.latitude,
                  longitude: store!.longitude, contactPersonNumber: '', contactPersonName: '', addressType: '',
                ), 'store', Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module!.moduleType!).newVariation!,
-             storeName: store!.name,
-           )),
-           child: Column(children: [
-             // Icon(Icons.location_on, color: Theme.of(context).primaryColor, size: 20),
-             Image.asset(Images.storeLocationIcon, height: 20, width: 20),
-             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-             Text('location'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-           ]),
-         ),
-         const Expanded(child: SizedBox()),
-         const VerticalDivider(color: Colors.white, thickness: 1),
-         const Expanded(child: SizedBox()),
+               storeName: store!.name,
+             )),
+             child: Column(children: [
+               Icon(Icons.location_on, color: Theme.of(context).primaryColor, size: 20),
+               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+               Text('location'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
+             ]),
+           ),
+           const Expanded(child: SizedBox()),
 
-         Column(children: [
-           Image.asset(Images.storeDeliveryTimeIcon, height: 20, width: 20),
-           const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-           Text(store!.deliveryTime!, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-         ]),
-
-         (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
-         (store!.delivery! && store!.freeDelivery!) ? const VerticalDivider(color: Colors.white, thickness: 1) : const SizedBox(),
-         (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
-
-         (store!.delivery! && store!.freeDelivery!) ? Column(children: [
-           Icon(Icons.money_off, color: Theme.of(context).primaryColor, size: 20),
-           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-           Text('free_delivery'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-         ]) : const SizedBox(),
-         const Expanded(child: SizedBox()),
-       ]),
-     ):
-     Row(children: [
-       const Expanded(child: SizedBox()),
-       InkWell(
-         onTap: () => Get.toNamed(RouteHelper.getStoreReviewRoute(store!.id, store!.name, store!)),
-         child: Column(children: [
-           Row(children: [
-             Icon(Icons.star, color: Theme.of(context).primaryColor, size: 20),
+           Column(children: [
+             Row(children: [
+               Icon(Icons.timer, color: Theme.of(context).primaryColor, size: 20),
+               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+               Text(
+                 store!.deliveryTime!,
+                 style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
+               ),
+             ]),
              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-             Text(
-               store!.avgRating!.toStringAsFixed(1),
-               style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
-             ),
+             Text('delivery_time'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
            ]),
-           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-           Text(
-             '${store!.ratingCount} + ${'ratings'.tr}',
-             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
-           ),
+           (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
+           (store!.delivery! && store!.freeDelivery!) ? Column(children: [
+             Icon(Icons.money_off, color: Theme.of(context).primaryColor, size: 20),
+             const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+             Text('free_delivery'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
+           ]) : const SizedBox(),
+           const Expanded(child: SizedBox()),
          ]),
-       ),
-       const Expanded(child: SizedBox()),
+         const SizedBox(height: 25),
+         Row(
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: [
 
+             Expanded(
+               child: InkWell(
 
-       InkWell(
-         onTap: () => Get.toNamed(RouteHelper.getMapRoute(
-           AddressModel(id: store!.id, address: store!.address, latitude: store!.latitude,
-             longitude: store!.longitude, contactPersonNumber: '', contactPersonName: '', addressType: '',
-           ), 'store', Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module!.moduleType!).newVariation!,
-           storeName: store!.name,
-         )),
-         child: Column(children: [
-           Icon(Icons.location_on, color: Theme.of(context).primaryColor, size: 20),
-           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-           Text('location'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-         ]),
-       ),
-       const Expanded(child: SizedBox()),
+                 onTap: () async {
+                   final Uri callUri = Uri(scheme: 'tel', path: store!.phone.toString());
+                   if (await canLaunchUrl(callUri)) {
+                     await launchUrl(callUri);
+                   } else {
+                     showCustomSnackBar('Could not launch dialer');
+                   }
+                 },
+                 child: Container(
+                   padding: const EdgeInsets.symmetric(vertical: 10),
+                   decoration: BoxDecoration(
+                     color: Colors.grey.withValues(alpha: 0.1),
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       const Icon(Icons.call, color: Colors.blue),
+                       const SizedBox(width: 6),
+                       Text(
+                         'Call Store',
+                         style: robotoMedium.copyWith(color: Colors.blue),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
 
-       Column(children: [
-         Row(children: [
-           Icon(Icons.timer, color: Theme.of(context).primaryColor, size: 20),
-           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-           Text(
-             store!.deliveryTime!,
-             style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor),
-           ),
-         ]),
-         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-         Text('delivery_time'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-       ]),
-       (store!.delivery! && store!.freeDelivery!) ? const Expanded(child: SizedBox()) : const SizedBox(),
-       (store!.delivery! && store!.freeDelivery!) ? Column(children: [
-         Icon(Icons.money_off, color: Theme.of(context).primaryColor, size: 20),
-         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-         Text('free_delivery'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: textColor)),
-       ]) : const SizedBox(),
-       const Expanded(child: SizedBox()),
-     ]),
+             const SizedBox(width: 10),
+
+             Expanded(
+               child: InkWell(
+                 onTap: () async {
+                   final phone = store!.phone.toString(); // Make sure it's in international format without '+'
+                   final message = Uri.encodeComponent("Hello, I have a query");
+                   final url = Uri.parse("https://wa.me/$phone?text=$message");
+
+                   if (await canLaunchUrl(url)) {
+                     await launchUrl(url, mode: LaunchMode.externalApplication);
+                   } else {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(content: Text("Could not open WhatsApp")),
+                     );
+                   }
+                 },
+                 child: Container(
+                   padding: const EdgeInsets.symmetric(vertical: 10),
+                   decoration: BoxDecoration(
+                     color: Colors.green.withOpacity(0.1),
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Image.asset(Images.whatsappMenu, height: 24, width: 24),
+                       const SizedBox(width: 6),
+                       Text(
+                         'Send WhatsApp',
+                         style: robotoMedium.copyWith(color: Colors.green),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
+
+           ],
+         ),
+
+       ],
+     ),
 
 
     ]);
