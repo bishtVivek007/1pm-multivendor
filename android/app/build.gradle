@@ -59,7 +59,7 @@ android {
         release {
             keyAlias 'groceries'
             keyPassword 'Mali@123Gluu'
-            storeFile file('C:\\Users\\Acer\\Desktop\\vivek\\1pm-multivendor\\android\\app\\groceries.jks')
+            storeFile file('/home/acerpc/Desktop/1pm-multivendor-app/android/app/groceries.jks')
             storePassword 'Mali@123Gluu'
         }
     }
