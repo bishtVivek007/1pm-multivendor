@@ -102,7 +102,7 @@ class _StoreScreenState extends State<StoreScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
+      top: true,
       child: Scaffold(
         appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : null,
         endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,

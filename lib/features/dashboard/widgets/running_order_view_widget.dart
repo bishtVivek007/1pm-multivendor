@@ -17,140 +17,146 @@ class RunningOrderViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderController>(builder: (orderController) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius : const BorderRadius.only(
-            topLeft: Radius.circular(Dimensions.paddingSizeExtraLarge),
-            topRight : Radius.circular(Dimensions.paddingSizeExtraLarge),
-          ),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
-        ),
-        child: Column(children: [
-
-           Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-              height: 3, width: 40,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).highlightColor,
-                  borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall)
-              ),
+      return Material(
+        color: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius : const BorderRadius.only(
+              topLeft: Radius.circular(Dimensions.paddingSizeExtraLarge),
+              topRight : Radius.circular(Dimensions.paddingSizeExtraLarge),
             ),
-           ),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
+          ),
+          // padding: EdgeInsets.only(
+          //   bottom: (GetPlatform.isIOS ? 80 : 65) + MediaQuery.of(context).padding.bottom,
+          // ),
+          child: Column(children: [
 
-           ListView.builder(
-            itemCount: reversOrder.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index){
+             Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+                height: 3, width: 40,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).highlightColor,
+                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall)
+                ),
+              ),
+             ),
 
-              bool isFirstOrder =  index == 0;
+             ListView.builder(
+              itemCount: reversOrder.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index){
 
-              String? orderStatus = reversOrder[index].orderStatus;
-              int status = 0;
+                bool isFirstOrder =  index == 0;
 
-              if(orderStatus == AppConstants.pending){
-                status = 1;
-              }else if(orderStatus == AppConstants.accepted || orderStatus == AppConstants.processing || orderStatus == AppConstants.confirmed){
-                status = 2;
-              }else if(orderStatus == AppConstants.handover || orderStatus == AppConstants.pickedUp){
-                status = 3;
-              }
+                String? orderStatus = reversOrder[index].orderStatus;
+                int status = 0;
 
-              return InkWell(
-                onTap: () async {
-                  await Get.toNamed(
-                    RouteHelper.getOrderDetailsRoute(reversOrder[index].id),
-                    arguments: OrderDetailsScreen(
-                      orderId: reversOrder[index].id,
-                      orderModel: reversOrder[index],
-                    ),
-                  );
-                  if(orderController.showBottomSheet){
-                    orderController.showRunningOrders();
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraSmall, top: Dimensions.paddingSizeSmall),
+                if(orderStatus == AppConstants.pending){
+                  status = 1;
+                }else if(orderStatus == AppConstants.accepted || orderStatus == AppConstants.processing || orderStatus == AppConstants.confirmed){
+                  status = 2;
+                }else if(orderStatus == AppConstants.handover || orderStatus == AppConstants.pickedUp){
+                  status = 3;
+                }
 
-                  child:  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
-                    child: Row( crossAxisAlignment: CrossAxisAlignment.center, children: [
+                return InkWell(
+                  onTap: () async {
+                    await Get.toNamed(
+                      RouteHelper.getOrderDetailsRoute(reversOrder[index].id),
+                      arguments: OrderDetailsScreen(
+                        orderId: reversOrder[index].id,
+                        orderModel: reversOrder[index],
+                      ),
+                    );
+                    if(orderController.showBottomSheet){
+                      orderController.showRunningOrders();
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraSmall, top: Dimensions.paddingSizeSmall),
 
-                      Center(
-                        child: SizedBox(
-                          height: orderStatus == AppConstants.pending ? 50 : 60, width: orderStatus == AppConstants.pending ? 50 : 60,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset( status == 2 ? orderStatus == AppConstants.confirmed || orderStatus == AppConstants.accepted ? Images.confirmedGif
-                                : Images.processingGif : status == 3
-                                ? orderStatus == AppConstants.handover ? Images.handoverGif : Images.onTheWayGif : Images.pendingGif,
-                        height: 60, width: 60, fit: BoxFit.fill),
+                    child:  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+                      child: Row( crossAxisAlignment: CrossAxisAlignment.center, children: [
+
+                        Center(
+                          child: SizedBox(
+                            height: orderStatus == AppConstants.pending ? 50 : 60, width: orderStatus == AppConstants.pending ? 50 : 60,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset( status == 2 ? orderStatus == AppConstants.confirmed || orderStatus == AppConstants.accepted ? Images.confirmedGif
+                                  : Images.processingGif : status == 3
+                                  ? orderStatus == AppConstants.handover ? Images.handoverGif : Images.onTheWayGif : Images.pendingGif,
+                          height: 60, width: 60, fit: BoxFit.fill),
+                            ),
                           ),
                         ),
-                      ),
 
-                      SizedBox(width: isFirstOrder ? 0 : Dimensions.paddingSizeSmall),
+                        SizedBox(width: isFirstOrder ? 0 : Dimensions.paddingSizeSmall),
 
-                      Expanded(
-                        child: Column(mainAxisAlignment: isFirstOrder ? MainAxisAlignment.center : MainAxisAlignment.start,
-                            crossAxisAlignment: isFirstOrder ? CrossAxisAlignment.center : CrossAxisAlignment.start, children: [
-                              Row( mainAxisAlignment: isFirstOrder ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                        Expanded(
+                          child: Column(mainAxisAlignment: isFirstOrder ? MainAxisAlignment.center : MainAxisAlignment.start,
+                              crossAxisAlignment: isFirstOrder ? CrossAxisAlignment.center : CrossAxisAlignment.start, children: [
+                                Row( mainAxisAlignment: isFirstOrder ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
 
-                                Text('${'your_order_is'.tr} ', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
-                                Text(reversOrder[index].orderStatus!.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor)),
-                              ]) ,
-                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                  Text('${'your_order_is'.tr} ', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
+                                  Text(reversOrder[index].orderStatus!.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor)),
+                                ]) ,
+                                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                              Text(
-                                '${'order'.tr} #${reversOrder[index].id}',
-                                style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), maxLines: 1, overflow: TextOverflow.ellipsis,
-                              ),
-
-                              isFirstOrder ? SizedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault,
-                                      vertical: Dimensions.paddingSizeSmall),
-                                  child: Row(children: [
-                                    Expanded(child: trackView(context, status: status >= 1 ? true : false)),
-                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                    Expanded(child: trackView(context, status: status >= 2 ? true : false)),
-                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                    Expanded(child: trackView(context, status: status >= 3 ? true : false)),
-                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                    Expanded(child: trackView(context, status: status >= 4 ? true : false)),
-                                  ]),
+                                Text(
+                                  '${'order'.tr} #${reversOrder[index].id}',
+                                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), maxLines: 1, overflow: TextOverflow.ellipsis,
                                 ),
-                              ) : const SizedBox()
 
-                            ]),
-                      ),
+                                isFirstOrder ? SizedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault,
+                                        vertical: Dimensions.paddingSizeSmall),
+                                    child: Row(children: [
+                                      Expanded(child: trackView(context, status: status >= 1 ? true : false)),
+                                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
 
-                      Container(
-                        padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                        decoration: BoxDecoration(color: Theme.of(context).primaryColor.withValues(alpha: 0.1), shape: BoxShape.circle),
-                        child: isFirstOrder ? !(reversOrder.length < 2) ? InkWell(
-                          onTap: () => onOrderTap(),
-                          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                Text('+${reversOrder.length - 1}', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
-                                Text('more'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor)),
+                                      Expanded(child: trackView(context, status: status >= 2 ? true : false)),
+                                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                                      Expanded(child: trackView(context, status: status >= 3 ? true : false)),
+                                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                                      Expanded(child: trackView(context, status: status >= 4 ? true : false)),
+                                    ]),
+                                  ),
+                                ) : const SizedBox()
+
                               ]),
-                            ) : Icon(Icons.arrow_forward, size: 18, color: Theme.of(context).primaryColor)
-                            : Icon(Icons.arrow_forward, size: 18, color: Theme.of(context).primaryColor),
-                      ),
+                        ),
 
-                    ]),
-                  ) ,
-                ),
-              );
-            }),
-         ]),
-     );
+                        Container(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                          decoration: BoxDecoration(color: Theme.of(context).primaryColor.withValues(alpha: 0.1), shape: BoxShape.circle),
+                          child: isFirstOrder ? !(reversOrder.length < 2) ? InkWell(
+                            onTap: () => onOrderTap(),
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                  Text('+${reversOrder.length - 1}', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
+                                  Text('more'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor)),
+                                ]),
+                              ) : Icon(Icons.arrow_forward, size: 18, color: Theme.of(context).primaryColor)
+                              : Icon(Icons.arrow_forward, size: 18, color: Theme.of(context).primaryColor),
+                        ),
+
+                      ]),
+                    ) ,
+                  ),
+                );
+              }),
+           ]),
+             ),
+      );
     });
   }
 

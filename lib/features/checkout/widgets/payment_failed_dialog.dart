@@ -83,6 +83,8 @@ class PaymentFailedDialog extends StatelessWidget {
                   Get.find<OrderController>().cancelOrder(int.parse(orderID!), 'Digital payment issue', guestId: guestId.isNotEmpty ? guestId : null).then((success) {
                     if(success){
                       Get.offAllNamed(RouteHelper.getInitialRoute());
+                    } else {
+                      Get.offAllNamed(RouteHelper.getInitialRoute());
                     }
                   });
                 },

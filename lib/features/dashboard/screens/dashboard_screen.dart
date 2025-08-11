@@ -202,7 +202,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                               const MenuScreen()
                             ];
                             return SafeArea(
-                              top: false,
+                              top: true,
                               child: Container(
                                 width: size.width, height: GetPlatform.isIOS ? 80 : 65,
                                 decoration: BoxDecoration(
@@ -279,7 +279,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ]),
 
-                  persistentContentHeight: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active) ? 0 : GetPlatform.isIOS ? 110 : 100,
+                  // persistentContentHeight: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active) ? 0 : (GetPlatform.isIOS ? 110 : 100),
+                  persistentContentHeight: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active) ? 0 : (GetPlatform.isIOS ? 110 : 100) + MediaQuery.of(context).padding.bottom,
 
                   onIsContractedCallback: () {
                     if(!orderController.showOneOrder) {
@@ -297,19 +298,25 @@ class DashboardScreenState extends State<DashboardScreen> {
                   expandableContent: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active && !ResponsiveHelper.isDesktop(context)) ?  const SizedBox()
                   : (ResponsiveHelper.isDesktop(context) || !_isLogin || orderController.runningOrderModel == null
                   || orderController.runningOrderModel!.orders!.isEmpty || !orderController.showBottomSheet) ? const SizedBox()
-                  : Dismissible(
-                    key: UniqueKey(),
-                    onDismissed: (direction) {
-                      if(orderController.showBottomSheet){
-                        orderController.showRunningOrders();
-                      }
-                    },
-                    child: RunningOrderViewWidget(reversOrder: reversOrder, onOrderTap: () {
-                      _setPage(3);
-                      if(orderController.showBottomSheet){
-                        orderController.showRunningOrders();
-                      }
-                    }),
+                  : Padding(
+                    padding: EdgeInsets.only(
+                      // bottom: 0,
+                      bottom: (GetPlatform.isIOS ? 80 : 65) + MediaQuery.of(context).padding.bottom,
+                    ),
+                    child: Dismissible(
+                      key: UniqueKey(),
+                      onDismissed: (direction) {
+                        if(orderController.showBottomSheet){
+                          orderController.showRunningOrders();
+                        }
+                      },
+                      child: RunningOrderViewWidget(reversOrder: reversOrder, onOrderTap: () {
+                        _setPage(3);
+                        if(orderController.showBottomSheet){
+                          orderController.showRunningOrders();
+                        }
+                      }),
+                    ),
                   ),
                 ),
               );

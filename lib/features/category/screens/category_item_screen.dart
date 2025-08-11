@@ -111,7 +111,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
             return;
           }
         },
-        child: SafeArea(top: false,
+        child: SafeArea(top: true,
 
           child: Scaffold(
             appBar: (ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : AppBar(
