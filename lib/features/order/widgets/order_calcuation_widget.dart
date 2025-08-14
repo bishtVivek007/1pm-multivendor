@@ -23,6 +23,7 @@ class OrderCalculationWidget extends StatelessWidget {
   final bool prescriptionOrder;
   final double deliveryCharge;
   final double itemsPrice;
+  final String remainingAmount;
   final double discount;
   final double couponDiscount;
   final double tax;
@@ -37,7 +38,7 @@ class OrderCalculationWidget extends StatelessWidget {
   final Function timerCancel;
   final Function startApiCall;
   const OrderCalculationWidget({
-    super.key, required this.orderController, required this.order, required this.ongoing,
+    super.key, required this.orderController, required this.remainingAmount, required this.order, required this.ongoing,
     required this.parcel, required this.prescriptionOrder, required this.deliveryCharge,
     required this.itemsPrice, required this.discount, required this.couponDiscount, required this.tax,
     required this.addOns, required this.dmTips, required this.taxIncluded, required this.subTotal,
@@ -123,6 +124,15 @@ class OrderCalculationWidget extends StatelessWidget {
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       Text('item_price'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
                       Text(PriceConverter.convertPrice(itemsPrice), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), textDirection: TextDirection.ltr),
+                    ]),
+                    const SizedBox(height: 10),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('Remaining Amount', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                      Text(
+                          PriceConverter.convertPrice(double.tryParse(order.remainingAmount ?? '0') ?? 0.0,),
+                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), textDirection: TextDirection.ltr
+                      ),
                     ]),
                     const SizedBox(height: 10),
 

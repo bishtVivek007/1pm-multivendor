@@ -43,6 +43,7 @@ class OrderModel {
   String? couponDiscountTitle;
   String? paymentStatus;
   String? orderStatus;
+  String? remainingAmount;
   double? totalTaxAmount;
   String? paymentMethod;
   String? couponCode;
@@ -115,6 +116,7 @@ class OrderModel {
         this.deliveryCharge,
         this.scheduleAt,
         this.otp,
+        this.remainingAmount,
         this.pending,
         this.accepted,
         this.confirmed,
@@ -163,6 +165,7 @@ class OrderModel {
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    remainingAmount = json['balance_amount'];
     orderAmount = json['order_amount'].toDouble();
     couponDiscountAmount = json['coupon_discount_amount'].toDouble();
     couponDiscountTitle = json['coupon_discount_title'];
@@ -252,6 +255,7 @@ class OrderModel {
     data['payment_status'] = paymentStatus;
     data['order_status'] = orderStatus;
     data['total_tax_amount'] = totalTaxAmount;
+    data['balance_amount'] = remainingAmount;
     data['payment_method'] = paymentMethod;
     data['coupon_code'] = couponCode;
     data['order_note'] = orderNote;

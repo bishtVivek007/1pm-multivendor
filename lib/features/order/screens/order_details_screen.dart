@@ -105,6 +105,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
         body: SafeArea(child: GetBuilder<OrderController>(builder: (orderController) {
           double deliveryCharge = 0;
           double itemsPrice = 0;
+          String remaining = '';
           double discount = 0;
           double couponDiscount = 0;
           double tax = 0;
@@ -126,6 +127,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
             couponDiscount = order.couponDiscountAmount!;
             discount = order.storeDiscountAmount! + order.flashAdminDiscountAmount! + order.flashStoreDiscountAmount!;
             tax = order.totalTaxAmount!;
+            remaining = order.remainingAmount ?? '0';
             dmTips = order.dmTips!;
             taxIncluded = order.taxStatus!;
             additionalCharge = order.additionalCharge!;
@@ -204,6 +206,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     Expanded(
                       flex: 4,
                       child: OrderCalculationWidget(
+                        remainingAmount: remaining,
                         orderController: orderController, order: order, ongoing: ongoing, parcel: parcel,
                         prescriptionOrder: prescriptionOrder, deliveryCharge: deliveryCharge, itemsPrice: itemsPrice,
                         discount: discount, couponDiscount: couponDiscount, tax: tax, addOns: addOns, dmTips: dmTips,
@@ -221,6 +224,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
 
                   ResponsiveHelper.isDesktop(context) ? const SizedBox() : OrderCalculationWidget(
+                    remainingAmount: remaining,
                       orderController: orderController, order: order, ongoing: ongoing, parcel: parcel,
                       prescriptionOrder: prescriptionOrder, deliveryCharge: deliveryCharge, itemsPrice: itemsPrice,
                       discount: discount, couponDiscount: couponDiscount, tax: tax, addOns: addOns, dmTips: dmTips, taxIncluded: taxIncluded, subTotal: subTotal, total: total,
